@@ -700,9 +700,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   text-align: center;
   font: bold 18px var(--font-typewriter);
   letter-spacing: -0.08em;
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
 }
 /* back links, at the bottom of a page: small, plain and centred */
 .project-back {
