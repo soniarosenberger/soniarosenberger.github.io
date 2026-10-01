@@ -106,7 +106,7 @@ document.body.insertAdjacentHTML('beforeend',
 
 
 // Share the width of the tabs line as --tabs-width, so things can match it
-// (the guest book, and the ring round the snow globe on the homepage)
+// (the guest book, the About page and the star on the homepage)
 var nav = document.querySelector('.site-nav');
 if (nav && 'ResizeObserver' in window) {
   new ResizeObserver(function () {

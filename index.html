@@ -6,7 +6,7 @@
   <title>Sonia Rosenberger</title>
   <meta name="description" content="Sonia Rosenberger — art, music, writing and projects.">
   <link rel="stylesheet" href="css/fonts.css?v=10">
-  <link rel="stylesheet" href="css/style.css?v=286">
+  <link rel="stylesheet" href="css/style.css?v=287">
   <link rel="stylesheet" href="css/lettering.css?v=2">
   <link rel="stylesheet" href="css/home.css?v=6">
 </head>
@@ -23,46 +23,15 @@
   </header>
 
   <main class="home-main">
-    <!-- The snow globe (js/snowglobe.js makes it teeter and the glitter swirl when it's
-         hovered or tapped). The homepage caption is typed out under Sonia's name when the name
-         is hovered (js/main.js); it's also here for screen readers. -->
+    <!-- The homepage caption is typed out under Sonia's name when the name is hovered
+         (js/main.js); it's also here for screen readers. -->
     <p class="visually-hidden">Things I&#39;ve made, been, collected, dabbled in, started, finished, loved, hated, and dreamed about.</p>
-    <!-- Sonia's room inside a snow globe, full of glitter. The room photo and the glitter sit
-         behind the globe's silver base and rim (images/about/snowglobe.png, which is
-         see-through where the glass is). -->
-    <!-- the stand holds the globe's shadows on the table, so they stay put when it rocks -->
-    <div class="globe-stand">
-      <!-- The shadows on the table, drawn flat in the table's own proportions (units: 1% of
-           the globe's width, centred on the middle of the foot) and then squashed to the
-           camera's 21-degree view. The light is up and to the front left, about 50 degrees
-           high, so everything falls back and to the right. -->
-      <svg class="globe-shadows" viewBox="0 0 100 153" aria-hidden="true">
-        <defs>
-          <filter id="shadow-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
-          <filter id="shadow-mid" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
-          <filter id="shadow-tight" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
-        </defs>
-        <g transform="translate(48 137.7) scale(1 0.358)">
-          <!-- the glass ball: further out, lighter, with light focused into it -->
-          <ellipse transform="translate(72.0 -60.4) rotate(-40)" rx="70" ry="49" fill="rgb(40 36 30 / 0.17)" filter="url(#shadow-soft)"/>
-          <ellipse transform="translate(79.7 -66.8) rotate(-40)" rx="22" ry="14" fill="rgb(255 246 226 / 0.5)" filter="url(#shadow-mid)"/>
-          <!-- the base -->
-          <ellipse transform="translate(18.4 -15.4) rotate(-40)" rx="66" ry="42" fill="rgb(28 25 22 / 0.36)" filter="url(#shadow-mid)"/>
-          <!-- where the foot touches the table -->
-          <circle r="44" fill="rgb(22 20 18 / 0.6)" filter="url(#shadow-tight)"/>
-        </g>
-      </svg>
-      <div class="globe" tabindex="0" role="img" aria-label="A snow globe with a photo of Sonia in her room inside it, full of glitter. Hover over it to nudge it.">
-        <div class="globe-scene">
-          <!-- the water inside, holding the room and the snow -->
-          <div class="globe-water">
-            <img src="images/about/room-globe.jpg" width="900" height="900" alt="">
-            <canvas class="globe-snow" data-floor="0.4907 0.9028 0.2452 0.0634" aria-hidden="true"></canvas>
-            <span class="globe-water-edge"></span>
-          </div>
-          <span class="globe-glass"></span>
-        </div>
-        <img class="globe-base" src="images/about/snowglobe.png?v=2" width="900" height="1377" alt="">
+    <!-- Sonia's linocut star, cut out and puffed up, turning slowly (js/star.js stacks the
+         layers that give it its thickness) -->
+    <div class="star" role="img" aria-label="A linocut print of a star with a face, cut out and slowly spinning">
+      <div class="star-spin">
+        <img class="star-face star-front" src="images/home/star-front.png" width="400" height="508" alt="">
+        <img class="star-face star-back" src="images/home/star-back.png" width="400" height="508" alt="">
       </div>
     </div>
   </main>
@@ -75,6 +44,6 @@
   </footer>
 
   <script src="js/main.js?v=28"></script>
-  <script src="js/snowglobe.js?v=14"></script>
+  <script src="js/star.js?v=1"></script>
 </body>
 </html>

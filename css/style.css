@@ -549,148 +549,71 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .vhs { transition: none; }
 }
 
-/* ---- Home: Sonia's room in a snow globe (js/snowglobe.js teeters it and swirls the glitter) ----
-   Positions are fractions of the snow globe photo (1182 x 1809 once cropped). */
-/* On the homepage the globe is sized from the tabs line (--tabs-width, measured in
-   js/main.js), and never narrower than 140px or wider than most of a phone screen. */
-.home-main .globe-stand {
-  width: min(60vw, max(140px, calc(var(--tabs-width, 346px) * 0.468)));
+/* ---- Home: Sonia's linocut star, cut out and puffed up, turning slowly about its upright ----
+   The print is already in the icons' black-and-white grain (baked into the pictures). Its
+   thickness is a stack of star-shaped layers (js/star.js) between the printed front and the
+   paper back, shrinking towards the faces so the edge rounds over like a pillow. Sizes are
+   in cqw, hundredths of the star's width. */
+.star {
+  width: min(45vw, max(120px, calc(var(--tabs-width, 346px) * 0.36)));
+  aspect-ratio: 400 / 508;
   margin: calc(var(--caption-gap, 2.5rem) - 1rem) auto 0;
+  container-type: inline-size;
+  perspective: 900px;
 }
-
-/* The globe sitting on a table. The photo looks down at the globe at about 21 degrees (the
-   collar's top ellipse is about 0.36 as deep as it is wide), so everything lying on the
-   table is flattened to that same shape. The light comes from the upper left at about 50
-   degrees, so shadows fall back and to the right:
-   - a dark contact shadow hugging the foot, where the base touches the table
-   - the base's shadow, stretching back and to the right
-   - the glass ball's shadow, further out because the ball sits higher, and lighter
-     because glass lets light through, with a bright patch where the ball focuses light.
-   They're drawn in about.html as one flat layer (.globe-shadows). */
-.globe-stand {
-  position: relative;
-  width: min(140px, 40vw);
-  margin: 1rem auto 0;
-  isolation: isolate;
-}
-.globe-shadows {
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-.globe {
+.star-spin {
   position: relative;
   width: 100%;
-  aspect-ratio: 1182 / 1809;
-  /* js/snowglobe.js tips it on the edge of its base when nudged */
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: star-spin 14s linear infinite;
 }
-.globe:focus-visible { outline: 1px dashed #0000ee; outline-offset: 8px; }
-.globe-base {
+@keyframes star-spin { to { transform: rotateY(360deg); } }
+.star-face,
+.star-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
-/* The glass ball, after real globes: the water fills it right to the edge, and the glass
-   shows as the view darkening softly towards the curved edge, a crisp dark outline with a
-   thin bright arc just inside it along the top, a big soft patch of light, and the sharper
-   reflections of a window on the right. */
-.globe-scene {
-  position: absolute;
-  left: 0.338%;
-  top: 0.221%;
-  width: 99.154%;
-  height: 64.787%;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #120d06;
-}
-.globe-water {
+.star-front { transform: translateZ(4.55cqw) scale(0.95); }
+.star-back { transform: rotateY(180deg) translateZ(4.55cqw) scale(0.95); }
+/* each face dims as it turns away from the light */
+.star-shade {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  overflow: hidden;
-}
-.globe-water img,
-.globe-snow,
-.globe-water-edge,
-.globe-glass {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.globe-water img { transform: scale(1.05); }   /* the water magnifies a little */
-/* the edge of the ball: light bends away, so the view darkens softly towards it */
-.globe-water-edge {
-  border-radius: 50%;
-  background: radial-gradient(circle closest-side at 50% 48%, rgba(0, 0, 0, 0) 72%, rgba(18, 20, 24, 0.14) 84%,
-    rgba(16, 18, 22, 0.38) 94%, rgba(12, 14, 18, 0.62) 99%);
-}
-.globe-glass {
-  border-radius: 50%;
+  background: #000;
+  -webkit-mask: url("../images/home/star-front.png") center / 100% 100%;
+  mask: url("../images/home/star-front.png") center / 100% 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  opacity: 0;
   pointer-events: none;
-  background:
-    /* the crisp outline of the glass */
-    radial-gradient(circle closest-side at 50% 50%, rgba(70, 76, 84, 0) 98.6%, rgba(70, 76, 84, 0.65) 99.5%, rgba(70, 76, 84, 0.8) 100%),
-    /* a soft bloom round the window's reflection */
-    radial-gradient(ellipse 26% 22% at 33% 29%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 72%),
-    /* light that has passed through the ball, gathering low on the far side */
-    radial-gradient(ellipse 28% 7% at 60% 91%, rgba(255, 246, 225, 0.22), rgba(255, 246, 225, 0) 72%);
+  animation: star-shade 14s linear infinite;
 }
-.globe-glass::before,
-.globe-glass::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
+.star-shade--back {
+  -webkit-mask-image: url("../images/home/star-back.png");
+  mask-image: url("../images/home/star-back.png");
+  animation-delay: -7s;
 }
-/* Light caught by the curved rim of the glass: crisp at the outer edge and fading softly
-   inwards, brightest where the light comes from (upper left) and tapering off either side,
-   with a fainter glow on the opposite side where light passes through the glass. */
-.globe-glass::before {
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg,
-    rgba(255, 255, 255, 0.35) 0deg,
-    rgba(255, 255, 255, 0.05) 50deg,
-    rgba(255, 255, 255, 0) 90deg,
-    rgba(255, 255, 255, 0.12) 125deg,
-    rgba(255, 255, 255, 0.3) 145deg,
-    rgba(255, 255, 255, 0.1) 170deg,
-    rgba(255, 255, 255, 0) 200deg,
-    rgba(255, 255, 255, 0.05) 245deg,
-    rgba(255, 255, 255, 0.75) 290deg,
-    rgba(255, 255, 255, 0.95) 315deg,
-    rgba(255, 255, 255, 0.6) 340deg,
-    rgba(255, 255, 255, 0.35) 360deg);
-  -webkit-mask: radial-gradient(circle closest-side, transparent 83%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0.7) 95%, #000 97.4%, transparent 98.7%);
-  mask: radial-gradient(circle closest-side, transparent 83%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0.7) 95%, #000 97.4%, transparent 98.7%);
+@keyframes star-shade {
+  0%, 100% { opacity: 0; }
+  8%, 92% { opacity: 0.12; }
+  16%, 84% { opacity: 0.35; }
+  25%, 75% { opacity: 0.55; }
 }
-/* The main reflection of the light, up and to the left where it comes from: a soft, curved
-   streak that follows the round of the glass, brightest at its top and melting away
-   downwards, with a small sharp glint at its brightest point. */
-.globe-glass::after {
-  left: 13%;
-  top: 11%;
-  width: 34%;
-  height: 26%;
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse 9% 8% at 40% 26%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
-    radial-gradient(ellipse 58% 42% at 44% 30%, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.34) 55%, rgba(255, 255, 255, 0) 100%);
-  /* carve the lower edge into a curve, so the streak bends with the ball */
-  -webkit-mask: radial-gradient(ellipse 78% 82% at 62% 92%, transparent 60%, #000 72%);
-  mask: radial-gradient(ellipse 78% 82% at 62% 92%, transparent 60%, #000 72%);
-  transform: rotate(-24deg);
-  filter: blur(1.2px);
+/* the edge: both sides of every layer show, so it reads solid from any angle */
+.star-layer {
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+  -webkit-mask: url("../images/home/star-front.png") center / 100% 100%;
+  mask: url("../images/home/star-front.png") center / 100% 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .star-spin { animation: none; transform: rotateY(-28deg); }
+  .star-shade { animation: none; opacity: 0.2; }
 }
 
 /* About: the astronaut photo with the bio beside it, the pair as wide as the tabs line
@@ -747,7 +670,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 
 /* The inquiries note in its own little pixel frame (images/about/icons/frame.png, drawn by
   : its 8-pixel corners stay put, its edges repeat along the
-   sides, all at twice size with the pixels kept hard. As wide as the photo and bio above. */
+   sides, all at twice size with the pixels kept hard. As wide as the photo and bio above.
+   The contact icons sit inside it, under the note. */
 .about-inquiries {
   width: calc(var(--tabs-width, 440px) - 2 * 0.3 * clamp(1.4rem, 2.6vw, 2.1rem));
   max-width: 100%;
@@ -763,7 +687,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   text-align: center;
 }
 
-/* The old-style pixel icons under the photo, spread across a row as wide as the email line
+/* The old-style pixel icons in the inquiries frame, spread across a row as wide as the email line
    in the footer (26 typewriter characters at the footer's size and spacing), and pressed in
    (down onto their shadow) when hovered, like an old button. */
 .contact-icons {
@@ -773,13 +697,15 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   align-items: flex-end;
   font-size: 0.9rem;                    /* the footer's size, so the width below matches it */
   width: calc(26 * (0.6em - 0.06em));
-  margin: 2.5rem auto 0;
+  max-width: 100%;
+  margin: 1rem auto 0.25rem;
   padding: 0;
 }
 .contact-icon { display: block; line-height: 0; }
 .contact-icon img {
   width: 25.5px;                        /* three quarters of their pixel size */
   height: 25.5px;
+  image-rendering: auto;                /* (not the frame's hard pixels, see below) */
   transition: transform 0.08s steps(1);
 }
 /* the envelope is wider than the others (46 pixels across instead of 34) */
