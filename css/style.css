@@ -230,7 +230,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   transition: transform 0.25s ease;
 }
 .project-icon:hover,
-.project-icon:focus-visible { transform: translateY(-4px); }
+.project-icon:focus-visible,
+.project-icon.is-active { transform: translateY(-4px); }
 .project-object {
   position: relative;
   display: block;
@@ -238,7 +239,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   transition: filter 0.3s ease;
 }
 .project-icon:hover .project-object,
-.project-icon:focus-visible .project-object {
+.project-icon:focus-visible .project-object,
+.project-icon.is-active .project-object {
   filter: none;
 }
 .project-object > img { display: block; width: 100%; height: auto; }
@@ -251,7 +253,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   letter-spacing: -0.03em;
 }
 .project-icon:hover .project-title,
-.project-icon:focus-visible .project-title { color: #0000ee; }
+.project-icon:focus-visible .project-title,
+.project-icon.is-active .project-title { color: #0000ee; }
 @media (max-width: 560px) {
   .project-icons { gap: 2rem 2.5rem; }
   .project-object--skate { width: 34px; }
@@ -336,7 +339,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   transform: rotateY(180deg);
 }
 .project-icon:hover .skate-deck,
-.project-icon:focus-visible .skate-deck {
+.project-icon:focus-visible .skate-deck,
+.project-icon.is-active .skate-deck {
   animation: skate-spin 1.6s cubic-bezier(0.35, 0.1, 0.3, 1);
 }
 @keyframes skate-spin {
@@ -347,7 +351,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .tv-static.is-on, .tv-static.is-off { animation: none; }
   .tv-static.is-off { opacity: 0; }
   .project-icon:hover .skate-deck,
-  .project-icon:focus-visible .skate-deck { animation: none; }
+  .project-icon:focus-visible .skate-deck,
+  .project-icon.is-active .skate-deck { animation: none; }
 }
 
 /* ---- Video page: a big TV that plays the picked VHS tape (js/video.js) ----
@@ -980,9 +985,11 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   transition: filter 0.3s ease;
 }
 .band-member:hover img,
-.band-member:focus-visible img { filter: none; }
+.band-member:focus-visible img,
+.band-member.is-active img { filter: none; }
 .band-member:hover,
-.band-member:focus-visible { transform: translateY(-4px); }
+.band-member:focus-visible,
+.band-member.is-active { transform: translateY(-4px); }
 .band-member:focus-visible { outline: 2px dotted #000; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .band-member { transition: none; }
@@ -1005,11 +1012,12 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .band-name-link:hover,
 .band-name-link:focus-visible,
 .band-stage:has(.band-member:hover) .band-name-link,
-.band-stage:has(.band-member:focus-visible) .band-name-link { color: #0000ee; }
+.band-stage:has(.band-member:focus-visible) .band-name-link,
+.band-stage:has(.band-member.is-active) .band-name-link { color: #0000ee; }
 /* likewise "Mixtapes" while one of its CDs is hovered */
 .playlists:has(.playlist:hover) .playlists-title,
 .playlists:has(.playlist:focus-visible) .playlists-title,
-.playlists:has(.playlist.is-open) .playlists-title { color: #0000ee; }
+.playlists:has(.playlist.is-active) .playlists-title { color: #0000ee; }
 .band-media[hidden] { display: none; }
 
 /* seasonal playlist covers, linking out to Spotify */
@@ -1034,7 +1042,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   .playlist-grid { grid-template-columns: repeat(2, var(--case)); }
   /* a left-hand case's lid swings out a whole case-width to the left: while one is open the
      grid slides over, so the lid stays on screen */
-  .playlist-grid:has(> li:nth-child(odd) .playlist.is-open) { translate: calc(var(--case) / 2) 0; }
+  .playlist-grid:has(> li:nth-child(odd) .playlist.is-active) { translate: calc(var(--case) / 2) 0; }
 }
 .playlist {
   display: block;
@@ -1048,7 +1056,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .playlist { position: relative; }
 .playlist:hover,
 .playlist:focus-visible,
-.playlist.is-open { z-index: 5; }    /* the opened lid swings over its neighbour */
+.playlist.is-active { z-index: 5; }    /* the opened lid swings over its neighbour */
 .jewel {
   position: relative;
   display: block;
@@ -1060,7 +1068,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .playlist:hover .jewel,
 .playlist:focus-visible .jewel,
-.playlist.is-open .jewel { filter: none; }
+.playlist.is-active .jewel { filter: none; }
 .jewel-tray,
 .jewel-face,
 .jewel-face::before {
@@ -1112,7 +1120,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .playlist:hover .jewel-lid,
 .playlist:focus-visible .jewel-lid,
-.playlist.is-open .jewel-lid { transform: rotateY(-180deg); }
+.playlist.is-active .jewel-lid { transform: rotateY(-180deg); }
 .playlist-title {
   display: block;
   margin-top: 0.5rem;
@@ -1121,7 +1129,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .playlist:hover .playlist-title,
 .playlist:focus-visible .playlist-title,
-.playlist.is-open .playlist-title { color: #0000ee; }
+.playlist.is-active .playlist-title { color: #0000ee; }
 @media (prefers-reduced-motion: reduce) {
   .jewel-lid { transition: none; }
 }
@@ -1822,16 +1830,22 @@ body.mag-open { overflow: hidden; }
 .phone-new { font: 17cqw/1 "VT323", monospace; white-space: nowrap; }   /* sized to the screen */
 .project-icon:hover .phone-screen,
 .project-icon:focus-visible .phone-screen,
-.phone-screen.is-lit { opacity: 1; }
+.phone-screen.is-lit,
+.project-icon.is-active .phone-screen { opacity: 1; }
 .project-icon:hover .phone-envelope,
 .project-icon:focus-visible .phone-envelope,
 .project-icon:hover .phone-new,
 .project-icon:focus-visible .phone-new,
-.phone-screen.is-lit > * { animation: phone-blink 0.9s steps(1) infinite; }
+.phone-screen.is-lit > *,
+.project-icon.is-active .phone-envelope,
+.project-icon.is-active .phone-new { animation: phone-blink 0.9s steps(1) infinite; }
 @keyframes phone-blink { 50% { visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) {
-  .project-icon:hover .phone-envelope, .project-icon:hover .phone-new,
-  .phone-screen.is-lit > * { animation: none; }
+  .project-icon:hover .phone-envelope,
+  .project-icon:hover .phone-new,
+  .phone-screen.is-lit > *,
+  .project-icon.is-active .phone-envelope,
+  .project-icon.is-active .phone-new { animation: none; }
 }
 
 /* ---- Messages page (js/messages.js): the closed phone, its notice blinking, with a caption.
@@ -2089,15 +2103,21 @@ body.mag-open { overflow: hidden; }
   transition: opacity 0.2s;
 }
 .project-icon:hover .rec-reel,
-.project-icon:focus-visible .rec-reel { animation: reel-turn 1.8s linear infinite; }
+.project-icon:focus-visible .rec-reel,
+.project-icon.is-active .rec-reel { animation: reel-turn 1.8s linear infinite; }
 .project-icon:hover .rec-light,
-.project-icon:focus-visible .rec-light { opacity: 1; animation: rec-glow 1.2s ease-in-out infinite; }
+.project-icon:focus-visible .rec-light,
+.project-icon.is-active .rec-light { opacity: 1; animation: rec-glow 1.2s ease-in-out infinite; }
 @keyframes reel-turn { to { transform: rotate(-360deg); } }
 @keyframes rec-glow { 50% { opacity: 0.55; } }
 @media (max-width: 560px) {
   .project-object--recorder { width: 80px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .project-icon:hover .rec-reel, .project-icon:focus-visible .rec-reel,
-  .project-icon:hover .rec-light, .project-icon:focus-visible .rec-light { animation: none; }
+  .project-icon:hover .rec-reel,
+  .project-icon:focus-visible .rec-reel,
+  .project-icon:hover .rec-light,
+  .project-icon:focus-visible .rec-light,
+  .project-icon.is-active .rec-reel,
+  .project-icon.is-active .rec-light { animation: none; }
 }

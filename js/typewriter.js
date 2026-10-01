@@ -45,4 +45,6 @@
   icon.addEventListener('mouseleave', stop);
   icon.addEventListener('focus', start);
   icon.addEventListener('blur', stop);
+  icon.addEventListener('icon:on', start);     // tapped, on a touch screen
+  icon.addEventListener('icon:off', stop);
 })();

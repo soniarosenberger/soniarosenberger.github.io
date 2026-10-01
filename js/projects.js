@@ -82,6 +82,8 @@
   scope.addEventListener('mouseleave', stop);
   scope.addEventListener('focus', start);
   scope.addEventListener('blur', stop);
+  scope.addEventListener('icon:on', start);    // tapped, on a touch screen
+  scope.addEventListener('icon:off', stop);
 })();
 
 // The TV: hovering switches it on to snow, drawn at low resolution and stretched over the
@@ -126,4 +128,6 @@
   tv.addEventListener('mouseleave', off);
   tv.addEventListener('focus', on);
   tv.addEventListener('blur', off);
+  tv.addEventListener('icon:on', on);          // tapped, on a touch screen
+  tv.addEventListener('icon:off', off);
 })();

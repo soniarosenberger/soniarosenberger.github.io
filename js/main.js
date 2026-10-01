@@ -306,3 +306,39 @@ if (nav && 'ResizeObserver' in window) {
   if ('ResizeObserver' in window) new ResizeObserver(update).observe(sheet);
   update();
 })();
+
+
+// Touch screens can't hover, so there a tap on an icon plays what hovering does (its
+// animation, in colour), and a tap on its title opens the page. A tap anywhere else, or on
+// another icon, stops it. (Each kind: the icon, and what counts as its title.)
+(function () {
+  if (!window.matchMedia('(hover: none)').matches) return;
+  var KINDS = [
+    ['.project-icon', '.project-title'],
+    ['.playlist', '.playlist-title'],
+    ['.band-member', null]                 // the band's title is the "Filthy Blonde" heading
+  ];
+  var active = null;
+  function stop() {
+    if (!active) return;
+    active.classList.remove('is-active');
+    active.dispatchEvent(new Event('icon:off'));
+    active = null;
+  }
+  KINDS.forEach(function (kind) {
+    document.querySelectorAll(kind[0]).forEach(function (icon) {
+      icon.addEventListener('click', function (e) {
+        if (kind[1] && e.target.closest(kind[1])) return;   // the title: open the page
+        e.preventDefault();
+        if (active === icon) return;
+        stop();
+        active = icon;
+        icon.classList.add('is-active');
+        icon.dispatchEvent(new Event('icon:on'));
+      });
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (active && !active.contains(e.target)) stop();
+  });
+})();
