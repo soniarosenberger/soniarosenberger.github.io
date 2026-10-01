@@ -549,11 +549,13 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .vhs { transition: none; }
 }
 
-/* ---- Home: Sonia's linocut star, cut out and puffed up, turning slowly about its upright ----
-   The print is already in the icons' black-and-white grain (baked into the pictures). Its
-   thickness is a stack of star-shaped layers (js/star.js) between the printed front and the
-   paper back, shrinking towards the faces so the edge rounds over like a pillow. Sizes are
-   in cqw, hundredths of the star's width. */
+/* ---- Home: Sonia's linocut star, blown up like a foil balloon, turning slowly about its upright ----
+   The print is already in the icons' black-and-white grain, and shaded for its puffed-up
+   surface (images/home/star.png). Its shape is a stack of layers (js/star.js), each the
+   print cut to one contour of the balloon's height (a strip of images/home/star-layers.png),
+   the smaller ones further out on both sides, so it's fattest in the middle and thins
+   towards the points. The back is the same print, seen from behind. Sizes are in cqw,
+   hundredths of the star's width. */
 .star {
   width: min(45vw, max(120px, calc(var(--tabs-width, 346px) * 0.36)));
   aspect-ratio: 400 / 508;
@@ -569,51 +571,16 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   animation: star-spin 14s linear infinite;
 }
 @keyframes star-spin { to { transform: rotateY(360deg); } }
-.star-face,
 .star-layer {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.star-front { transform: translateZ(4.55cqw) scale(0.95); }
-.star-back { transform: rotateY(180deg) translateZ(4.55cqw) scale(0.95); }
-/* each face dims as it turns away from the light */
-.star-shade {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  -webkit-mask: url("../images/home/star-front.png") center / 100% 100%;
-  mask: url("../images/home/star-front.png") center / 100% 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  animation: star-shade 14s linear infinite;
-}
-.star-shade--back {
-  -webkit-mask-image: url("../images/home/star-back.png");
-  mask-image: url("../images/home/star-back.png");
-  animation-delay: -7s;
-}
-@keyframes star-shade {
-  0%, 100% { opacity: 0; }
-  8%, 92% { opacity: 0.12; }
-  16%, 84% { opacity: 0.35; }
-  25%, 75% { opacity: 0.55; }
-}
-/* the edge: both sides of every layer show, so it reads solid from any angle */
-.star-layer {
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
-  -webkit-mask: url("../images/home/star-front.png") center / 100% 100%;
-  mask: url("../images/home/star-front.png") center / 100% 100%;
+  background: url("../images/home/star.png") center / 100% 100%;
+  -webkit-mask: url("../images/home/star-layers.png") 0 var(--at) / 100% 2100% no-repeat;
+  mask: url("../images/home/star-layers.png") 0 var(--at) / 100% 2100% no-repeat;
+  transform: translateZ(var(--z));
 }
 @media (prefers-reduced-motion: reduce) {
   .star-spin { animation: none; transform: rotateY(-28deg); }
-  .star-shade { animation: none; opacity: 0.2; }
 }
 
 /* About: the astronaut photo with the bio beside it, the pair as wide as the tabs line
