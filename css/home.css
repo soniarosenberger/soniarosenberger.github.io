@@ -1,0 +1,12 @@
+/* Homepage spacing: --caption-gap is the space between the tabs, the snow globe and the footer. */
+:root {
+  --photo-width: 15vw;
+  --photo-min-width: 180px;
+  --photo-offset-x: 0px;
+  --photo-offset-y: 0px;
+  --caption-size: 0.8rem;
+  --caption-gap: 2.5rem;
+  --caption-align: center;
+  --caption-offset-x: 0px;
+  --caption-extra-width: 4rem;
+}

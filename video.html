@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sonia Rosenberger — Video</title>
+  <meta name="description" content="Sonia Rosenberger — art, music, writing and projects.">
+  <link rel="stylesheet" href="css/fonts.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=267">
+  <link rel="stylesheet" href="css/lettering.css?v=2">
+</head>
+<body>
+  <header class="site-header">
+    <p class="site-name"><a href="index.html">Sonia Rosenberger</a></p>
+    <nav class="site-nav" aria-label="Main">
+      <a href="art.html">art</a>
+      <a href="music.html">music</a>
+      <a href="writing.html">writing</a>
+      <a href="projects.html" aria-current="page">projects</a>
+      <a href="about.html">about</a>
+    </nav>
+  </header>
+
+  <main class="collage-page video-page">
+    <h1 class="visually-hidden">Video</h1>
+    <!-- The TV plays whichever tape is picked. Each tape's film is its data-video (a file in
+         videos/), and its blurb is the hidden .vhs-blurb below it. -->
+    <div class="vcr">
+      <div class="vcr-tv">
+        <img class="vcr-tv-img" src="images/projects/video/tv.png?v=2" width="2143" height="1044" alt="">
+        <div class="vcr-screen">
+          <canvas class="vcr-static" width="176" height="99" aria-hidden="true"></canvas>
+          <video class="vcr-video" playsinline preload="metadata"></video>
+        </div>
+      </div>
+      <div class="vcr-controls" hidden>
+        <button type="button" class="vcr-play">❚❚ pause</button>
+        <input type="range" class="vcr-seek" min="0" max="1000" value="0" aria-label="Position in film">
+        <span class="vcr-time">0:00 / 0:00</span>
+        <button type="button" class="vcr-sound">sound on</button>
+        <button type="button" class="vcr-eject">⏏ eject</button>
+      </div>
+      <div class="vcr-blurb" aria-live="polite"></div>
+      <ul class="vcr-tapes" aria-label="Tapes">
+        <li>
+          <button type="button" class="vhs" data-video="videos/the-tomato-conspiracy.mp4?v=2" aria-label="Play The Tomato Conspiracy">
+            <img src="images/projects/video/vhs.png" width="900" height="506" alt="">
+            <span class="vhs-label"><span class="vhs-label-text">The Tomato Conspiracy</span></span>
+          </button>
+          <div class="vhs-blurb" hidden>
+            <h2 class="vcr-blurb-title">The Tomato Conspiracy - 2021</h2>
+            <p>Short film based on the poem &ldquo;The Tomato Conspiracy&rdquo; by <a href="https://www.billbissett.com/" target="_blank" rel="noopener">bill bissett</a>. Submitted as a project for my high school English 12 class. Mix of original stop-motion animation cut with stock footage.</p>
+          </div>
+        </li>
+        <li>
+          <button type="button" class="vhs" data-video="videos/time-on-van-isle.mp4?v=2" aria-label="Play Time on Van Isle">
+            <img src="images/projects/video/vhs.png" width="900" height="506" alt="">
+            <span class="vhs-label"><span class="vhs-label-text">Time on Van Isle</span></span>
+          </button>
+          <div class="vhs-blurb" hidden>
+            <h2 class="vcr-blurb-title">Time on Van Isle - 2026</h2>
+            <p>Edit of footage filmed on my 2006 Sony HDR-SR1 Handycam. Featuring people, places, and songs I love.</p>
+            <p class="vcr-credits">Song Credits:<br>The One to Wait - CCFX<br>Molly In The Club - Sophia Stel<br>Rolling Stone - Slightly Stoopid</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <p class="project-back video-back"><a href="projects.html">back to projects</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="mailto:sonia@soniarosenberger.com">sonia@soniarosenberger.com</a></p>
+    <p>&copy; <span id="year"></span> Sonia Rosenberger</p>
+    <p class="guestbook-link"><a href="guestbook.html">guestbook</a></p>
+  </footer>
+
+  <script src="js/main.js?v=23"></script>
+  <script src="js/video.js?v=6"></script>
+</body>
+</html>

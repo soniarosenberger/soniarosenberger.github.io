@@ -1,0 +1,9 @@
+.DS_Store
+__pycache__/
+# local test entries from tools/dev_server.py (the live guest book is in Supabase)
+data/guestbook.json
+# added once the domain's DNS points at GitHub Pages
+CNAME
+# local tools and settings (not part of the published site)
+.claude/
+tools/

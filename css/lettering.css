@@ -1,0 +1,139 @@
+/* The name, tabs and tape labels, drawn from outlines of their lettering. */
+
+.site-name a {
+  --fs: var(--name-size);
+  width: calc(var(--fs) * 9.7803);
+  height: calc(var(--fs) * 1.1000);
+  padding: calc(var(--fs) * 0.0000) calc(var(--fs) * 0.0000);
+  --ink-t: -0.1885;
+  --ink-b: 1.2946;
+}
+.site-name a::before {
+  left: calc(var(--fs) * -0.0591);
+  top: calc(var(--fs) * -0.2073);
+  width: calc(var(--fs) * 9.8394);
+  height: calc(var(--fs) * 1.6313);
+  -webkit-mask-image: url("../images/type/name.svg");
+  mask-image: url("../images/type/name.svg");
+}
+
+.site-nav a[href="art.html"] {
+  --fs: clamp(1.4rem, 2.6vw, 2.1rem);
+  width: calc(var(--fs) * 1.7370);
+  height: calc(var(--fs) * 1.8000);
+  padding: calc(var(--fs) * 0.1000) calc(var(--fs) * 0.3000);
+  --ink-t: 0.4072;
+  --ink-b: 0.6222;
+}
+.site-nav a[href="art.html"]::before {
+  left: calc(var(--fs) * 0.1670);
+  top: calc(var(--fs) * 0.1000);
+  width: calc(var(--fs) * 1.3160);
+  height: calc(var(--fs) * 1.6000);
+  -webkit-mask-image: url("../images/type/nav-art.svg");
+  mask-image: url("../images/type/nav-art.svg");
+}
+
+.site-nav a[href="music.html"] {
+  --fs: clamp(1.4rem, 2.6vw, 2.1rem);
+  width: calc(var(--fs) * 2.8710);
+  height: calc(var(--fs) * 1.8000);
+  padding: calc(var(--fs) * 0.1000) calc(var(--fs) * 0.3000);
+  --ink-t: 0.4333;
+  --ink-b: 0.6222;
+}
+.site-nav a[href="music.html"]::before {
+  left: calc(var(--fs) * 0.1600);
+  top: calc(var(--fs) * 0.1000);
+  width: calc(var(--fs) * 2.4370);
+  height: calc(var(--fs) * 1.6000);
+  -webkit-mask-image: url("../images/type/nav-music.svg");
+  mask-image: url("../images/type/nav-music.svg");
+}
+
+.site-nav a[href="writing.html"] {
+  --fs: clamp(1.4rem, 2.6vw, 2.1rem);
+  width: calc(var(--fs) * 3.4150);
+  height: calc(var(--fs) * 1.8000);
+  padding: calc(var(--fs) * 0.1000) calc(var(--fs) * 0.3000);
+  --ink-t: 0.4072;
+  --ink-b: 0.7778;
+}
+.site-nav a[href="writing.html"]::before {
+  left: calc(var(--fs) * 0.1930);
+  top: calc(var(--fs) * 0.1000);
+  width: calc(var(--fs) * 2.9470);
+  height: calc(var(--fs) * 1.6000);
+  -webkit-mask-image: url("../images/type/nav-writing.svg");
+  mask-image: url("../images/type/nav-writing.svg");
+}
+
+.site-nav a[href="projects.html"] {
+  --fs: clamp(1.4rem, 2.6vw, 2.1rem);
+  width: calc(var(--fs) * 3.6680);
+  height: calc(var(--fs) * 1.8000);
+  padding: calc(var(--fs) * 0.1000) calc(var(--fs) * 0.3000);
+  --ink-t: 0.4072;
+  --ink-b: 0.7778;
+}
+.site-nav a[href="projects.html"]::before {
+  left: calc(var(--fs) * -0.2130);
+  top: calc(var(--fs) * 0.1000);
+  width: calc(var(--fs) * 3.6020);
+  height: calc(var(--fs) * 1.6000);
+  -webkit-mask-image: url("../images/type/nav-projects.svg");
+  mask-image: url("../images/type/nav-projects.svg");
+}
+
+.site-nav a[href="about.html"] {
+  --fs: clamp(1.4rem, 2.6vw, 2.1rem);
+  width: calc(var(--fs) * 2.7410);
+  height: calc(var(--fs) * 1.8000);
+  padding: calc(var(--fs) * 0.1000) calc(var(--fs) * 0.3000);
+  --ink-t: 0.3261;
+  --ink-b: 0.6222;
+}
+.site-nav a[href="about.html"]::before {
+  left: calc(var(--fs) * 0.1670);
+  top: calc(var(--fs) * 0.1000);
+  width: calc(var(--fs) * 2.3200);
+  height: calc(var(--fs) * 1.6000);
+  -webkit-mask-image: url("../images/type/nav-about.svg");
+  mask-image: url("../images/type/nav-about.svg");
+}
+
+.site-nav a { --underline-at: 1.1000; }
+
+.vhs[data-video^="videos/the-tomato-conspiracy"] .vhs-label-text {
+  --fs: 6.2cqw;
+  width: calc(var(--fs) * 5.6750);
+  height: calc(var(--fs) * 2.1000);
+  padding: calc(var(--fs) * 0.0000) calc(var(--fs) * 0.0000);
+  --ink-t: 0.0974;
+  --ink-b: 0.9819;
+}
+.vhs[data-video^="videos/the-tomato-conspiracy"] .vhs-label-text::before {
+  left: calc(var(--fs) * 0.0000);
+  top: calc(var(--fs) * 0.0000);
+  width: calc(var(--fs) * 5.6890);
+  height: calc(var(--fs) * 2.1000);
+  -webkit-mask-image: url("../images/type/vhs-tomato.svg");
+  mask-image: url("../images/type/vhs-tomato.svg");
+}
+
+.vhs[data-video^="videos/time-on-van-isle"] .vhs-label-text {
+  --fs: 6.2cqw;
+  width: calc(var(--fs) * 4.8650);
+  height: calc(var(--fs) * 2.1000);
+  padding: calc(var(--fs) * 0.0000) calc(var(--fs) * 0.0000);
+  --ink-t: 0.0974;
+  --ink-b: 0.8548;
+}
+.vhs[data-video^="videos/time-on-van-isle"] .vhs-label-text::before {
+  left: calc(var(--fs) * 0.0000);
+  top: calc(var(--fs) * 0.0000);
+  width: calc(var(--fs) * 4.8860);
+  height: calc(var(--fs) * 2.1000);
+  -webkit-mask-image: url("../images/type/vhs-van-isle.svg");
+  mask-image: url("../images/type/vhs-van-isle.svg");
+}

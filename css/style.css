@@ -1,0 +1,2026 @@
+:root {
+  --bg: #ffffff;
+  --text: #1a1a1a;
+  --muted: #666;
+  --accent: #1a1a1a;
+  --max-width: 1000px;
+  --font-body: system-ui, -apple-system, sans-serif;
+  --font-display: Georgia, serif;
+  --font-typewriter: "Courier New", Courier, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg);
+  background-image: url("../images/paper.svg?v=6");
+  background-size: 1000px 1000px;
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+a { color: var(--accent); }
+
+/* Header: centred name with tabs underneath */
+.site-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem 1rem;
+  text-align: center;
+}
+/* The name and the tabs are drawn from outlines of their lettering (css/lettering.css sizes
+   each one and picks its outline), filled with --ink so the hover colours still work. The
+   words stay in the page, at zero size, for screen readers and search. */
+.site-name a::before,
+.site-nav a::before,
+.vhs-label-text::before {
+  content: "";
+  position: absolute;
+  background: var(--ink);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.site-name {
+  /* "SONIA ROSENBERGER" is 9.78 of these wide, so this makes it ~50% of the page width */
+  --name-size: 5.11vw;
+  font-size: var(--name-size);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+/* on phones the name is bigger, about 80% of the screen width */
+@media (max-width: 440px) {
+  .site-name { --name-size: 8.2vw; }
+}
+.site-name a {
+  --ink: var(--text);
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 0;
+  text-decoration: none;
+}
+
+/* Same classic hyperlink blue as the tabs on hover */
+.site-name a:hover,
+.site-name a:focus-visible { --ink: #0000ee; }
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem clamp(0.75rem, 3.5vw, 2.25rem);
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+.site-nav a {
+  --ink: #000;
+  position: relative;
+  font-size: 0;
+  text-decoration: none;
+}
+/* On phones, where all five won't fit on one line, break evenly: three tabs, then two */
+@media (max-width: 440px) {
+  .site-nav { row-gap: 0; }
+  /* the tabs' lines closer together (a line height of 1.25 rather than 1.6), the words kept
+     centred in them */
+  .site-header .site-nav a[href] { height: calc(var(--fs) * 1.45); }
+  .site-nav a::before, .site-nav a::after { translate: 0 calc(var(--fs) * -0.175); }
+  .site-nav::after { content: ""; flex-basis: 100%; order: 2; }
+  .site-nav a:nth-child(n + 4) { order: 3; }
+}
+/* Classic early-web hyperlink blue on hover */
+.site-nav a:hover,
+.site-nav a:focus-visible { --ink: #0000ee; }
+/* the current tab is underlined, a thin line 0.3 of the type size under its baseline */
+.site-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--fs) * 0.3);
+  right: calc(var(--fs) * 0.3);
+  top: calc(var(--fs) * (var(--underline-at) + 0.3));
+  height: 1px;
+  background: var(--text);
+}
+
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: normal; }
+main h1 { font-size: 2rem; margin-bottom: 1rem; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Floating collage pages (art, music, projects, about).
+   Each item's size, tilt, nudge, stacking and float timing are set inline by the page. */
+.collage-page { max-width: 1200px; padding-top: 1.5rem; }
+.collage-section + .collage-section { margin-top: 3rem; }
+.collage-label {
+  position: relative;
+  z-index: 60; /* stays readable above the pictures */
+  text-align: center;
+  font: bold 15px var(--font-typewriter);
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  margin-bottom: 0.5rem;
+}
+.collage {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0.5rem 1.5rem;
+  overflow-x: clip; /* tilted edges never cause sideways scrolling */
+  overflow-clip-margin: 1rem;
+}
+.collage-item {
+  position: relative;
+  z-index: var(--z, 1);
+  width: min(var(--w, 240px), 44vw);
+  margin: -0.9rem -0.6rem; /* slight overlaps between neighbours */
+  rotate: var(--r, 0deg);
+  translate: var(--dx, 0) var(--dy, 0);
+  animation: collage-float var(--dur, 7s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+.collage-item img,
+.collage-item video {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
+  transition: transform 0.25s ease;
+}
+.collage-item video { cursor: default; }
+.collage-item:hover,
+.collage-item:focus-within { z-index: 50; }
+.collage-item:hover img,
+.collage-item img:focus-visible { transform: scale(1.06); }
+@keyframes collage-float {
+  from { transform: translateY(-5px); }
+  to   { transform: translateY(5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .collage-item { animation: none; }
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  cursor: zoom-out;
+}
+.lightbox[hidden] { display: none; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3));
+}
+
+.page-placeholder {
+  text-align: center;
+  padding: 3rem 0;
+  font: bold 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+  color: #666;
+}
+
+/* Every page's icons (these, the sketchbooks, the band and the CD cases) rest in soft, grainy
+   black and white: url(#bw-grain) is a film-grain filter js/main.js adds to each page. */
+/* The object icons (Projects and Writing), in a line, bottoms lined up, each opening its
+   own page. At rest they're still, in high-contrast black and white; hovered, each comes into
+   colour, lifts, gently floats and plays its own animation. */
+.project-icons {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 2.5rem 3.5rem;
+  padding: 1.5rem 0 1rem;
+}
+.project-icons > li:hover,
+.project-icons > li:focus-within { animation: project-float 5s ease-in-out infinite; }
+@keyframes project-float {
+  0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+  50% { transform: translateY(-4px) rotate(0.5deg); }
+}
+.project-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #000;
+  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+.project-icon:hover,
+.project-icon:focus-visible { transform: translateY(-4px); }
+.project-object {
+  position: relative;
+  display: block;
+  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);
+  transition: filter 0.3s ease;
+}
+.project-icon:hover .project-object,
+.project-icon:focus-visible .project-object {
+  filter: none;
+}
+.project-object > img { display: block; width: 100%; height: auto; }
+.project-object--skate { width: 42px; }         /* 166px tall */
+.project-object--engineering { width: 124px; }  /* 153px tall */
+.project-object--video { width: 200px; }        /* 116px tall */
+.project-title {
+  margin-top: 0.6rem;
+  font: bold 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+}
+.project-icon:hover .project-title,
+.project-icon:focus-visible .project-title { color: #0000ee; }
+@media (max-width: 560px) {
+  .project-icons { gap: 2rem 2.5rem; }
+  .project-object--skate { width: 34px; }
+  .project-object--engineering { width: 100px; }
+  .project-object--video { width: 150px; }
+}
+
+/* the oscilloscope's moving trace, laid over the green screen of the photo
+   (the photo's own flat line was erased) */
+.scope-trace {
+  position: absolute;
+  left: 7.93%;
+  top: 11.23%;
+  width: 59.71%;
+  height: 32.48%;
+  overflow: hidden;
+  border-radius: 6%;
+  filter: drop-shadow(0 0 1.5px rgba(70, 255, 120, 0.9)) drop-shadow(0 0 4px rgba(40, 220, 80, 0.6));
+}
+.scope-trace path {
+  fill: none;
+  stroke: #c4ffd9;
+  stroke-width: 1.6px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+/* while js/projects.js glitches from one waveform to the next */
+.scope-trace.is-glitching path { stroke: #e6fff0; }
+@media (prefers-reduced-motion: reduce) {
+  .project-icon { transition: none; }
+  .project-icons > li:hover, .project-icons > li:focus-within { animation: none; }
+}
+
+/* the TV's screen: switches on to static while the TV is hovered (drawn by js/projects.js),
+   shaped to the glass by a mask */
+.tv-static {
+  position: absolute;
+  left: 30.78%;
+  top: 11.88%;
+  width: 59.67%;
+  height: 76.44%;
+  -webkit-mask: url("../images/projects/icons/video-screen-mask.png") center / 100% 100% no-repeat;
+  mask: url("../images/projects/icons/video-screen-mask.png") center / 100% 100% no-repeat;
+  opacity: 0;
+  pointer-events: none;
+}
+/* switching on: a bright line opens out into the picture, like an old set warming up */
+.tv-static.is-on { opacity: 0.95; animation: tv-on 0.45s ease-out both; }
+.tv-static.is-off { animation: tv-off 0.3s ease-in both; }
+@keyframes tv-on {
+  0%   { opacity: 1; transform: scale(0.02, 0.006); filter: brightness(5); }
+  35%  { opacity: 1; transform: scale(1, 0.006); filter: brightness(4); }
+  70%  { opacity: 1; transform: scale(1, 1); filter: brightness(1.8); }
+  100% { opacity: 0.95; transform: scale(1, 1); filter: brightness(1); }
+}
+@keyframes tv-off {
+  0%   { opacity: 0.95; transform: scale(1, 1); filter: brightness(1); }
+  55%  { opacity: 1; transform: scale(1, 0.006); filter: brightness(4); }
+  85%  { opacity: 1; transform: scale(0.02, 0.006); filter: brightness(5); }
+  100% { opacity: 0; transform: scale(0, 0); }
+}
+
+/* the skateboard spins round once on its long (vertical) axis when hovered,
+   showing the other side of the deck halfway round */
+.project-object--skate { perspective: 500px; }
+.skate-deck {
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+}
+.skate-face {
+  display: block;
+  width: 100%;
+  height: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.skate-face--back {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  transform: rotateY(180deg);
+}
+.project-icon:hover .skate-deck,
+.project-icon:focus-visible .skate-deck {
+  animation: skate-spin 1.6s cubic-bezier(0.35, 0.1, 0.3, 1);
+}
+@keyframes skate-spin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tv-static.is-on, .tv-static.is-off { animation: none; }
+  .tv-static.is-off { opacity: 0; }
+  .project-icon:hover .skate-deck,
+  .project-icon:focus-visible .skate-deck { animation: none; }
+}
+
+/* ---- Video page: a big TV that plays the picked VHS tape (js/video.js) ----
+   Waiting: the TV fills most of the screen, showing static, with the tapes beside it.
+   Playing (.vcr.is-playing): the TV grows to nearly the full width, with the controls, the
+   film's blurb and then the tapes underneath. */
+.video-page { max-width: 1400px; }
+.vcr {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+  padding: 0.5rem 0 1.5rem;
+}
+.vcr-tv {
+  position: relative;
+  flex: none;
+  width: min(70%, (100vh - 250px) * 2.053);
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.18));
+  transition: width 0.7s cubic-bezier(0.4, 0.1, 0.2, 1);
+  animation: vcr-grow 0.75s cubic-bezier(0.3, 0.1, 0.2, 1) both;
+}
+/* arriving from the little TV on the projects page */
+@keyframes vcr-grow {
+  from { transform: scale(0.3); opacity: 0.4; }
+  to { transform: none; opacity: 1; }
+}
+.vcr-tv-img { display: block; width: 100%; height: auto; }
+.vcr-screen {
+  position: absolute;
+  left: 25.76%;
+  top: 11.78%;
+  width: 66.26%;
+  height: 76.53%;
+  -webkit-mask: url("../images/projects/video/tv-screen-mask.png?v=2") center / 100% 100% no-repeat;
+  mask: url("../images/projects/video/tv-screen-mask.png?v=2") center / 100% 100% no-repeat;
+}
+.vcr-static,
+.vcr-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.vcr-static { opacity: 0; }
+.vcr-static.is-on { opacity: 0.95; animation: tv-on 0.45s ease-out both; }
+/* the screen is 16:9 like the films, so they fill it edge to edge */
+.vcr-video {
+  object-fit: cover;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.vcr.is-showing .vcr-video { opacity: 1; }
+/* a picture tube's darker corners, over whatever is on the screen */
+.vcr-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+  transition: opacity 0.4s ease;
+}
+.vcr-screen.is-on::after { opacity: 1; }
+.vcr.is-playing .vcr-tv { cursor: pointer; }
+
+.vcr-tapes {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: min(22%, 280px);
+}
+.vhs {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  container-type: inline-size;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.vhs:hover,
+.vhs:focus-visible { transform: translateY(-4px) rotate(-1deg); }
+.vhs img { display: block; width: 100%; height: auto; }
+/* the title, written on the label's ruled lines */
+.vhs-label {
+  position: absolute;
+  left: 30.2%;
+  top: 43.5%;
+  width: 37.7%;
+  height: 26.6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  rotate: -2deg;
+}
+.vhs-label-text { --ink: #1b1b3a; position: relative; display: block; font-size: 0; }
+.vhs:hover .vhs-label-text,
+.vhs:focus-visible .vhs-label-text { --ink: #0000ee; }
+.vhs[aria-pressed="true"] { opacity: 0.45; }
+
+.vcr-controls,
+.vcr-blurb {
+  order: 2;
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font: bold 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+}
+.vcr-controls[hidden] { display: none; }
+.vcr-controls button {
+  min-width: 6.5em;
+  padding: 0.35em 0.7em;
+  border: 1.5px solid #000;
+  background: none;
+  color: #000;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+.vcr-controls button:hover,
+.vcr-controls button:focus-visible { color: #0000ee; border-color: #0000ee; }
+.vcr-time { font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.vcr-seek {
+  flex: 0 1 480px;
+  min-width: 60px;
+  accent-color: #000;
+  cursor: pointer;
+}
+@media (max-width: 560px) {
+  .vcr-controls { flex-wrap: wrap; }
+  .vcr-seek { flex-basis: 100%; order: 5; }
+}
+.vcr-blurb {
+  order: 3;
+  display: block;
+  max-width: 62ch;
+  margin: 0 auto;
+  font: 400 15px / 1.5 var(--font-typewriter);
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+.vcr-blurb:empty { display: none; }
+.vcr-blurb p + p { margin-top: 0.8em; }
+.vcr-blurb-title {
+  margin-bottom: 0.5em;
+  font: bold 18px var(--font-typewriter);
+  letter-spacing: -0.03em;
+}
+.vcr-credits { font-style: italic; }
+.vcr-blurb a { color: inherit; text-decoration: underline; }
+.vcr-blurb a:hover,
+.vcr-blurb a:focus-visible { color: #0000ee; }
+
+/* as big as the window allows, leaving a border all round (2.053 is the TV's width to
+   height); it spills past the page's column evenly on both sides because the row is centred */
+.vcr.is-playing .vcr-tv { width: min(100vw - 64px, (100vh - 64px) * 2.053); }
+.vcr.is-playing .vcr-tapes {
+  order: 4;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  animation: vcr-fade 0.5s ease both;
+}
+.vcr.is-playing .vhs { width: 170px; }
+@keyframes vcr-fade { from { opacity: 0; } }
+
+@media (max-width: 700px) {
+  .vcr-tv { width: 100%; }
+  .vcr-tapes { flex-direction: row; justify-content: center; width: 100%; }
+  .vhs { width: 44%; }
+  .vcr.is-playing .vcr-tv { width: min(100vw - 32px, (100vh - 32px) * 2.053); }
+  .vcr.is-playing .vhs { width: 40%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vcr-tv, .vcr-tapes { animation: none !important; transition: none; }
+  .vcr-static.is-on { animation: none; }
+  .vhs { transition: none; }
+}
+
+/* ---- Home: Sonia's room in a snow globe (js/snowglobe.js teeters it and swirls the glitter) ----
+   Positions are fractions of the snow globe photo (1182 x 1809 once cropped). */
+/* On the homepage the globe is sized from the tabs line (--tabs-width, measured in
+   js/main.js), and never narrower than 140px or wider than most of a phone screen. */
+.home-main .globe-stand {
+  width: min(60vw, max(140px, calc(var(--tabs-width, 346px) * 0.468)));
+  margin: calc(var(--caption-gap, 2.5rem) - 1rem) auto 0;
+}
+
+/* The globe sitting on a table. The photo looks down at the globe at about 21 degrees (the
+   collar's top ellipse is about 0.36 as deep as it is wide), so everything lying on the
+   table is flattened to that same shape. The light comes from the upper left at about 50
+   degrees, so shadows fall back and to the right:
+   - a dark contact shadow hugging the foot, where the base touches the table
+   - the base's shadow, stretching back and to the right
+   - the glass ball's shadow, further out because the ball sits higher, and lighter
+     because glass lets light through, with a bright patch where the ball focuses light.
+   They're drawn in about.html as one flat layer (.globe-shadows). */
+.globe-stand {
+  position: relative;
+  width: min(140px, 40vw);
+  margin: 1rem auto 0;
+  isolation: isolate;
+}
+.globe-shadows {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.globe {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1182 / 1809;
+  /* js/snowglobe.js tips it on the edge of its base when nudged */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.globe:focus-visible { outline: 1px dashed #0000ee; outline-offset: 8px; }
+.globe-base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* The glass ball, after real globes: the water fills it right to the edge, and the glass
+   shows as the view darkening softly towards the curved edge, a crisp dark outline with a
+   thin bright arc just inside it along the top, a big soft patch of light, and the sharper
+   reflections of a window on the right. */
+.globe-scene {
+  position: absolute;
+  left: 0.338%;
+  top: 0.221%;
+  width: 99.154%;
+  height: 64.787%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #120d06;
+}
+.globe-water {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.globe-water img,
+.globe-snow,
+.globe-water-edge,
+.globe-glass {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.globe-water img { transform: scale(1.05); }   /* the water magnifies a little */
+/* the edge of the ball: light bends away, so the view darkens softly towards it */
+.globe-water-edge {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side at 50% 48%, rgba(0, 0, 0, 0) 72%, rgba(18, 20, 24, 0.14) 84%,
+    rgba(16, 18, 22, 0.38) 94%, rgba(12, 14, 18, 0.62) 99%);
+}
+.globe-glass {
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    /* the crisp outline of the glass */
+    radial-gradient(circle closest-side at 50% 50%, rgba(70, 76, 84, 0) 98.6%, rgba(70, 76, 84, 0.65) 99.5%, rgba(70, 76, 84, 0.8) 100%),
+    /* a soft bloom round the window's reflection */
+    radial-gradient(ellipse 26% 22% at 33% 29%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 72%),
+    /* light that has passed through the ball, gathering low on the far side */
+    radial-gradient(ellipse 28% 7% at 60% 91%, rgba(255, 246, 225, 0.22), rgba(255, 246, 225, 0) 72%);
+}
+.globe-glass::before,
+.globe-glass::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+/* Light caught by the curved rim of the glass: crisp at the outer edge and fading softly
+   inwards, brightest where the light comes from (upper left) and tapering off either side,
+   with a fainter glow on the opposite side where light passes through the glass. */
+.globe-glass::before {
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    rgba(255, 255, 255, 0.35) 0deg,
+    rgba(255, 255, 255, 0.05) 50deg,
+    rgba(255, 255, 255, 0) 90deg,
+    rgba(255, 255, 255, 0.12) 125deg,
+    rgba(255, 255, 255, 0.3) 145deg,
+    rgba(255, 255, 255, 0.1) 170deg,
+    rgba(255, 255, 255, 0) 200deg,
+    rgba(255, 255, 255, 0.05) 245deg,
+    rgba(255, 255, 255, 0.75) 290deg,
+    rgba(255, 255, 255, 0.95) 315deg,
+    rgba(255, 255, 255, 0.6) 340deg,
+    rgba(255, 255, 255, 0.35) 360deg);
+  -webkit-mask: radial-gradient(circle closest-side, transparent 83%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0.7) 95%, #000 97.4%, transparent 98.7%);
+  mask: radial-gradient(circle closest-side, transparent 83%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0.7) 95%, #000 97.4%, transparent 98.7%);
+}
+/* The main reflection of the light, up and to the left where it comes from: a soft, curved
+   streak that follows the round of the glass, brightest at its top and melting away
+   downwards, with a small sharp glint at its brightest point. */
+.globe-glass::after {
+  left: 13%;
+  top: 11%;
+  width: 34%;
+  height: 26%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse 9% 8% at 40% 26%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(ellipse 58% 42% at 44% 30%, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.34) 55%, rgba(255, 255, 255, 0) 100%);
+  /* carve the lower edge into a curve, so the streak bends with the ball */
+  -webkit-mask: radial-gradient(ellipse 78% 82% at 62% 92%, transparent 60%, #000 72%);
+  mask: radial-gradient(ellipse 78% 82% at 62% 92%, transparent 60%, #000 72%);
+  transform: rotate(-24deg);
+  filter: blur(1.2px);
+}
+
+/* About: the astronaut photo with the bio beside it, the pair as wide as the tabs line
+   (--tabs-width, from js/main.js) and starting where the "art" tab's letters start (each
+   tab has 0.3em of padding before its word) */
+.about-intro {
+  --tab-inset: calc(0.3 * clamp(1.4rem, 2.6vw, 2.1rem));
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
+  width: calc(var(--tabs-width, 440px) - 2 * var(--tab-inset));
+  max-width: 100%;
+  /* the header already leaves 1rem under the tabs, plus the tabs' tails */
+  margin: calc(var(--about-gap) - 24px) auto 0;
+}
+/* photo and bio share the width equally */
+.about-photo {
+  flex: 1 1 0;
+  margin: 0;
+}
+.about-photo img { display: block; width: 100%; height: auto; }
+.about-bio {
+  flex: 1 1 0;
+  font-family: "IM Fell English", Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  /* beside the photo, js/main.js sizes the type so the bio stands as tall as the photo */
+}
+.about-bio p + p { margin-top: 0.9em; }
+/* the footer follows the italic note at the same distance as the note follows the icons */
+/* the same gap below the tabs, and between the photo and bio and the inquiries box */
+.about-page { --about-gap: 2.5rem; padding-top: 0; padding-bottom: 0; }
+.about-page + .site-footer { padding-top: 20px; }
+/* the italic note under the icons, on one line */
+.about-note {
+  margin: 1.5rem 0 0;
+  font-family: var(--font-typewriter);
+  font-size: 0.8rem;
+  font-style: italic;
+  -webkit-text-stroke: 0.3px currentColor;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .about-note { font-size: 0.6rem; }   /* small enough to stay on one line on a phone */
+}
+/* on phones the tabs wrap onto two lines, so the photo and bio stack, centred */
+@media (max-width: 560px) {
+  .about-intro { flex-direction: column; align-items: stretch; width: 100%; }
+  .about-photo, .about-bio { flex-basis: auto; width: 100%; }
+  .about-page .about-inquiries { width: 100%; }
+}
+
+/* The inquiries note in its own little pixel frame (images/about/icons/frame.png, drawn by
+  : its 8-pixel corners stay put, its edges repeat along the
+   sides, all at twice size with the pixels kept hard. As wide as the photo and bio above. */
+.about-inquiries {
+  width: calc(var(--tabs-width, 440px) - 2 * 0.3 * clamp(1.4rem, 2.6vw, 2.1rem));
+  max-width: 100%;
+  margin: var(--about-gap) auto 0;
+  padding: 0.6rem 1rem;
+  border: 16px solid transparent;
+  border-image: url("../images/about/icons/frame.png") 8 round;
+  image-rendering: pixelated;
+  background: #fff;
+  background-clip: padding-box;
+  font: bold 0.8rem/1.35 var(--font-typewriter);
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+/* The old-style pixel icons under the photo, spread across a row as wide as the email line
+   in the footer (26 typewriter characters at the footer's size and spacing), and pressed in
+   (down onto their shadow) when hovered, like an old button. */
+.contact-icons {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 0.9rem;                    /* the footer's size, so the width below matches it */
+  width: calc(26 * (0.6em - 0.06em));
+  margin: 2.5rem auto 0;
+  padding: 0;
+}
+.contact-icon { display: block; line-height: 0; }
+.contact-icon img {
+  width: 25.5px;                        /* three quarters of their pixel size */
+  height: 25.5px;
+  transition: transform 0.08s steps(1);
+}
+/* the envelope is wider than the others (46 pixels across instead of 34) */
+.contact-icon img.is-wide { width: 34.5px; }
+/* on high-resolution screens that's a clean one and a half screen pixels per icon pixel,
+   so keep the pixels hard; on older screens let them smooth a little instead of breaking up */
+@media (min-resolution: 2dppx) {
+  .contact-icon img { image-rendering: pixelated; }
+}
+a.contact-icon:hover img,
+a.contact-icon:focus-visible img { transform: translate(1px, 1px); }
+a.contact-icon:active img { transform: translate(2px, 2px); }
+a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px; }
+
+/* project pages (video, engineering, skate) */
+.project-page-title {
+  text-align: center;
+  font: bold 18px var(--font-typewriter);
+  letter-spacing: -0.08em;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+/* back links, at the bottom of a page: small, plain and centred */
+.project-back {
+  margin-top: 2.5rem;                    /* well clear of whatever is above */
+  text-align: center;
+  font: 12px var(--font-typewriter);
+}
+.project-back a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.project-back a:hover { color: #0000ee; }
+.poem-nav .poem-prev, .poem-nav .poem-next { text-decoration: none; }   /* only the way back is underlined */
+
+/* Engineering: its projects, one per line, each opening its own write-up */
+.eng-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 2rem 0 2.5rem;
+  font: 15px "IM Fell English", Georgia, serif;
+}
+.eng-list a { color: #000; text-decoration: none; }
+.eng-list a:hover, .eng-list a:focus-visible { color: #0000ee; text-decoration: underline; }
+.poem-list { gap: 0.7rem; }   /* the poem titles sit a little closer together */
+
+/* a poem, set on a page like a word processor's: as wide as a US Letter sheet (8.5 inches,
+   drawn at 80 pixels to the inch) with narrow half-inch margins, and only as long as the poem. */
+.poem-sheet {
+  width: min(680px, calc(100% - 32px));
+  margin: -1.5rem auto 0;               /* snug under the tabs */
+  padding: 1.5rem 5.88%;                        /* narrow margins: half an inch of the 8.5 */
+  background: #fff;
+  font: 13px/1.45 "Times New Roman", Times, serif;
+  text-align: center;
+}
+/* the header, the page and the links under it fill exactly one screen, so the links always sit
+   at the same spot near the bottom (the footer is just below, a scroll away); a poem longer
+   than its page scrolls inside it */
+.poem-screen { display: flex; flex-direction: column; height: 100vh; height: 100svh; }
+.poem-main {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.25rem;
+}
+.poem-main .poem-sheet { flex: 1; min-height: 0; overflow-y: auto; }   /* at its end, scrolling carries on down the page to the footer */
+/* spaced like plain typed text: lines close together, one blank line between verses, and
+   one under the title */
+.poem-title { margin-bottom: 1.45em; font: bold 1em/1.45 "Times New Roman", Times, serif; }
+.poem-body p + p { margin-top: 1.45em; }
+/* under the page: previous and next either side of the way back to the list */
+.poem-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;   /* the way back stays centred, even with one side empty */
+  gap: 2rem;
+  margin-top: 0.75rem;                  /* snug under the page */
+}
+.poem-prev { justify-self: end; }        /* previous and next sit close in on either side of it */
+.poem-next { justify-self: start; }
+.poem-nav .is-off { color: #aaa; cursor: default; }   /* first or last poem: nothing that way */
+@media (max-width: 560px) {
+  .poem-sheet { padding: 1.25rem 1rem; font-size: 12px; }
+}
+
+
+/* a project write-up: title, a small line under it, then the article in a readable column */
+.article { max-width: 36rem; margin: 0 auto; padding: 0 16px 2.5rem; }
+.article-meta {
+  margin-top: 0.4rem;
+  text-align: center;
+  font: italic 13px var(--font-typewriter);
+  color: #555;
+}
+/* a video in a write-up, the width of the column, with a small caption under it */
+.article-figure { margin: 1.5rem 0; }
+.article-video { display: block; width: 100%; height: auto; background: #000; }
+.article-figure figcaption {
+  margin-top: 0.5rem;
+  text-align: center;
+  font: italic 13px var(--font-typewriter);
+  color: #555;
+}
+/* a file to download, as a plain typewriter button */
+.article-download { margin-top: 1.5rem; text-align: center; }
+.download-button {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border: 1.5px solid #000;
+  background: #fff;
+  color: #000;
+  font: bold 13px var(--font-typewriter);
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+.download-button:hover, .download-button:focus-visible { color: #fff; background: #000; }
+.article-body { margin-top: 2rem; font: 15px/1.7 "IM Fell English", Georgia, serif; }
+.article-body p + p { margin-top: 1em; }
+/* one page holding several short write-ups, each under its own small title */
+.article-section-title {
+  margin: 2.2rem 0 0.8rem;
+  text-align: center;
+  font: bold 15px var(--font-typewriter);
+  letter-spacing: -0.05em;
+}
+.article-section-title:first-child { margin-top: 0; }
+.article-list { padding-left: 1.4em; }
+.article-list li + li { margin-top: 0.3em; }
+/* photos set into the text like a newspaper's, the words wrapping round them */
+.article-photo { width: 45%; margin: 0.35rem 0 0.6rem; }
+.article-photo img { display: block; width: 100%; height: auto; }
+.article-photo--right { float: right; margin-left: 1.25rem; }
+.article-photo--left { float: left; margin-right: 1.25rem; }
+.article-body::after { content: ""; display: block; clear: both; }
+/* a short run of audio clips, numbered, each with the browser's own player */
+.article-sounds { clear: both; }
+.sound-list { list-style: none; display: grid; gap: 0.5rem; }
+.sound-list li { display: flex; align-items: center; gap: 0.6rem; }
+.sound-num { font: bold 13px var(--font-typewriter); width: 1ch; }
+.sound-list audio { flex: 1; min-width: 0; height: 36px; }
+
+/* ---- Music: the band as Pixel Chix-style sprites (images/music/band-*.png, 24 x 33 pixels,
+  . Each sprite pixel is shown as a whole number of
+   screen pixels (--px) so the pixels stay perfectly square and sharp. ---- */
+.band-stage { padding: 1.5rem 0 1rem; text-align: center; }
+.band {
+  --px: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: calc(var(--px) * 1px);
+}
+@media (min-width: 1000px) { .band { --px: 3; } }
+@media (min-width: 1700px) { .band { --px: 4; } }
+.band-member {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.15s steps(2);
+}
+.band-member img {
+  display: block;
+  width: calc(24px * var(--px));
+  height: calc(33px * var(--px));
+  image-rendering: pixelated;
+  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);            /* black and white until hovered */
+  transition: filter 0.3s ease;
+}
+.band-member:hover img,
+.band-member:focus-visible img { filter: none; }
+.band-member:hover,
+.band-member:focus-visible { transform: translateY(-4px); }
+.band-member:focus-visible { outline: 2px dotted #000; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .band-member { transition: none; }
+}
+.band-name {
+  margin-bottom: 1.1rem;
+  font: bold 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+}
+.band-name-link {
+  text-decoration: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.band-name-link:hover,
+.band-name-link:focus-visible,
+.band-stage:has(.band-member:hover) .band-name-link,
+.band-stage:has(.band-member:focus-visible) .band-name-link { color: #0000ee; }
+/* likewise "Mixtapes" while one of its CDs is hovered */
+.playlists:has(.playlist:hover) .playlists-title,
+.playlists:has(.playlist:focus-visible) .playlists-title { color: #0000ee; }
+.band-media[hidden] { display: none; }
+
+/* seasonal playlist covers, linking out to Spotify */
+.playlists { padding: 2.5rem 0 1rem; text-align: center; }
+.playlists-title {
+  margin-bottom: 1.1rem;
+  font: bold 14px var(--font-typewriter);   /* the same as "Filthy Blonde" and the icon titles */
+  letter-spacing: -0.03em;
+}
+/* columns the width of a case, with the same gap across and down:
+   four across (two on narrow screens) */
+.playlist-grid {
+  --case: 96px;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, var(--case));
+  justify-content: center;
+  gap: 28px;
+}
+@media (max-width: 560px) {
+  .playlist-grid { grid-template-columns: repeat(2, var(--case)); }
+}
+.playlist {
+  display: block;
+  color: #000;
+  text-decoration: none;
+}
+/* Each playlist is a CD in a real photographed jewel case (images/cd/lid.png and tray.png,
+   cut from one photo of an open case). Closed, the lid shows the playlist cover through the
+   clear plastic. On hover the lid swings open on its hinge to reveal the CD in the tray, and
+   the inside of the lid shows the cover mirrored, as seen from behind. */
+.playlist { position: relative; }
+.playlist:hover,
+.playlist:focus-visible { z-index: 5; }    /* the opened lid swings over its neighbour */
+.jewel {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 263 / 250;
+  perspective: 900px;
+  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);   /* black and white until hovered */
+  transition: filter 0.3s ease;
+}
+.playlist:hover .jewel,
+.playlist:focus-visible .jewel { filter: none; }
+.jewel-tray,
+.jewel-face,
+.jewel-face::before {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+}
+.jewel-tray { background-image: url("../images/cd/tray.png"); }
+.jewel-lid {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.1, 0.25, 1);
+}
+.jewel-face { backface-visibility: hidden; overflow: hidden; }
+.jewel-face::before { content: ""; }
+/* outside of the lid: the photographed lid, mirrored so the hinge is on the left */
+.jewel-face--front::before {
+  background-image: url("../images/cd/lid.png");
+  transform: scaleX(-1);
+}
+/* inside of the lid, seen once it's open: the photographed lid as it is, hinge on the right */
+.jewel-face--back {
+  transform: rotateY(180deg);
+  background-image: url("../images/cd/lid.png");
+}
+.jewel-face--back::before { display: none; }
+/* the playlist cover sitting in the lid, under the clear plastic */
+.jewel-cover {
+  position: absolute;
+  top: 6%;
+  width: 84%;
+  height: 88%;
+  object-fit: cover;
+  opacity: 0.94;
+}
+.jewel-face--front .jewel-cover { left: 11%; }
+.jewel-face--back .jewel-cover { left: 5%; transform: scaleX(-1); }
+/* the clear lid catches the light over the cover */
+.jewel-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 24%, rgba(255, 255, 255, 0) 40%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.18) 66%, rgba(255, 255, 255, 0) 73%);
+  pointer-events: none;
+}
+.playlist:hover .jewel-lid,
+.playlist:focus-visible .jewel-lid { transform: rotateY(-180deg); }
+.playlist-title {
+  display: block;
+  margin-top: 0.5rem;
+  font: bold 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+}
+.playlist:hover .playlist-title,
+.playlist:focus-visible .playlist-title { color: #0000ee; }
+@media (prefers-reduced-motion: reduce) {
+  .jewel-lid { transition: none; }
+}
+
+/* The Filthy Blonde board: photos, the video and text boxes placed freely (filthy-blonde.html,
+   in .gallery-board). --x, --y, --w and the board's --board-h are in percent of
+   the board's width, and text --size too, so the arrangement scales as one piece. */
+.band-board[hidden] { display: none; }
+.gallery-board {
+  width: min(1100px, 100%);
+  margin: 2rem auto 0;                             /* a little below the page title */
+  container-type: inline-size;
+}
+.gallery-board .band-board {
+  display: block;
+  position: relative;
+  height: calc(var(--board-h, 100) * 1cqw);
+}
+.board-item {
+  position: absolute;
+  left: calc(var(--x, 0) * 1cqw);
+  top: calc(var(--y, 0) * 1cqw);
+  width: calc(var(--w, 30) * 1cqw);
+  z-index: var(--z, auto);
+}
+.board-photo img,
+.board-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.board-photo { cursor: zoom-in; }
+.board-photo img { transition: transform 0.2s ease; }
+.board-photo:hover img,
+.board-photo:focus-visible img { transform: scale(1.02); }
+.board-text {
+  font: var(--weight, 400) calc(var(--size, 2) * 1cqw) / 1.35 var(--font-typewriter);
+  letter-spacing: -0.02em;
+  color: #000;
+  overflow-wrap: break-word;
+}
+.board-text[data-italic] { font-style: italic; }
+.board-text a { color: inherit; text-decoration: underline; }
+.board-text a:hover,
+.board-text a:focus-visible { color: #0000ee; }
+/* the song player on the board (built from the <audio> by js/music.js) */
+.song {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  font: 700 max(11px, 1.2cqw) / 1.2 var(--font-typewriter);
+  letter-spacing: -0.02em;
+}
+.song-play {
+  flex: none;
+  min-width: 5.2em;
+  padding: 0.35em 0.6em;
+  border: 1.5px solid #000;
+  background: none;
+  color: #000;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+.song-play:hover,
+.song-play:focus-visible { color: #0000ee; border-color: #0000ee; }
+.song-title { flex: none; }
+.song-seek {
+  flex: 1;
+  min-width: 3em;
+  accent-color: #000;
+  cursor: pointer;
+}
+.song-time {
+  flex: none;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.song audio { max-width: 100%; }
+/* a long title gets its own line above the controls */
+.song--stacked { flex-wrap: wrap; row-gap: 0.5em; }
+.song--stacked .song-title { flex: 0 0 100%; order: -1; }
+.song-title-line { white-space: nowrap; }   /* kept to one line, except on phones */
+.song-title-sub { font-weight: 400; }
+@media (max-width: 560px) {
+  .song-title-line { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .board-photo img { transition: none; }
+}
+.gallery-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  padding: 16px;
+  background: rgba(250, 250, 250, 0.97);
+  cursor: zoom-out;
+}
+.gallery-zoom[hidden] { display: none; }
+.board-zoom { z-index: 300; }   /* on a page rather than inside the gallery overlay */
+.gallery-zoom img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));
+}
+
+/* ---- Sketchbooks (art) ----
+   A shelf of old cloth-bound books; clicking one opens a flip-through sketchbook
+   (js/magazine.js). Each cover is a real photographed antique binding
+   (images/covers/*.jpg), set inline on the cover as its background image. */
+.mag-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem 2rem;
+  padding: 1.5rem 0.5rem 2rem;
+}
+.mag {
+  width: min(210px, 42vw);
+}
+/* hovered, a book floats gently, like the other icons */
+.mag:has(.mag-cover:hover),
+.mag:has(.mag-cover:focus-visible) { animation: project-float 3s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .mag:has(.mag-cover:hover), .mag:has(.mag-cover:focus-visible) { animation: none; }
+}
+.mag-pages[hidden] { display: none; }
+
+/* The binding photo, with a little extra light-and-shade so it reads as a solid board */
+.mag-binding {
+  position: relative;
+  container-type: inline-size;
+  background-color: #5a2a22;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 0 14px rgba(0, 0, 0, 0.35);
+  border-radius: 2px 4px 4px 2px;
+}
+/* hinge groove beside the spine, and soft light across the board */
+.mag-binding::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, 0.28) 0 3%, rgba(255, 255, 255, 0.10) 3% 3.8%, rgba(0, 0, 0, 0.16) 3.8% 5.5%, rgba(0, 0, 0, 0) 5.5%),
+    radial-gradient(ellipse at 35% 25%, rgba(255, 245, 225, 0.12), rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.18));
+}
+
+/* Blind-embossed title: pressed into the cloth in the book's own colour.
+   A darker fill with a pale lower edge and a shadowed upper edge reads as a debossed stamp. */
+.mag-label {
+  position: absolute;
+  z-index: 1;
+  top: 20%;
+  left: 12%;
+  right: 12%;
+  text-align: center;
+}
+.mag-label-title,
+.mag-label::before {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  text-transform: uppercase;
+  /* one size for every book: small enough that "SCREENPRINTING" fits on one line */
+  font-size: 6.1cqw;
+  font-weight: bold;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+}
+/* Debossed: the pressed fibres are darker (multiplied into the cloth, so its weave still
+   shows through the letters), with a crisp shadow where the top edges step down... */
+.mag-label-title {
+  position: relative;
+  color: rgba(40, 28, 16, 0.2);
+  mix-blend-mode: multiply;
+  text-shadow: 0 -0.8px 0.6px rgba(0, 0, 0, 0.42);
+}
+/* ...and a faint catch of light along the bottom edges, peeking out below each letter */
+.mag-label::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  text-shadow: 0 0.9px 0.5px rgba(255, 250, 238, 0.22);
+}
+
+.mag-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  /* at rest in high-contrast black and white, like the other icons; in colour when hovered */
+  filter: url(#bw-grain) grayscale(1) brightness(var(--bw-lift, 1.8)) contrast(1.5) brightness(0.9);   /* --bw-lift: extra for darker cloths */
+  transition: transform 0.2s ease, filter 0.3s ease;
+}
+/* slight lift on hover */
+.mag-cover:hover,
+.mag-cover:focus-visible {
+  transform: translateY(-5px);
+  filter: none;
+}
+
+/* page block peeking out along the fore-edge, like a real hardback */
+.mag-cover::after {
+  content: "";
+  position: absolute;
+  top: 2%;
+  right: -3px;
+  bottom: 2%;
+  width: 3px;
+  background: repeating-linear-gradient(to bottom, #efe8d8 0 1px, #d9d0bc 1px 2px);
+  border-radius: 0 1px 1px 0;
+}
+
+/* Reader overlay */
+body.mag-open { overflow: hidden; }
+.mag-reader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  grid-template-rows: auto auto auto;    /* the book, its page turner just under it, then the way back */
+  align-content: center;
+  padding: 12px 16px 16px;
+  background: rgba(250, 250, 250, 0.97);
+}
+.mag-reader[hidden] { display: none; }
+.mag-reader button {
+  font: bold 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+  color: #000;
+  background: none;
+  border: 0;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+.mag-reader button:disabled { opacity: 0.25; cursor: default; }
+/* the way out: a back link like the ones on the other pages, centred at the bottom */
+.mag-reader .mag-close { justify-self: center; margin-top: 2rem; font: 12px var(--font-typewriter); letter-spacing: normal; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.mag-reader .mag-close:hover, .mag-reader .mag-close:focus-visible { color: #0000ee; }
+.mag-stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  perspective: 2200px;
+  touch-action: pan-y;
+}
+.mag-book {
+  /* a two-page spread is 3:2 (each page 3:4), sized to fit the screen */
+  --bw: min(1100px, 100%, (100vh - 120px) * 1.5);
+  position: relative;
+  width: var(--bw);
+  aspect-ratio: 3 / 2;
+  transform-style: preserve-3d;
+  transition: translate 0.8s ease;
+  cursor: pointer;
+}
+.mag-book.is-closed-front { translate: -25% 0; }
+.mag-book.is-closed-back { translate: 25% 0; }
+.mag-leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.3, 1);
+}
+.mag-leaf.is-turned { transform: rotateY(-180deg); }
+
+/* Sketchbook pages: cream drawing paper (images/sketch-paper.jpg) with a fine tooth, fibres and faint age marks, shaded into the gutter */
+.mag-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  background: #efe9dc url("../images/sketch-paper.jpg") center / cover;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.mag-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.mag-face--front {
+  border-radius: 0 3px 3px 0;
+}
+.mag-face--front::before {
+  background:
+    linear-gradient(to right, rgba(60, 40, 20, 0.22), rgba(60, 40, 20, 0.06) 4%, rgba(0, 0, 0, 0) 10%),
+    linear-gradient(to left, rgba(60, 40, 20, 0.08), rgba(0, 0, 0, 0) 3%);
+}
+.mag-face--back {
+  transform: rotateY(180deg);
+  border-radius: 3px 0 0 3px;
+}
+.mag-face--back::before {
+  background:
+    linear-gradient(to left, rgba(60, 40, 20, 0.22), rgba(60, 40, 20, 0.06) 4%, rgba(0, 0, 0, 0) 10%),
+    linear-gradient(to right, rgba(60, 40, 20, 0.08), rgba(0, 0, 0, 0) 3%);
+}
+
+/* Pictures taped into the sketchbook. --pw/--ph are the picture's share of the page's
+   print area (worked out in js/magazine.js from its shape), --tilt a small hand-placed angle. */
+.mag-content {
+  position: absolute;
+  inset: 8% 9% 11%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mag-face { container-type: size; }   /* captions are sized to the page */
+.mag-pasted {
+  flex-shrink: 0;
+  position: relative;
+  width: var(--pw, 100%);
+  height: var(--ph, 100%);
+  rotate: var(--tilt, 0deg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+/* the picture shows through a window, so it can be cropped (sizes set in js/magazine.js) */
+.mag-crop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.mag-crop-frame { position: absolute; }
+.mag-crop img,
+.mag-crop video {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: fill;
+}
+/* a caption written under the picture, in light typewriter */
+.mag-caption {
+  max-width: 92%;
+  margin-top: 4.5cqw;
+  text-align: center;
+  font: 400 3.4cqw/1.35 var(--font-typewriter);
+  letter-spacing: -0.02em;
+  color: #2f2a24;
+}
+/* masking tape across two corners */
+.mag-pasted::before,
+.mag-pasted::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 22%;
+  min-width: 26px;
+  height: 7%;
+  min-height: 11px;
+  background: rgba(236, 226, 200, 0.82);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  mask-image: linear-gradient(90deg, transparent 0 2px, #000 2px calc(100% - 2px), transparent calc(100% - 2px));
+}
+.mag-pasted::before { top: -3%; left: -6%; rotate: -35deg; }
+.mag-pasted::after { top: -3%; right: -6%; rotate: 35deg; }
+
+.mag-pageno {
+  position: absolute;
+  z-index: 4;
+  bottom: 3.5%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: bold 11px var(--font-typewriter);
+  color: #8a7d6c;
+}
+
+/* front and back covers in the reader */
+.mag-cover-page,
+.mag-back-page { position: absolute; inset: 0; }
+/* back cover: the same binding, mirrored so the spine sits on the right */
+.mag-back-page { transform: scaleX(-1); }
+/* inside covers: the binding seen from the reverse, mirrored and a little darker */
+.mag-endpaper {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(0.68);
+}
+.mag-endpaper.is-mirrored { transform: scaleX(-1); }
+
+.mag-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 10px;
+  font: bold 13px var(--font-typewriter);
+  letter-spacing: -0.03em;
+}
+.mag-status { min-width: 11em; text-align: center; }
+@media (prefers-reduced-motion: reduce) {
+  .mag-leaf, .mag-book, .mag-cover { transition: none; }
+}
+
+/* Homepage photo + caption (sizes/positions come from css/home.css) */
+/* --caption-gap sets both the tabs→photo and photo→caption spacing, so they always match.
+   (The header already adds 1rem of padding under the tabs.) */
+.home-main { padding-top: 0; padding-bottom: 0; }
+/* same spacing again between the caption and the footer */
+.home-main + .site-footer { padding-top: var(--caption-gap); }
+.home-photo {
+  width: max(var(--photo-min-width), var(--photo-width));
+  max-width: 100%;
+  margin: calc(var(--caption-gap) - 1rem) auto 0;
+  transform: translate(var(--photo-offset-x), var(--photo-offset-y));
+}
+.home-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.home-caption {
+  /* a little wider than the photo, still centred under it */
+  width: calc(100% + var(--caption-extra-width));
+  margin-left: calc(var(--caption-extra-width) / -2);
+  margin-top: var(--caption-gap);
+  font-family: var(--font-typewriter);
+  font-size: var(--caption-size);
+  line-height: 1.15;
+  /* Courier New only comes in regular and bold, so a thin outline gives a halfway weight */
+  -webkit-text-stroke: 0.35px currentColor;
+  text-align: var(--caption-align);
+  transform: translateX(var(--caption-offset-x));
+}
+
+/* On the homepage, hovering Sonia's name types the caption out underneath it, like a
+   typewriter (js/main.js). It floats in the gap above the tabs, so nothing moves. */
+.site-header { position: relative; }
+.typed-caption {
+  position: absolute;
+  left: 50%;
+  width: var(--tabs-width, 90%);
+  max-width: calc(100% - 2rem);
+  translate: -50% 0;
+  margin: 0;
+  font-family: var(--font-typewriter);
+  font-size: 0.7rem;
+  line-height: 1.25;
+  /* Courier New only comes in regular and bold, so a thin outline gives a halfway weight */
+  -webkit-text-stroke: 0.35px currentColor;
+  color: #000;
+  text-align: left;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.typed-caption.is-on { opacity: 1; transition-duration: 0.1s; }
+.typed-caption span { visibility: hidden; }
+.typed-caption span.is-typed { visibility: visible; }
+.typed-caption .typed-caret {
+  position: absolute;
+  visibility: visible;
+  animation: caret-blink 1s steps(1) infinite;
+}
+@keyframes caret-blink { 50% { opacity: 0; } }
+@media (max-width: 440px) {
+  /* as wide as the name (8.2vw type, about 9.78em across), so it sits centred under it */
+  .typed-caption { font-size: 0.58rem; width: 80.2vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typed-caption .typed-caret { display: none; }
+}
+
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #000;
+  font-family: var(--font-typewriter);
+  font-weight: bold;
+  font-size: 0.9rem;
+  letter-spacing: -0.06em;
+}
+.site-footer a { color: #000; }
+
+/* Homepage link to the guest book: classic underlined hyperlink */
+.guestbook-link {
+  margin-top: 0.4rem;
+  text-align: center;
+  /* font, size and bold come from the footer, same as the copyright line */
+}
+.site-footer .guestbook-link a { color: #0000ee; text-decoration: underline; }
+.site-footer .guestbook-link a:visited { color: #551a8b; }
+
+/* Guest book page: plain late-90s message board, as wide as the tabs line
+   (--tabs-width is measured in js/main.js). Title in the tab script, everything else typewriter. */
+.guestbook {
+  width: var(--tabs-width, 100%);
+  max-width: calc(100% - 32px);
+  margin: 2.5rem auto 0;
+  padding: 0;
+  font: 14px/1.4 var(--font-typewriter);
+  color: #000;
+}
+/* Watercolour paper with rough deckled edges (#deckle is defined in guestbook.html).
+   Used for the form sheet and for each entry slip. */
+.gb-sheet,
+.gb-slip {
+  position: relative;
+  isolation: isolate;
+}
+.gb-sheet::before,
+.gb-slip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #f9f9f9 url("../images/watercolour-paper.svg?v=2") 0 0 / 600px 600px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 6px 18px rgba(0, 0, 0, 0.1);
+  filter: url(#deckle);
+}
+.gb-sheet { padding: 1.75rem 1.75rem 2rem; }
+.gb-title {
+  text-align: center;
+  font: bold 30px/1.2 var(--font-typewriter);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+}
+.gb-form { display: grid; gap: 0.45rem; }
+.gb-form input[type="text"],
+.gb-form textarea,
+.gb-form select {
+  width: 100%;
+  font: 14px var(--font-typewriter);
+  padding: 2px 5px;
+  background: #fff;
+  /* inset bevel, with the light edges greyed so they still show on a white page */
+  border: 2px solid;
+  border-color: #808080 #d4d4d4 #d4d4d4 #808080;
+  border-radius: 0;
+}
+.gb-form select { width: auto; }
+.gb-form textarea { resize: vertical; }
+.gb-form button {
+  font: 13px var(--font-typewriter);
+  padding: 2px 10px;
+  background: #c0c0c0;
+  color: #000;
+  border: 2px outset #e0e0e0;
+  border-radius: 0;
+  cursor: pointer;
+}
+.gb-form button:active { border-style: inset; }
+.gb-form button[type="submit"] { justify-self: start; }
+.gb-trap { position: absolute; left: -9999px; }
+.gb-draw { display: grid; gap: 0.25rem; }
+.gb-canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 900 / 450;
+  border: 2px solid;
+  border-color: #808080 #d4d4d4 #d4d4d4 #808080;
+  cursor: crosshair;
+  touch-action: none;
+}
+.gb-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.gb-form .gb-pigment {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: var(--swatch);
+}
+.gb-form .gb-pigment[aria-pressed="true"] { border-style: inset; outline: 1px dotted #000; outline-offset: 1px; }
+.gb-status { min-height: 1em; }
+.gb-meta { font-size: 13px; }
+.gb-message { margin-top: 0.2rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.gb-empty { color: #555; text-align: center; }
+
+/* Entries: their own scrolling pane of watercolour slips */
+.gb-wall {
+  margin-top: 2.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1rem 0.75rem; /* room for the tilted slips' torn edges and shadows */
+}
+.gb-entries { display: grid; gap: 1.5rem; }
+.gb-slip {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1rem 1.1rem 1.1rem;
+  transform: rotate(var(--tilt, 0deg));
+}
+.gb-slip-text { flex: 1 1 auto; min-width: 0; }
+
+/* Ornate carved silver frames for the cave paintings, cut from a photo of a real frame
+   (images/frame-silver.jpg, a desaturated, high-contrast version). The photo's corners stay intact and its sides stretch to fit.
+   Slice numbers are where the frame meets the opening in that image. Each entry gets a
+   slightly different moulding width and tilt from js/guestbook.js (--fw, --frame-tilt). */
+.gb-frame {
+  --fw: 26px;
+  position: relative;
+  flex: 0 0 44%;
+  border: var(--fw) solid transparent;
+  border-image: url("../images/frame-silver.jpg") 149 145 141 150 stretch;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+  transform: rotate(var(--frame-tilt, 0deg));
+}
+.gb-frame img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  /* thin dark rebate where the picture meets the moulding */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55);
+}
+/* the moulding casts a soft shadow onto the picture */
+.gb-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5), inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .gb-slip { flex-direction: column; }
+  .gb-frame { flex-basis: auto; width: 100%; }
+}
+
+
+/* ---- Writing: the closed flip phone. Hovered, its little orange screen lights up with a
+   blinking new-message notice, laid over the photo's screen. ---- */
+.project-object--phone { width: 96px; }          /* 207px tall */
+.phone-screen {
+  position: absolute;
+  left: 23.48%;
+  top: 60.89%;
+  width: 54.78%;
+  height: 13.91%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3%;
+  container-type: size;
+  border-radius: 2px;
+  background: radial-gradient(closest-side, #ff9d62, #f6824f);
+  box-shadow: 0 0 5px rgba(255, 130, 70, 0.6);
+  color: #8a2a12;                                 /* the ink of the photo's "Operating" */
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.phone-envelope { width: 30%; fill: none; stroke: currentColor; stroke-width: 1.2; }
+.phone-new { font: 17cqw/1 "VT323", monospace; white-space: nowrap; }   /* sized to the screen */
+.project-icon:hover .phone-screen,
+.project-icon:focus-visible .phone-screen,
+.phone-screen.is-lit { opacity: 1; }
+.project-icon:hover .phone-envelope,
+.project-icon:focus-visible .phone-envelope,
+.project-icon:hover .phone-new,
+.project-icon:focus-visible .phone-new,
+.phone-screen.is-lit > * { animation: phone-blink 0.9s steps(1) infinite; }
+@keyframes phone-blink { 50% { visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) {
+  .project-icon:hover .phone-envelope, .project-icon:hover .phone-new,
+  .phone-screen.is-lit > * { animation: none; }
+}
+
+/* ---- Messages page (js/messages.js): the closed phone, its notice blinking, with a caption.
+   Clicked, it flips open and its colour screen shows one quote at a time; the left and right
+   of the round key (or the arrow keys) go between them, and END closes it again. ---- */
+.messages-page { display: flex; flex-direction: column; align-items: center; }
+.messages-phone { position: relative; }
+.phone-closed {
+  display: block;
+  width: 170px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
+  transition: transform 0.25s ease;
+}
+.phone-closed:hover, .phone-closed:focus-visible { transform: translateY(-4px); }
+.phone-closed > img, .phone-open > img { display: block; width: 100%; height: auto; }
+.phone-closed, .phone-open { position: relative; }
+.messages-caption {
+  margin-top: 1.25rem;
+  font: italic 400 14px var(--font-typewriter);
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+.phone-open {
+  /* js/messages.js sizes it to the height left between the caption and the back link, so
+     the back link still shows at the bottom of the screen; this is the fallback */
+  width: clamp(110px, calc((100svh - 310px) / 3.43), min(220px, 60vw));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
+  animation: phone-flip 0.35s ease-out both;
+}
+.phone-open[hidden], .phone-closed[hidden] { display: none; }
+@keyframes phone-flip {
+  from { transform: scaleY(0.55) translateY(20%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+/* The phone photo, with its screen panel cut away, sits in front
+   of the page's own screen, so the screen shows through the hole as if it's in the phone. The
+   frame's shadow falls onto the screen's edges, like glass set just under the case. */
+.phone-frame {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 0.7));
+}
+.phone-key { z-index: 2; }
+
+/* the screen: an early-2000s colour phone display, about 96 "pixels" across. --p is one of
+   those pixels, so the borders, icons and bubbles are drawn in chunky whole pixels */
+.quote-screen {
+  position: absolute;
+  left: 5.10%;
+  top: 7.17%;
+  width: 86.45%;
+  height: 34.98%;
+  /* the panel's traced outline */
+  clip-path: polygon(99.0% 49.4%, 98.9% 51.9%, 99.0% 54.4%, 99.0% 56.9%, 98.9% 59.5%, 98.4% 62.1%, 98.5% 64.9%, 98.9% 68.1%, 98.2% 71.0%, 98.5% 74.7%, 98.3% 78.5%, 99.1% 83.4%, 99.2% 88.6%, 98.4% 93.8%, 95.3% 97.5%, 89.9% 98.9%, 84.0% 99.3%, 77.8% 98.5%, 72.6% 99.0%, 67.5% 99.4%, 62.5% 99.6%, 57.6% 99.7%, 52.7% 99.8%, 47.8% 99.8%, 42.9% 99.7%, 38.0% 99.5%, 33.0% 99.2%, 28.0% 98.8%, 22.6% 98.7%, 16.5% 99.3%, 10.9% 98.6%, 5.2% 97.5%, 1.7% 94.2%, 1.1% 88.8%, 0.7% 83.9%, 0.5% 79.5%, 0.5% 75.5%, 0.5% 71.8%, 0.5% 68.5%, 0.4% 65.4%, 0.4% 62.5%, 0.4% 59.7%, 0.4% 57.1%, 0.5% 54.5%, 0.5% 52.0%, 0.7% 49.4%, 1.0% 47.0%, 1.0% 44.5%, 1.0% 41.9%, 1.0% 39.3%, 1.4% 36.6%, 1.5% 33.8%, 1.6% 30.8%, 1.9% 27.7%, 2.2% 24.3%, 2.5% 20.6%, 2.8% 16.4%, 3.4% 11.9%, 5.2% 7.9%, 9.3% 5.7%, 14.1% 4.3%, 18.9% 3.2%, 23.8% 2.3%, 28.7% 1.6%, 33.5% 1.1%, 38.3% 0.7%, 43.1% 0.4%, 47.9% 0.2%, 52.6% 0.2%, 57.4% 0.2%, 62.3% 0.4%, 67.1% 0.7%, 72.1% 1.0%, 77.1% 1.6%, 82.2% 2.3%, 87.3% 3.3%, 92.3% 4.6%, 95.9% 7.4%, 97.3% 11.8%, 97.6% 16.5%, 97.7% 20.8%, 97.7% 24.6%, 97.9% 28.0%, 98.3% 31.1%, 98.4% 34.0%, 98.3% 36.8%, 98.6% 39.4%, 98.7% 42.0%, 98.9% 44.5%, 98.9% 47.0%);
+  display: flex;
+  flex-direction: column;
+  container-type: size;
+  overflow: hidden;
+  background: #cfdcee;
+  color: #0b1640;
+  font-family: "VT323", monospace;
+  -webkit-font-smoothing: none;                   /* hard-edged letters, like a real LCD */
+  font-smooth: never;
+}
+.quote-screen > * { --p: calc(100cqw / 96); }
+@supports (width: round(down, 1.3px, 0.5px)) {
+  .quote-screen > * { --p: round(down, calc(100cqw / 96), 0.5px); }
+}
+.lcd-icon { height: 0.75em; width: auto; fill: currentColor; flex: none; }
+
+/* status bar in the arch at the top: signal, clock, battery */
+.lcd-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 5.5cqh 11cqw calc(var(--p) * 1.5);
+  background: #0e1a4a;
+  color: #e9f0ff;
+  font-size: 8.5cqw;
+  line-height: 1;
+}
+.lcd-status .lcd-icon { height: 0.7em; }
+.lcd-icon--battery { color: #8ff08f; }
+
+/* title bar: in stepped bands of blue, as a phone with few colours draws a gradient */
+.quote-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--p) * 1.5) 5cqw;
+  background: linear-gradient(#5b7ce6 0 25%, #4a6bd8 25% 50%, #3b5bc8 50% 75%, #2d4bb4 75%);
+  box-shadow: inset 0 var(--p) #9cb2ff, inset 0 calc(var(--p) * -1) #14245e;
+  color: #fff;
+  font-size: 9cqw;
+  line-height: 1;
+  text-shadow: var(--p) var(--p) #14245e;
+}
+.quote-bar > span { display: flex; align-items: center; gap: calc(var(--p) * 2); }
+
+/* the messages, on a faintly dithered background */
+.quote-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: calc(var(--p) * 3) calc(var(--p) * 3) 4.5cqh;       /* clear of the rounded bottom */
+  background:
+    repeating-conic-gradient(#d8e3f2 0 25%, #cbd8ec 0 50%) 0 0 / calc(var(--p) * 2) calc(var(--p) * 2);
+  font-size: 11cqw;
+  line-height: 1;
+  scrollbar-width: none;
+}
+.quote-body::-webkit-scrollbar { display: none; }
+
+/* chat bubbles with pixel corners (the outline skips each corner pixel) and a stepped tail:
+   incoming on the left in white (a second sender in yellow), outgoing on the right in green */
+.quote-line {
+  --fill: #fff;
+  --ink: #1b2a5c;
+  position: relative;
+  width: fit-content;
+  max-width: 84%;
+  margin: var(--p) 0 var(--p) calc(var(--p) * 4);
+  padding: calc(var(--p) * 1.5) calc(var(--p) * 3) calc(var(--p) * 2);
+  overflow-wrap: anywhere;                        /* long words wrap inside the bubble */
+  background: var(--fill);
+  box-shadow:
+    0 calc(var(--p) * -1) var(--ink), 0 var(--p) var(--ink),
+    calc(var(--p) * -1) 0 var(--ink), var(--p) 0 var(--ink);
+}
+.quote-line + .quote-line { margin-top: calc(var(--p) * 4); }
+.quote-line::before,
+.quote-line::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--p) * -4);
+  bottom: calc(var(--p) * -1);
+  width: calc(var(--p) * 5);
+  height: calc(var(--p) * 4);
+}
+.quote-line::before {
+  background: var(--ink);
+  clip-path: polygon(60% 0, 80% 0, 80% 75%, 100% 75%, 100% 100%, 0 100%, 0 75%, 20% 75%, 20% 50%, 40% 50%, 40% 25%, 60% 25%);
+}
+.quote-line::after {
+  background: var(--fill);
+  clip-path: polygon(60% 25%, 80% 25%, 80% 75%, 40% 75%, 40% 50%, 60% 50%);
+}
+.quote-line.is-right {
+  --fill: #c4ef9a;
+  margin-left: auto;
+  margin-right: calc(var(--p) * 4);
+}
+.quote-line.is-other { --fill: #fff29a; }
+.quote-line.is-right::before,
+.quote-line.is-right::after { left: auto; right: calc(var(--p) * -4); transform: scaleX(-1); }
+.quote-context { margin-top: var(--p); font-size: 0.78em; color: #56628c; }
+
+/* the glass: a faint pixel grid, a soft glare across the top and a little shade at the edges */
+.lcd-glass {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 38%, rgba(255, 255, 255, 0) 39%),
+    repeating-linear-gradient(0deg, rgba(10, 20, 60, 0.07) 0 0.5px, transparent 0.5px var(--p)),
+    repeating-linear-gradient(90deg, rgba(10, 20, 60, 0.05) 0 0.5px, transparent 0.5px var(--p)),
+    radial-gradient(closest-side, rgba(0, 0, 0, 0) 75%, rgba(0, 10, 40, 0.18));
+}
+/* clickable spots over the photo's keys */
+.phone-key {
+  position: absolute;
+  width: 10%;
+  height: 5%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.phone-key:hover, .phone-key:focus-visible { background: rgba(120, 200, 90, 0.35); outline: none; }
+.phone-key { height: 3%; }
+.phone-key--left  { left: 29.95%; top: 61.16%; }
+.phone-key--right { left: 57.14%; top: 61.44%; }
+.phone-key--end   { left: 69.67%; top: 71.53%; width: 16%; height: 3.2%; }
+/* the caption only shows once the phone is open, above it */
+.messages-caption { display: none; }
+.messages-page.is-open .messages-caption { display: block; order: -1; margin: 0 0 0.75rem; }
+.messages-back { order: 1; margin-top: 2.5rem; }   /* last on the page, under the phone */
+/* open, everything closes up so the caption, phone and back link fit on one screen */
+.messages-page.is-open { padding-top: 1rem; padding-bottom: 0.75rem; }
+.messages-page.is-open .messages-back { margin-top: 1rem; }
+/* when the phone opens, its keys glow until one is pressed, so people know to use them */
+.phone-open:not([hidden]):not(.is-used) .phone-key { animation: key-pulse 1.4s ease-in-out 0.5s infinite; }
+.phone-open .phone-key:hover, .phone-open .phone-key:focus-visible { animation: none; }
+@keyframes key-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(120, 200, 90, 0); background: transparent; }
+  50% { box-shadow: 0 0 6px 3px rgba(120, 200, 90, 0.55); background: rgba(120, 200, 90, 0.3); }
+}
+@media (prefers-reduced-motion: reduce) { .phone-open .phone-key { animation: none; } }
+
+/* ---- Writing: the typewriter. Its sheet of paper is a separate layer behind the machine
+  ; while it's hovered, js/typewriter.js types random letters
+   onto it, a line at a time, feeding each finished line up the page. ---- */
+.project-object--poetry { width: 170px; }        /* 147px tall */
+.tw-machine { position: relative; z-index: 1; }
+.tw-paper {
+  position: absolute;
+  left: 17.13%;
+  top: 0;
+  width: 63.6%;
+  height: 25.19%;
+  overflow: hidden;
+  container-type: inline-size;
+  background: url("../images/writing/icons/typewriter-paper.png?v=1") center / 100% 100% no-repeat;
+}
+.tw-typed {
+  position: absolute;
+  left: 10%;
+  bottom: 6%;
+  margin: 0;
+  font: 8.6cqw/1.15 var(--font-typewriter);
+  color: #1d1a16;
+  white-space: pre;
+}
+@media (max-width: 560px) {
+  .project-object--poetry { width: 136px; }
+}
+
+/* ---- Writing: the cassette recorder, stood on end. Hovered, the
+   tape's two reels turn and the red record light glows, as if it's recording. ---- */
+.project-object--recorder { width: 100px; }      /* 191px tall */
+.project-object > img.rec-reel {
+  position: absolute;
+  width: 14.63%;
+  height: auto;
+  top: 55.16%;
+  border-radius: 50%;
+}
+.rec-reel--1 { left: 58.94%; }
+.rec-reel--2 { left: 30.89%; }
+.rec-light {
+  position: absolute;
+  left: 83.74%;
+  top: 76.55%;
+  width: 2.85%;
+  height: 1.07%;
+  border-radius: 1px;
+  background: #ff2a2a;
+  box-shadow: 0 0 3px 1px rgba(255, 40, 40, 0.8);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.project-icon:hover .rec-reel,
+.project-icon:focus-visible .rec-reel { animation: reel-turn 1.8s linear infinite; }
+.project-icon:hover .rec-light,
+.project-icon:focus-visible .rec-light { opacity: 1; animation: rec-glow 1.2s ease-in-out infinite; }
+@keyframes reel-turn { to { transform: rotate(-360deg); } }
+@keyframes rec-glow { 50% { opacity: 0.55; } }
+@media (max-width: 560px) {
+  .project-object--recorder { width: 80px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-icon:hover .rec-reel, .project-icon:focus-visible .rec-reel,
+  .project-icon:hover .rec-light, .project-icon:focus-visible .rec-light { animation: none; }
+}

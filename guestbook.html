@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sonia Rosenberger — Guestbook</title>
+  <meta name="description" content="Sonia Rosenberger — art, music, writing and projects.">
+  <link rel="stylesheet" href="css/fonts.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=267">
+  <link rel="stylesheet" href="css/lettering.css?v=2">
+</head>
+<body>
+  <!-- Rough, deckled paper edge for the guest book pane -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="deckle" x="-3%" y="-3%" width="106%" height="106%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="5" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <header class="site-header">
+    <p class="site-name"><a href="index.html">Sonia Rosenberger</a></p>
+    <nav class="site-nav" aria-label="Main">
+      <a href="art.html">art</a>
+      <a href="music.html">music</a>
+      <a href="writing.html">writing</a>
+      <a href="projects.html">projects</a>
+      <a href="about.html">about</a>
+    </nav>
+  </header>
+
+  <main class="guestbook" aria-labelledby="gb-title">
+    <div class="gb-sheet">
+    <h1 id="gb-title" class="gb-title">Guestbook</h1>
+    <form class="gb-form">
+      <label>Name:<br><input type="text" name="name" maxlength="40" autocomplete="off"></label>
+      <label>Message:<br><textarea name="message" rows="3" maxlength="500"></textarea></label>
+      <!-- spam trap: hidden from people, bots tend to fill it in -->
+      <label class="gb-trap" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <div class="gb-draw">
+        <span>Leave a cave painting (optional):</span>
+        <canvas class="gb-canvas" width="900" height="450" aria-label="Drawing area"></canvas>
+        <div class="gb-tools">
+          <button type="button" class="gb-pigment" data-color="#8e2f1c" aria-pressed="true" title="Red ochre" style="--swatch:#8e2f1c"></button>
+          <button type="button" class="gb-pigment" data-color="#c8872e" aria-pressed="false" title="Yellow ochre" style="--swatch:#c8872e"></button>
+          <button type="button" class="gb-pigment" data-color="#231f1c" aria-pressed="false" title="Charcoal" style="--swatch:#231f1c"></button>
+          <button type="button" class="gb-pigment" data-color="#efe6d2" aria-pressed="false" title="Chalk" style="--swatch:#efe6d2"></button>
+          <select class="gb-brush" aria-label="Brush size">
+            <option value="3">thin</option>
+            <option value="5" selected>medium</option>
+            <option value="10">thick</option>
+          </select>
+          <button type="button" class="gb-clear">Clear</button>
+        </div>
+      </div>
+      <button type="submit">Sign Guestbook</button>
+      <span class="gb-status" role="status"></span>
+    </form>
+    </div>
+    <section class="gb-wall" aria-label="Guestbook entries">
+      <div class="gb-entries"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="mailto:sonia@soniarosenberger.com">sonia@soniarosenberger.com</a></p>
+    <p>&copy; <span id="year"></span> Sonia Rosenberger</p>
+    <p class="guestbook-link"><a href="index.html">home</a></p>
+  </footer>
+
+  <script src="js/main.js?v=23"></script>
+  <script src="js/guestbook.js?v=10"></script>
+</body>
+</html>
