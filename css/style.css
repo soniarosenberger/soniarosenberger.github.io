@@ -735,6 +735,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 @media (max-width: 560px) {
   .about-intro { flex-direction: column; align-items: stretch; width: 100%; }
   .about-photo, .about-bio { flex-basis: auto; width: 100%; }
+  .about-photo { width: 25%; align-self: center; }   /* the photo small, a quarter of the width */
   .about-page .about-inquiries { width: 100%; }
 }
 
