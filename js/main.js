@@ -169,9 +169,14 @@ if (nav && 'ResizeObserver' in window) {
     caret.style.left = ((next ? at.right : at.left) - box.left + caption.scrollLeft) + 'px';
     caret.style.top = (at.top - box.top) + 'px';
   }
-  // on a screen too narrow for the whole line, keep the newest letters in view
+  // On a screen too narrow for the whole line, it types from the left edge and, once the
+  // newest letter reaches the right edge, slides along to keep it (and the cursor) in view.
   function follow() {
-    caption.scrollLeft = caption.scrollWidth;
+    if (!next) return;
+    var box = caption.getBoundingClientRect();
+    var end = letters[next - 1].getBoundingClientRect().right - box.left + caption.scrollLeft;
+    var room = caret.getBoundingClientRect().width + 2;
+    caption.scrollLeft = Math.max(0, end + room - caption.clientWidth);
   }
   function typeNext() {
     if (!on || next >= letters.length) return;
