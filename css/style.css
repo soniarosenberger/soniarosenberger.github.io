@@ -1437,6 +1437,10 @@ body.mag-open { overflow: hidden; }
   transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.3, 1);
 }
 .mag-leaf.is-turned { transform: rotateY(-180deg); }
+/* the cover's debossed title is drawn on a layer of its own, which some browsers show through
+   the back of a turning cover, mirrored: so it simply goes once the cover is turned over */
+.mag-face .mag-label { transition: visibility 0s 0.4s; }
+.mag-leaf.is-turned .mag-label { visibility: hidden; }
 
 /* Sketchbook pages: cream drawing paper (images/sketch-paper.jpg) with a fine tooth, fibres and faint age marks, shaded into the gutter */
 .mag-face {
@@ -1444,6 +1448,8 @@ body.mag-open { overflow: hidden; }
   inset: 0;
   overflow: hidden;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  isolation: isolate;          /* keeps the cover title's blended lettering inside its own face */
   background: #efe9dc url("../images/sketch-paper.jpg") center / cover;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
