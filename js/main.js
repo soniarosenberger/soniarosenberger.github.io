@@ -75,16 +75,22 @@ document.body.insertAdjacentHTML('beforeend',
         t = target > t ? Math.min(target, t + speed) : Math.max(target, t - speed);
         set(t * t * (3 - 2 * t));
         raf = t === target ? null : requestAnimationFrame(step);
+        if (t === 0) filtered(false);
+      }
+      // drop the filter in full colour: ios safari can blank a filtered element whose content keeps changing
+      function filtered(on) {
+        parts.forEach(function (part) { part.style.filter = on ? 'url(#' + id + ')' : 'none'; });
       }
       function go(to) {
         target = to;
-        if (still) { t = to; set(to); return; }
+        if (to > 0) filtered(true);
+        if (still) { t = to; set(to); if (!to) filtered(false); return; }
         if (!raf) { last = 0; raf = requestAnimationFrame(step); }
       }
       set(1);
       var parts = kind[3] ? el.querySelectorAll(kind[3]) : [el];
       if (kind[3]) el.style.filter = 'none';
-      parts.forEach(function (part) { part.style.filter = 'url(#' + id + ')'; });
+      filtered(true);
       el.style.transition = book ? 'transform 0.2s ease' : 'none';
       trigger.addEventListener('mouseenter', function () { go(0); });
       trigger.addEventListener('mouseleave', function () { go(1); });
