@@ -16,4 +16,15 @@
       spin.append(layer);
     });
   }
+  // Seen edge-on those layers are just lines, so the edge is also filled in with upright
+  // slices across the star: each one the balloon's profile through its strip of the print
+  // (images/home/star-sides.png), turned side-on.
+  var SLICES = 48;
+  for (var i = 0; i < SLICES; i++) {
+    var slice = document.createElement('span');
+    slice.className = 'star-slice';
+    slice.style.left = ((i + 0.5) / SLICES * 100 - DEPTH) + 'cqw';
+    slice.style.backgroundPositionX = (i / (SLICES - 1) * 100) + '%';
+    spin.append(slice);
+  }
 })();

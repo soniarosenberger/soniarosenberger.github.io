@@ -554,7 +554,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
    surface (images/home/star.png). Its shape is a stack of layers (js/star.js), each the
    print cut to one contour of the balloon's height (a strip of images/home/star-layers.png),
    the smaller ones further out on both sides, so it's fattest in the middle and thins
-   towards the points. The back is the same print, seen from behind. Sizes are in cqw,
+   towards the points, and upright cross-sections fill in the edge. The back is the same print, seen from behind. Sizes are in cqw,
    hundredths of the star's width. */
 .star {
   width: min(45vw, max(120px, calc(var(--tabs-width, 346px) * 0.36)));
@@ -578,6 +578,14 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   -webkit-mask: url("../images/home/star-layers.png") 0 var(--at) / 100% 2100% no-repeat;
   mask: url("../images/home/star-layers.png") 0 var(--at) / 100% 2100% no-repeat;
   transform: translateZ(var(--z));
+}
+.star-slice {
+  position: absolute;
+  top: 0;
+  width: 22cqw;                          /* the balloon's full thickness at its fattest */
+  height: 100%;
+  background: url("../images/home/star-sides.png?v=3") 0 0 / 4800% 100% no-repeat;
+  transform: rotateY(90deg);
 }
 @media (prefers-reduced-motion: reduce) {
   .star-spin { animation: none; transform: rotateY(-28deg); }
