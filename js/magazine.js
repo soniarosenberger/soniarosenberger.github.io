@@ -33,16 +33,10 @@
   var pageCount = 0;
   var lastFocus = null;
 
-  function face(side, content, pageNo) {
+  function face(side, content) {
     var f = document.createElement('div');
     f.className = 'mag-face mag-face--' + side;
     if (content) f.append(content);
-    if (pageNo) {
-      var n = document.createElement('span');
-      n.className = 'mag-pageno';
-      n.textContent = pageNo;
-      f.append(n);
-    }
     return f;
   }
 
@@ -152,7 +146,7 @@
     return wrap;
   }
 
-  var pageNums = []; // printed page number for each page slot (null for covers and blanks)
+  var pageNums = []; // page number for each page slot, for the status line (null for covers and blanks)
 
   var openMag = null;
 
@@ -178,8 +172,8 @@
       var leaf = document.createElement('div');
       leaf.className = 'mag-leaf';
       // right-hand page on the front, left-hand page on the back
-      leaf.append(face('front', pages[i], pageNums[i]));
-      leaf.append(face('back', pages[i + 1], pageNums[i + 1]));
+      leaf.append(face('front', pages[i]));
+      leaf.append(face('back', pages[i + 1]));
       leaf.addEventListener('transitionend', resetStacking);
       book.append(leaf);
       leaves.push(leaf);

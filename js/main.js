@@ -220,10 +220,20 @@ if (nav && 'ResizeObserver' in window) {
     caption.classList.remove('is-on');
   }
   caption.addEventListener('transitionend', function () { if (!on) reset(); });
-  name.addEventListener('mouseenter', show);
-  name.addEventListener('mouseleave', hide);
-  name.addEventListener('focus', show);
-  name.addEventListener('blur', hide);
+  if (window.matchMedia('(hover: none)').matches) {
+    // touch screens can't hover: a tap on the name types the caption (we're already home),
+    // another tap, or one anywhere else, takes it away
+    name.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (on) hide(); else show();
+    });
+    document.addEventListener('click', function (e) { if (on && !name.contains(e.target)) hide(); });
+  } else {
+    name.addEventListener('mouseenter', show);
+    name.addEventListener('mouseleave', hide);
+    name.addEventListener('focus', show);
+    name.addEventListener('blur', hide);
+  }
   window.addEventListener('resize', function () { if (on) { place(); placeCaret(); } });
   // warm up the text measurer with the page's fonts, so the first hover is placed right
   if (document.fonts) document.fonts.ready.then(function () { place(); });

@@ -1539,16 +1539,6 @@ body.mag-open { overflow: hidden; }
 .mag-pasted::before { top: -3%; left: -6%; rotate: -35deg; }
 .mag-pasted::after { top: -3%; right: -6%; rotate: 35deg; }
 
-.mag-pageno {
-  position: absolute;
-  z-index: 4;
-  bottom: 3.5%;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font: bold 11px var(--font-typewriter);
-  color: #8a7d6c;
-}
 
 /* front and back covers in the reader */
 .mag-cover-page,
