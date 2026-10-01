@@ -1,5 +1,4 @@
-// Seasonal playlists: refresh each cover from Spotify so it stays current if the
-// playlist's image changes. If Spotify can't be reached, the cover in the HTML stays.
+// refresh playlist covers from spotify
 document.querySelectorAll('.playlist').forEach(function (link) {
   fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(link.href))
     .then(function (res) { return res.ok ? res.json() : null; })

@@ -1,8 +1,6 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
-
-// A gritty, photocopy-like grain for the icons at rest (css/style.css uses it as url(#bw-grain)): fine
-// grey noise mixed into the picture, kept only where the picture is.
+// grain filter for icons at rest (css fallback)
 document.body.insertAdjacentHTML('beforeend',
   '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">' +
   '<filter id="bw-grain" color-interpolation-filters="sRGB">' +
@@ -12,11 +10,7 @@ document.body.insertAdjacentHTML('beforeend',
   '<feComposite in="grainy" in2="SourceGraphic" operator="in"/>' +
   '</filter></svg>');
 
-
-// The same black-and-white look, but as each icon's own filter, so it can fade: hovering (or
-// focusing) an icon eases its grain, greyness and contrast away into full colour, and back
-// again after. (A CSS filter list with url() in it can only switch, not fade.) The CSS look
-// above stays as the fallback until this takes over.
+// per-icon filter so the b&w can fade on hover (url() filters can't transition)
 (function () {
   var NS = 'http://www.w3.org/2000/svg';
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,15 +21,14 @@ document.body.insertAdjacentHTML('beforeend',
   holder.style.position = 'absolute';
   document.body.append(holder);
 
-  // [icon, what hovering it, and its own look: lift (brighten first), contrast, brightness]
+  // [icon, hover target, is a book, parts to filter]
   var kinds = [
     ['.project-object:not(.project-object--skate)', '.project-icon'],
-    // the skateboard spins in 3D, so (like the CD case below) each face of the deck wears it
+    // 3d, so filter the faces
     ['.project-object--skate', '.project-icon', false, '.skate-face'],
     ['.mag-cover', '.mag-cover', true],
     ['.band-member img', '.band-member'],
-    // the CD case swings its lid open in 3D, which a filter on the whole case upsets, so its
-    // flat parts (the tray and both faces of the lid) each wear the filter instead
+    // same
     ['.jewel', '.playlist', false, '.jewel-tray, .jewel-face']
   ];
   var n = 0;
@@ -62,7 +55,7 @@ document.body.insertAdjacentHTML('beforeend',
       var sat = f.querySelectorAll('feColorMatrix')[1];
       var tone = f.querySelectorAll('feComponentTransfer');
 
-      // t = 1 is the black-and-white rest look, t = 0 full colour
+      // t: 1 = b&w, 0 = colour
       function set(t) {
         grain.setAttribute('k3', 0.5 * t);
         grain.setAttribute('k4', -0.25 * t);
@@ -78,9 +71,9 @@ document.body.insertAdjacentHTML('beforeend',
       function step(now) {
         var dt = last ? now - last : 16;
         last = now;
-        var speed = dt / 220;                          // a full fade takes about a fifth of a second
+        var speed = dt / 220;
         t = target > t ? Math.min(target, t + speed) : Math.max(target, t - speed);
-        set(t * t * (3 - 2 * t));                       // eased
+        set(t * t * (3 - 2 * t));
         raf = t === target ? null : requestAnimationFrame(step);
       }
       function go(to) {
@@ -97,16 +90,13 @@ document.body.insertAdjacentHTML('beforeend',
       trigger.addEventListener('mouseleave', function () { go(1); });
       trigger.addEventListener('focusin', function () { go(0); });
       trigger.addEventListener('focusout', function () { go(1); });
-      // touch screens have no hover: a page can colour an icon in and out itself
       trigger.addEventListener('icon:on', function () { go(0); });
       trigger.addEventListener('icon:off', function () { go(1); });
     });
   });
 })();
 
-
-// Share the width of the tabs line as --tabs-width, so things can match it
-// (the guest book, the About page and the star on the homepage)
+// --tabs-width, for layouts that line up with the tabs
 var nav = document.querySelector('.site-nav');
 if (nav && 'ResizeObserver' in window) {
   new ResizeObserver(function () {
@@ -114,10 +104,7 @@ if (nav && 'ResizeObserver' in window) {
   }).observe(nav);
 }
 
-
-// On the homepage, hovering Sonia's name types the caption out underneath it, like a
-// typewriter: one key at a time, with the odd pause after a space, comma or full stop, and a
-// blinking cursor. Moving off fades it away; hovering again types it fresh.
+// homepage: hovering the name types the caption
 (function () {
   var name = document.querySelector('.site-name a');
   var header = document.querySelector('.site-header');
@@ -127,7 +114,7 @@ if (nav && 'ResizeObserver' in window) {
 
   var caption = document.createElement('p');
   caption.className = 'typed-caption';
-  caption.setAttribute('aria-hidden', 'true');           // the caption is in the page for screen readers
+  caption.setAttribute('aria-hidden', 'true');
   var letters = TEXT.split('').map(function (ch) {
     var s = document.createElement('span');
     s.textContent = ch;
@@ -140,10 +127,7 @@ if (nav && 'ResizeObserver' in window) {
   caption.append(caret);
   header.insertBefore(caption, header.querySelector('.site-nav'));
 
-  // Where the ink of the name's and tabs' letters actually starts and stops, top to bottom.
-  // The name's flourishes hang well below its box, and the script tabs start lower than
-  // theirs, so the gap between them is measured from the letters themselves (css/lettering.css
-  // gives each its ink's top and bottom as fractions of its box).
+  // letter ink bounds (--ink-t/--ink-b from lettering.css)
   function ink(el) {
     var r = el.getBoundingClientRect(), style = getComputedStyle(el);
     return {
@@ -151,7 +135,6 @@ if (nav && 'ResizeObserver' in window) {
       bottom: r.top + r.height * parseFloat(style.getPropertyValue('--ink-b'))
     };
   }
-  // halfway between the bottom of the name's letters and the top of the tabs' letters
   function place() {
     var headBox = header.getBoundingClientRect();
     var from = ink(name).bottom;
@@ -169,8 +152,7 @@ if (nav && 'ResizeObserver' in window) {
     caret.style.left = ((next ? at.right : at.left) - box.left + caption.scrollLeft) + 'px';
     caret.style.top = (at.top - box.top) + 'px';
   }
-  // On a screen too narrow for the whole line, it types from the left edge and, once the
-  // newest letter reaches the right edge, slides along to keep it (and the cursor) in view.
+  // keep the newest letter in view on narrow screens
   function follow() {
     if (!next) return;
     var box = caption.getBoundingClientRect();
@@ -185,7 +167,7 @@ if (nav && 'ResizeObserver' in window) {
     next++;
     follow();
     placeCaret();
-    var wait = 35 + Math.random() * 50;              // an uneven hand on the keys
+    var wait = 35 + Math.random() * 50;
     if (ch === ' ') wait += 30 + Math.random() * 50;
     if (ch === ',') wait += 180;
     if (ch === '.') wait += 300;
@@ -202,11 +184,10 @@ if (nav && 'ResizeObserver' in window) {
     on = true;
     reset();
     place();
-    // measure again a moment later: the first measurement can catch the fonts before the
-    // browser's text measurer has them
+    // fonts may not be measured yet on the first pass
     requestAnimationFrame(function () { setTimeout(function () { if (on) { place(); placeCaret(); } }, 30); });
     caption.classList.add('is-on');
-    if (still) {                                    // no motion: the whole caption at once
+    if (still) {
       letters.forEach(function (s) { s.classList.add('is-typed'); });
       next = letters.length;
       return;
@@ -221,8 +202,7 @@ if (nav && 'ResizeObserver' in window) {
   }
   caption.addEventListener('transitionend', function () { if (!on) reset(); });
   if (window.matchMedia('(hover: none)').matches) {
-    // touch screens can't hover: a tap on the name types the caption (we're already home),
-    // another tap, or one anywhere else, takes it away
+    // touch: tap the name
     name.addEventListener('click', function (e) {
       e.preventDefault();
       if (on) hide(); else show();
@@ -237,13 +217,10 @@ if (nav && 'ResizeObserver' in window) {
     name.addEventListener('blur', hide);
   }
   window.addEventListener('resize', function () { if (on) { place(); placeCaret(); } });
-  // warm up the text measurer with the page's fonts, so the first hover is placed right
   if (document.fonts) document.fonts.ready.then(function () { place(); });
 })();
 
-
-// About: beside the photo, the bio's type is sized so the text stands exactly as tall as the
-// photo (on phones they stack, and the bio keeps its own size).
+// about: fit the bio text to the photo's height
 (function () {
   var intro = document.querySelector('.about-intro');
   if (!intro) return;
@@ -254,7 +231,7 @@ if (nav && 'ResizeObserver' in window) {
     if (getComputedStyle(intro).flexDirection === 'column') return;
     var target = photo.getBoundingClientRect().height;
     if (!target) return;
-    var lo = 8, hi = 40;                                  // px; halve the range until it fits
+    var lo = 8, hi = 40;                                  // binary search
     for (var i = 0; i < 14; i++) {
       var mid = (lo + hi) / 2;
       bio.style.fontSize = mid + 'px';
@@ -267,16 +244,13 @@ if (nav && 'ResizeObserver' in window) {
   new ResizeObserver(fit).observe(intro);
 })();
 
-
-// Touch screens can't hover, so there a tap on an icon plays what hovering does (its
-// animation, in colour), and a second tap on it, or a tap on its title, opens the page. A tap
-// anywhere else, or on another icon, stops it. (Each kind: the icon, and what counts as its title.)
+// touch: first tap animates an icon, second tap (or its title) opens it
 (function () {
   if (!window.matchMedia('(hover: none)').matches) return;
   var KINDS = [
     ['.project-icon', '.project-title'],
     ['.playlist', '.playlist-title'],
-    ['.band-member', null]                 // the band's title is the "Filthy Blonde" heading
+    ['.band-member', null]
   ];
   var active = null;
   function stop() {
@@ -288,8 +262,8 @@ if (nav && 'ResizeObserver' in window) {
   KINDS.forEach(function (kind) {
     document.querySelectorAll(kind[0]).forEach(function (icon) {
       icon.addEventListener('click', function (e) {
-        if (kind[1] && e.target.closest(kind[1])) return;   // the title: open the page
-        if (active === icon) return;                         // tapped again: open it too
+        if (kind[1] && e.target.closest(kind[1])) return;
+        if (active === icon) return;
         e.preventDefault();
         stop();
         active = icon;

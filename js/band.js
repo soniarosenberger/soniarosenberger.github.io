@@ -1,5 +1,4 @@
-// The Filthy Blonde page (filthy-blonde.html): the board of photos, the video and text boxes
-// as arranged in the page. Click a photo to see it large, click again (or Esc) to go back.
+// filthy blonde board: photo zoom, and the column order on phones
 (function () {
   var board = document.querySelector('.band-board');
   var zoom = document.querySelector('.gallery-zoom');
@@ -16,8 +15,6 @@
       enlarge(photo.querySelector('img'));
     }
   });
-  // On phones the board becomes one column; it follows the board top to bottom (then left to
-  // right), whatever order the items are written in.
   board.querySelectorAll('.board-item').forEach(function (item) {
     var x = parseFloat(item.style.getPropertyValue('--x')) || 0;
     var y = parseFloat(item.style.getPropertyValue('--y')) || 0;
@@ -51,9 +48,7 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shrink(); });
 })();
 
-// Song player on the Filthy Blonde board: turns each .song's <audio> into a play button,
-// seek bar and time in the site's typewriter style. Without this script the browser's
-// own player shows instead.
+// custom song player
 document.querySelectorAll('.song').forEach(function (song) {
   var audio = song.querySelector('audio');
   if (!audio) return;

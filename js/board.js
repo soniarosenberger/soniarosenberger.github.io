@@ -1,6 +1,4 @@
-// Photo boards shown right on the page (the skate page): click a photo to see it large,
-// click again or press Esc to go back. (The Filthy Blonde board lives in an overlay and
-// has its own version of this in js/music.js.)
+// photo zoom for the skate board
 (function () {
   var boards = Array.prototype.filter.call(document.querySelectorAll('.band-board'), function (b) {
     return !b.closest('.gallery');

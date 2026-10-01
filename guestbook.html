@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="css/lettering.css?v=2">
 </head>
 <body>
-  <!-- Rough, deckled paper edge for the guest book pane -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="deckle" x="-3%" y="-3%" width="106%" height="106%">
       <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="5" result="noise"/>
@@ -35,7 +34,7 @@
     <form class="gb-form">
       <label>Name:<br><input type="text" name="name" maxlength="40" autocomplete="off"></label>
       <label>Message:<br><textarea name="message" rows="3" maxlength="500"></textarea></label>
-      <!-- spam trap: hidden from people, bots tend to fill it in -->
+      <!-- honeypot -->
       <label class="gb-trap" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
       <div class="gb-draw">
         <span>Leave a cave painting (optional):</span>

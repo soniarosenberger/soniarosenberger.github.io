@@ -1,13 +1,10 @@
-// Flip-through magazines. Each <article class="mag"> has a cover button and a hidden
-// list of pages (.mag-pages). Opening one builds a two-page book in an overlay:
-// click the right/left page, use the arrow buttons or keys, or swipe to turn pages.
+// sketchbook reader
 (function () {
   var mags = document.querySelectorAll('.mag');
   if (!mags.length) return;
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- Reader shell (built once) ----
   var reader = document.createElement('div');
   reader.className = 'mag-reader';
   reader.hidden = true;
@@ -29,7 +26,7 @@
   var prevBtn = reader.querySelector('.mag-prev');
   var nextBtn = reader.querySelector('.mag-next');
   var leaves = [];
-  var current = 0;      // number of leaves turned over
+  var current = 0;
   var pageCount = 0;
   var lastFocus = null;
 
@@ -61,7 +58,6 @@
     return b;
   }
 
-  // Inside covers: the reverse of the board, so the same binding mirrored and darker
   function endpaper(mag, mirrored) {
     var e = document.createElement('div');
     e.className = 'mag-endpaper' + (mirrored ? ' is-mirrored' : '');
@@ -69,13 +65,10 @@
     return e;
   }
 
-  // The page's print area is 82% of the page width by 81% of its height, on a 3:4 page
+  // print area: 82% x 81% of a 3:4 page
   var AREA_ASPECT = (0.82 * 3) / (0.81 * 4);
 
-  // A page's picture can be rotated (data-rotate="degrees" on its <li>), then cropped
-  // (data-crop="x y w h", as fractions of the rotated picture's bounding box), and
-  // captioned (<p class="mag-caption"> after the picture). A page with no picture is left
-  // blank apart from its caption. All three are written into art.html.
+  // per page: data-rotate, data-crop (x y w h, fractions), optional .mag-caption
   function cropOf(li) {
     var c = (li.dataset.crop || '').split(/\s+/).map(Number);
     return c.length === 4 && c.every(isFinite) && c[2] > 0 && c[3] > 0
@@ -83,8 +76,6 @@
       : { x: 0, y: 0, w: 1, h: 1 };
   }
 
-  // Lays a picture of natural size w x h, rotated by deg, into a box the size of its
-  // rotated bounds. Returns that box's width and height (in the picture's pixels).
   function placeRotated(media, w, h, deg) {
     var t = deg * Math.PI / 180, c = Math.abs(Math.cos(t)), s = Math.abs(Math.sin(t));
     var bw = w * c + h * s, bh = w * s + h * c;
@@ -103,7 +94,6 @@
     wrap.className = 'mag-content';
     var caption = li.querySelector('.mag-caption');
     var hasCaption = !!(caption && caption.textContent.trim());
-    // a blank page (<li class="mag-blank">): just paper, with its caption if it has one
     if (!li.querySelector('img, video')) {
       wrap.classList.add('mag-content--blank');
       if (hasCaption) wrap.append(caption.cloneNode(true));
@@ -113,7 +103,7 @@
     pasted.className = 'mag-pasted';
     var window_ = document.createElement('div');
     window_.className = 'mag-crop';
-    var frame = document.createElement('div');   // the rotated picture's bounds
+    var frame = document.createElement('div');
     frame.className = 'mag-crop-frame';
     var media = li.querySelector('img, video').cloneNode(true);
     media.removeAttribute('loading');
@@ -126,8 +116,7 @@
     frame.style.left = (-crop.x / crop.w * 100) + '%';
     frame.style.top = (-crop.y / crop.h * 100) + '%';
     var aspect = (bounds.w * crop.w) / (bounds.h * crop.h);
-    pasted.dataset.aspect = aspect;              // for showing it large (enlarge(), below)
-    // leave a little paper around the picture for the tape, and room below it for a caption
+    pasted.dataset.aspect = aspect;
     var fillW = 0.92, fillH = hasCaption ? 0.8 : 0.92;
     var areaAspect = AREA_ASPECT * fillW / fillH;
     if (aspect > areaAspect) {
@@ -137,7 +126,7 @@
       pasted.style.setProperty('--ph', fillH * 100 + '%');
       pasted.style.setProperty('--pw', (fillH * 100 * aspect / AREA_ASPECT).toFixed(2) + '%');
     }
-    pasted.style.setProperty('--tilt', (((n * 37) % 7) - 3) * 0.5 + 'deg'); // small, varied angles
+    pasted.style.setProperty('--tilt', (((n * 37) % 7) - 3) * 0.5 + 'deg');
     frame.append(media);
     window_.append(frame);
     pasted.append(window_);
@@ -146,7 +135,7 @@
     return wrap;
   }
 
-  var pageNums = []; // page number for each page slot, for the status line (null for covers and blanks)
+  var pageNums = [];
 
   var openMag = null;
 
@@ -156,22 +145,21 @@
     if (!keepPlace) current = 0;
     openMag = mag;
 
-    // cover, inside cover, sketchbook pages, (blank to even out), inside back cover, back cover
-    var pages = [coverPage(mag), endpaper(mag, true)];   // inside front: mirror of the front cover
+    // cover, inside cover, pages, (blank), inside back, back
+    var pages = [coverPage(mag), endpaper(mag, true)];
     pageNums = [null, null];
     mag.querySelectorAll('.mag-pages > li').forEach(function (li, i) {
       pages.push(contentPage(li, i + 1));
       pageNums.push(i + 1);
     });
     if (pages.length % 2 === 1) { pages.push(null); pageNums.push(null); }
-    pages.push(endpaper(mag, false), backPage(mag));   // inside back: mirror of the (mirrored) back cover
+    pages.push(endpaper(mag, false), backPage(mag));
     pageNums.push(null, null);
     pageCount = pageNums.filter(Boolean).length;
 
     for (var i = 0; i < pages.length; i += 2) {
       var leaf = document.createElement('div');
       leaf.className = 'mag-leaf';
-      // right-hand page on the front, left-hand page on the back
       leaf.append(face('front', pages[i]));
       leaf.append(face('back', pages[i + 1]));
       leaf.addEventListener('transitionend', resetStacking);
@@ -190,10 +178,9 @@
 
   function render(flipping) {
     leaves.forEach(function (leaf, i) { leaf.classList.toggle('is-turned', i < current); });
-    if (flipping != null) leaves[flipping].style.zIndex = leaves.length + 1; // on top while turning
+    if (flipping != null) leaves[flipping].style.zIndex = leaves.length + 1;
     if (flipping == null || reduceMotion) resetStacking();
 
-    // closed front/back cover sits centred; open spreads fill the stage
     book.classList.toggle('is-closed-front', current === 0);
     book.classList.toggle('is-closed-back', current === leaves.length);
 
@@ -234,8 +221,7 @@
   prevBtn.addEventListener('click', prev);
   reader.querySelector('.mag-close').addEventListener('click', close);
 
-  // A drawing clicked or tapped is shown large, cropped as it's pasted in, with its caption;
-  // a click anywhere (or Esc) puts it back.
+  // click a drawing to enlarge it
   var zoom = document.createElement('div');
   zoom.className = 'mag-zoom';
   zoom.hidden = true;
@@ -264,17 +250,15 @@
   }
   zoom.addEventListener('click', shrink);
 
-  // Click the right half to go forward, the left half to go back
   var swiped = false;
   book.addEventListener('click', function (e) {
-    if (swiped) { swiped = false; return; } // the swipe already turned the page
+    if (swiped) { swiped = false; return; }
     var pasted = e.target.closest('.mag-pasted');
     if (pasted) { enlarge(pasted); return; }
     var r = book.getBoundingClientRect();
     if (e.clientX > r.left + r.width / 2) next(); else prev();
   });
 
-  // Swipe on touch screens
   var startX = null;
   stage.addEventListener('pointerdown', function (e) { startX = e.clientX; });
   stage.addEventListener('pointerup', function (e) {

@@ -1,4 +1,3 @@
-// Click a collage picture to see it large; click anywhere or press Esc to close.
 (function () {
   var items = document.querySelectorAll('.collage-item img');
   if (!items.length) return;

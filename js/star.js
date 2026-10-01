@@ -1,11 +1,8 @@
-// The homepage star's shape: layers of the print, each cut to one contour of the balloon's
-// height (frame k of images/home/star-layers.png), placed at that height on both sides of
-// the middle. The middle layer is the whole star; the last pair is a small patch at the
-// centre, where it's puffiest.
+// contour layers (star-layers.png) stacked on both sides of the middle
 (function () {
   var spin = document.querySelector('.star-spin');
   if (!spin) return;
-  var N = 20, DEPTH = 11;                    // contours each side; the puff at the centre, in cqw
+  var N = 20, DEPTH = 11;                    // layers per side; depth in cqw
   for (var k = 0; k <= N; k++) {
     var z = DEPTH * k / (N + 1);
     (k ? [z, -z] : [0]).forEach(function (at) {
@@ -16,9 +13,7 @@
       spin.append(layer);
     });
   }
-  // Seen edge-on those layers are just lines, so the edge is also filled in with upright
-  // slices across the star: each one the balloon's profile through its strip of the print
-  // (images/home/star-sides.png), turned side-on.
+  // edge-on fill: upright profile slices (star-sides.png)
   var SLICES = 48;
   for (var i = 0; i < SLICES; i++) {
     var slice = document.createElement('span');

@@ -1,10 +1,5 @@
-// The Messages page: click the closed phone to flip it open, then page through the quotes
-// with the left and right of the round key (or the arrow keys). END closes it again.
-// Each message is one quote (a string), or a conversation (a list of lines, shown as
-// bubbles on alternating sides). Any line can be { t: text, c: context } to show a little
-// note underneath, { side: 'l' } or { side: 'r' } puts it on that side (incoming on the left,
-// outgoing on the right), and { who: 2 } colours it as a second person. The order is shuffled
-// each visit. Friends' names in the quotes are written <x>, <y>, <z>.
+// messages phone
+// a message is a string or a list of lines; a line can be {t, c, side, who}. names are <x>, <y>, <z>
 var QUOTES = [
   "I’m gonna be the Drake of engineering.",
   "I’m exactly like Chief Keef if he grew up with white privilege.",
@@ -146,7 +141,6 @@ var QUOTES = [
   var body = open.querySelector('.quote-body');
   var at = 0;
 
-  // a new order every visit
   for (var i = QUOTES.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var swap = QUOTES[i]; QUOTES[i] = QUOTES[j]; QUOTES[j] = swap;
@@ -177,7 +171,6 @@ var QUOTES = [
     count.textContent = (at + 1) + '/' + QUOTES.length;
     body.scrollTop = 0;
   }
-  // the screen's clock, in the phone's own style: 2:45p
   var clock = open.querySelector('.lcd-clock');
   function tick() {
     var now = new Date(), h = now.getHours(), m = now.getMinutes();
@@ -193,8 +186,7 @@ var QUOTES = [
     fit();
     (toOpen ? open.querySelector('.phone-key--right') : closed).focus({ preventScroll: true });
   }
-  // open, the phone is sized to fill whatever height is left between the caption and the back
-  // link, so the back link always shows at the bottom of the screen, whatever the window
+  // fit the open phone between the caption and the back link
   var caption = document.querySelector('.messages-caption');
   var back = document.querySelector('.messages-back');
   function fit() {
@@ -202,13 +194,12 @@ var QUOTES = [
     var top = caption.getBoundingClientRect().bottom + window.scrollY
       + parseFloat(getComputedStyle(caption).marginBottom);
     var below = back.offsetHeight + parseFloat(getComputedStyle(back).marginTop) + 24;
-    var tall = window.innerHeight - top - below;           // the phone is 3.43 times as tall as wide
+    var tall = window.innerHeight - top - below;
     var wide = Math.max(90, Math.min(tall / 3.43, 220, window.innerWidth * 0.6));
     open.style.width = wide + 'px';
   }
   window.addEventListener('resize', fit);
   closed.addEventListener('click', function () { show(0); open.classList.remove('is-used'); flip(true); });
-  // the first key pressed stops the keys glowing
   open.addEventListener('click', function (e) {
     if (e.target.closest('.phone-key')) open.classList.add('is-used');
   });

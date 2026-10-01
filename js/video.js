@@ -1,8 +1,4 @@
-// Video page: the TV warms up to static, and picking a tape plays its film on the TV.
-// Each tape (.vhs) names its film in data-video; its blurb is the hidden .vhs-blurb next
-// to it. Picking a tape grows the TV, shows play/pause, a scrubber, the time and a sound
-// switch underneath, then the blurb. "Eject" goes back to static. Clicking the TV while a
-// film is in also pauses it.
+// video page: tapes play on the tv
 (function () {
   var vcr = document.querySelector('.vcr');
   if (!vcr) return;
@@ -16,7 +12,7 @@
   var tapes = Array.prototype.slice.call(vcr.querySelectorAll('.vhs'));
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- static: soft analogue snow ----
+  // ---- static ----
   var ctx = canvas.getContext('2d');
   var w = canvas.width, h = canvas.height;
   var frame = ctx.createImageData(w, h);
@@ -43,14 +39,13 @@
     canvas.hidden = true;
   }
 
-  // switch the set on once it has grown into place
   setTimeout(function () {
     canvas.classList.add('is-on');
     screen.classList.add('is-on');
     startSnow();
   }, still ? 0 : 750);
 
-  // ---- playing a tape ----
+  // ---- playback ----
   var current = null;
   var tuneTimer = null;
 
@@ -73,7 +68,6 @@
   ['play', 'pause', 'timeupdate', 'loadedmetadata', 'durationchange', 'volumechange'].forEach(function (ev) {
     video.addEventListener(ev, update);
   });
-  // dragging the scrubber shows where it will land; letting go skips there
   seek.addEventListener('input', function () {
     seeking = true;
     if (video.duration) time.textContent = clock(seek.value / 1000 * video.duration) + ' / ' + clock(video.duration);
@@ -86,8 +80,7 @@
     video.muted = !video.muted;
     if (!video.muted && video.volume === 0) video.volume = 1;
   });
-  // start a film with sound; if the browser won't allow sound yet, play it silently
-  // and leave the "sound off" button for the visitor to switch it on
+  // autoplay with sound, or muted if blocked
   function start() {
     video.muted = false;
     video.play().catch(function () {
@@ -106,14 +99,13 @@
     var notes = tape.parentElement.querySelector('.vhs-blurb');
     blurb.innerHTML = notes ? notes.innerHTML : '';
     video.pause();
-    startSnow();   // a moment of static while the tape "loads"
-    // centre the grown TV in the window once it has finished growing
+    startSnow();
     setTimeout(function () {
       vcr.querySelector('.vcr-tv').scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'center' });
     }, still ? 0 : 700);
 
     var src = tape.dataset.video;
-    playBtn.hidden = time.hidden = seek.hidden = soundBtn.hidden = !src;   // eject stays, to go back
+    playBtn.hidden = time.hidden = seek.hidden = soundBtn.hidden = !src;
     if (!src) {
       video.removeAttribute('src');
       video.load();
@@ -156,8 +148,6 @@
     if (vcr.classList.contains('is-showing')) playBtn.click();
   });
   vcr.querySelector('.vcr-eject').addEventListener('click', eject);
-  // at the end of a film, back to static (the blurb stays)
-  // playing again after the end clears the static
   video.addEventListener('playing', function () {
     if (current && !vcr.classList.contains('is-showing')) {
       stopSnow();

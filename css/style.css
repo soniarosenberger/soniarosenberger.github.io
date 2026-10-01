@@ -22,8 +22,7 @@ body {
 
 a { color: var(--accent); }
 
-/* Old-style pixel cursors on computers (phones and tablets have none): the arrow everywhere,
-   and the pointing hand over anything that can be clicked. The numbers are each one's tip. */
+/* pixel cursors, mouse only */
 :root { --arrow: default; --hand: pointer; }
 @media (hover: hover) and (pointer: fine) {
   :root {
@@ -37,7 +36,7 @@ input[type="submit"], input[type="button"], input[type="checkbox"], input[type="
 input:not([type]), input[type="text"], input[type="email"], textarea { cursor: text; }
 button:disabled { cursor: var(--arrow); }
 
-/* Header: centred name with tabs underneath */
+/* header */
 .site-header {
   display: flex;
   flex-direction: column;
@@ -45,9 +44,7 @@ button:disabled { cursor: var(--arrow); }
   padding: 3rem 1rem 1rem;
   text-align: center;
 }
-/* The name and the tabs are drawn from outlines of their lettering (css/lettering.css sizes
-   each one and picks its outline), filled with --ink so the hover colours still work. The
-   words stay in the page, at zero size, for screen readers and search. */
+/* lettering is an svg mask (lettering.css); the text stays at size 0 for screen readers */
 .site-name a::before,
 .site-nav a::before,
 .vhs-label-text::before {
@@ -60,13 +57,12 @@ button:disabled { cursor: var(--arrow); }
   mask-repeat: no-repeat;
 }
 .site-name {
-  /* "SONIA ROSENBERGER" is 9.78 of these wide, so this makes it ~50% of the page width */
+  /* ~50% of the page width */
   --name-size: 5.11vw;
   font-size: var(--name-size);
   line-height: 1.1;
   white-space: nowrap;
 }
-/* on phones the name is bigger, about 80% of the screen width */
 @media (max-width: 440px) {
   .site-name { --name-size: 8.2vw; }
 }
@@ -79,7 +75,6 @@ button:disabled { cursor: var(--arrow); }
   text-decoration: none;
 }
 
-/* Same classic hyperlink blue as the tabs on hover */
 .site-name a:hover,
 .site-name a:focus-visible { --ink: #0000ee; }
 
@@ -96,21 +91,17 @@ button:disabled { cursor: var(--arrow); }
   font-size: 0;
   text-decoration: none;
 }
-/* On phones, where all five won't fit on one line, break evenly: three tabs, then two */
+/* phones: tabs wrap 3 + 2 */
 @media (max-width: 440px) {
   .site-nav { row-gap: 0; }
-  /* the tabs' lines closer together (a line height of 1.25 rather than 1.6), the words kept
-     centred in them */
   .site-header .site-nav a[href] { height: calc(var(--fs) * 1.45); }
   .site-nav a::before, .site-nav a::after { translate: 0 calc(var(--fs) * -0.175); }
   .site-nav::after { content: ""; flex-basis: 100%; order: 2; }
-  /* the second line, tucked up under the first: half the gap between their letters */
   .site-nav a:nth-child(n + 4) { order: 3; margin-top: calc(var(--fs) * -0.4); }
 }
-/* Classic early-web hyperlink blue on hover */
 .site-nav a:hover,
 .site-nav a:focus-visible { --ink: #0000ee; }
-/* the current tab is underlined, a thin line 0.3 of the type size under its baseline */
+/* current tab underline */
 .site-nav a[aria-current="page"]::after {
   content: "";
   position: absolute;
@@ -138,13 +129,12 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   white-space: nowrap;
 }
 
-/* Floating collage pages (art, music, projects, about).
-   Each item's size, tilt, nudge, stacking and float timing are set inline by the page. */
+/* collage pages; item layout is set inline */
 .collage-page { max-width: 1200px; padding-top: 1.5rem; }
 .collage-section + .collage-section { margin-top: 3rem; }
 .collage-label {
   position: relative;
-  z-index: 60; /* stays readable above the pictures */
+  z-index: 60;
   text-align: center;
   font: 15px var(--font-typewriter);
   letter-spacing: -0.03em;
@@ -157,14 +147,14 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   justify-content: center;
   align-items: center;
   padding: 2rem 0.5rem 1.5rem;
-  overflow-x: clip; /* tilted edges never cause sideways scrolling */
+  overflow-x: clip;
   overflow-clip-margin: 1rem;
 }
 .collage-item {
   position: relative;
   z-index: var(--z, 1);
   width: min(var(--w, 240px), 44vw);
-  margin: -0.9rem -0.6rem; /* slight overlaps between neighbours */
+  margin: -0.9rem -0.6rem;
   rotate: var(--r, 0deg);
   translate: var(--dx, 0) var(--dy, 0);
   animation: collage-float var(--dur, 7s) ease-in-out var(--delay, 0s) infinite alternate;
@@ -217,11 +207,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   color: #666;
 }
 
-/* Every page's icons (these, the sketchbooks, the band and the CD cases) rest in soft, grainy
-   black and white: url(#bw-grain) is a film-grain filter js/main.js adds to each page. */
-/* The object icons (Projects and Writing), in a line, bottoms lined up, each opening its
-   own page. At rest they're still, in high-contrast black and white; hovered, each comes into
-   colour, lifts, gently floats and plays its own animation. */
+/* icons rest in grainy b&w (#bw-grain is added by main.js) */
+/* object icons (projects, writing) */
 .project-icons {
   list-style: none;
   display: flex;
@@ -260,9 +247,9 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   filter: none;
 }
 .project-object > img { display: block; width: 100%; height: auto; }
-.project-object--skate { width: 42px; }         /* 166px tall */
-.project-object--engineering { width: 124px; }  /* 153px tall */
-.project-object--video { width: 200px; }        /* 116px tall */
+.project-object--skate { width: 42px; }
+.project-object--engineering { width: 124px; }
+.project-object--video { width: 200px; }
 .project-title {
   margin-top: 0.6rem;
   font: 14px var(--font-typewriter);
@@ -278,8 +265,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .project-object--video { width: 150px; }
 }
 
-/* the oscilloscope's moving trace, laid over the green screen of the photo
-   (the photo's own flat line was erased) */
+/* scope trace */
 .scope-trace {
   position: absolute;
   left: 7.93%;
@@ -297,15 +283,13 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
-/* while js/projects.js glitches from one waveform to the next */
 .scope-trace.is-glitching path { stroke: #e6fff0; }
 @media (prefers-reduced-motion: reduce) {
   .project-icon { transition: none; }
   .project-icons > li:hover, .project-icons > li:focus-within { animation: none; }
 }
 
-/* the TV's screen: switches on to static while the TV is hovered (drawn by js/projects.js),
-   shaped to the glass by a mask */
+/* tv static (projects.js) */
 .tv-static {
   position: absolute;
   left: 30.78%;
@@ -317,7 +301,6 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   opacity: 0;
   pointer-events: none;
 }
-/* switching on: a bright line opens out into the picture, like an old set warming up */
 .tv-static.is-on { opacity: 0.95; animation: tv-on 0.45s ease-out both; }
 .tv-static.is-off { animation: tv-off 0.3s ease-in both; }
 @keyframes tv-on {
@@ -333,10 +316,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   100% { opacity: 0; transform: scale(0, 0); }
 }
 
-/* the skateboard spins round once on its long (vertical) axis when hovered,
-   showing the other side of the deck halfway round */
-/* (its black and white is on each face, not the whole board, as a filter there would flatten
-   the spin, and some browsers then drop the filter altogether) */
+/* skateboard flip */
+/* filter on each face, not the board, or the 3d flattens */
 .project-object.project-object--skate { perspective: 500px; filter: none; }
 .project-object--skate .skate-face { filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9); transition: filter 0.3s ease; }
 .project-icon:hover .skate-face,
@@ -377,10 +358,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .project-icon.is-active .skate-deck { animation: none; }
 }
 
-/* ---- Video page: a big TV that plays the picked VHS tape (js/video.js) ----
-   Waiting: the TV fills most of the screen, showing static, with the tapes beside it.
-   Playing (.vcr.is-playing): the TV grows to nearly the full width, with the controls, the
-   film's blurb and then the tapes underneath. */
+/* ---- video page ---- */
 .video-page { max-width: 1400px; }
 .vcr {
   display: flex;
@@ -398,7 +376,6 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   transition: width 0.7s cubic-bezier(0.4, 0.1, 0.2, 1);
   animation: vcr-grow 0.75s cubic-bezier(0.3, 0.1, 0.2, 1) both;
 }
-/* arriving from the little TV on the projects page */
 @keyframes vcr-grow {
   from { transform: scale(0.3); opacity: 0.4; }
   to { transform: none; opacity: 1; }
@@ -422,7 +399,6 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 }
 .vcr-static { opacity: 0; }
 .vcr-static.is-on { opacity: 0.95; animation: tv-on 0.45s ease-out both; }
-/* the screen is 16:9 like the films, so they fill it edge to edge */
 .vcr-video {
   object-fit: cover;
   background: #000;
@@ -430,7 +406,6 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   transition: opacity 0.4s ease;
 }
 .vcr.is-showing .vcr-video { opacity: 1; }
-/* a picture tube's darker corners, over whatever is on the screen */
 .vcr-screen::after {
   content: "";
   position: absolute;
@@ -465,7 +440,6 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 .vhs:hover,
 .vhs:focus-visible { transform: translateY(-4px) rotate(-1deg); }
 .vhs img { display: block; width: 100%; height: auto; }
-/* the title, written on the label's ruled lines */
 .vhs-label {
   position: absolute;
   left: 30.2%;
@@ -539,8 +513,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 .vcr-blurb a:hover,
 .vcr-blurb a:focus-visible { color: #0000ee; }
 
-/* as big as the window allows, leaving a border all round (2.053 is the TV's width to
-   height); it spills past the page's column evenly on both sides because the row is centred */
+/* 2.053 = tv aspect ratio */
 .vcr.is-playing .vcr-tv { width: min(100vw - 64px, (100vh - 64px) * 2.053); }
 .vcr.is-playing .vcr-tapes {
   order: 4;
@@ -555,7 +528,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 @media (max-width: 700px) {
   .vcr-tv { width: 100%; }
   .vcr-tapes { flex-direction: row; justify-content: center; width: 100%; }
-  .vcr-tapes > li { width: 44%; }       /* the tapes side by side under the TV */
+  .vcr-tapes > li { width: 44%; }
   .vcr.is-playing .vcr-tv { width: min(100vw - 32px, (100vh - 32px) * 2.053); }
   .vcr.is-playing .vcr-tapes > li { width: 40%; }
 }
@@ -565,13 +538,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .vhs { transition: none; }
 }
 
-/* ---- Home: Sonia's linocut star, blown up like a foil balloon, turning slowly about its upright ----
-   The print is already in the icons' black-and-white grain, and shaded for its puffed-up
-   surface (images/home/star.png). Its shape is a stack of layers (js/star.js), each the
-   print cut to one contour of the balloon's height (a strip of images/home/star-layers.png),
-   the smaller ones further out on both sides, so it's fattest in the middle and thins
-   towards the points, and upright cross-sections fill in the edge. The back is the same print, seen from behind. Sizes are in cqw,
-   hundredths of the star's width. */
+/* ---- home star (layers built in star.js) ---- */
 .star {
   width: min(45vw, max(120px, calc(var(--tabs-width, 346px) * 0.36)));
   aspect-ratio: 400 / 508;
@@ -598,7 +565,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 .star-slice {
   position: absolute;
   top: 0;
-  width: 22cqw;                          /* the balloon's full thickness at its fattest */
+  width: 22cqw;
   height: 100%;
   background: url("../images/home/star-sides.png?v=3") 0 0 / 4800% 100% no-repeat;
   transform: rotateY(90deg);
@@ -607,9 +574,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   .star-spin { animation: none; transform: rotateY(-28deg); }
 }
 
-/* About: the astronaut photo with the bio beside it, the pair as wide as the tabs line
-   (--tabs-width, from js/main.js) and starting where the "art" tab's letters start (each
-   tab has 0.3em of padding before its word) */
+/* ---- about ---- */
 .about-intro {
   --tab-inset: calc(0.3 * clamp(1.4rem, 2.6vw, 2.1rem));
   display: flex;
@@ -617,10 +582,8 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   gap: 1.75rem;
   width: calc(var(--tabs-width, 440px) - 2 * var(--tab-inset));
   max-width: 100%;
-  /* the header already leaves 1rem under the tabs, plus the tabs' tails */
   margin: calc(var(--about-gap) - 24px) auto 0;
 }
-/* photo and bio share the width equally */
 .about-photo {
   flex: 1 1 0;
   margin: 0;
@@ -631,14 +594,11 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   font-family: "IM Fell English", Georgia, serif;
   font-size: 0.95rem;
   line-height: 1.65;
-  /* beside the photo, js/main.js sizes the type so the bio stands as tall as the photo */
+  /* font size set by main.js to match the photo's height */
 }
 .about-bio p + p { margin-top: 0.9em; }
-/* the footer follows the italic note at the same distance as the note follows the icons */
-/* the same gap below the tabs, and between the photo and bio and the inquiries box */
 .about-page { --about-gap: 2.5rem; padding-top: 0; padding-bottom: 0; }
 .about-page + .site-footer { padding-top: 20px; }
-/* the italic note under the icons, on one line */
 .about-note {
   margin: 1.5rem 0 0;
   font-family: var(--font-typewriter);
@@ -649,20 +609,17 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   white-space: nowrap;
 }
 @media (max-width: 560px) {
-  .about-note { font-size: 0.6rem; }   /* small enough to stay on one line on a phone */
+  .about-note { font-size: 0.6rem; }
 }
-/* on phones the tabs wrap onto two lines, so the photo and bio stack, centred */
+/* phones: stack */
 @media (max-width: 560px) {
   .about-intro { flex-direction: column; align-items: stretch; width: 100%; }
   .about-photo, .about-bio { flex-basis: auto; width: 100%; }
-  .about-photo { width: 50%; align-self: center; }   /* the photo smaller: a quarter of the area */
+  .about-photo { width: 50%; align-self: center; }
   .about-page .about-inquiries { width: 100%; }
 }
 
-/* The inquiries note in its own little pixel frame (images/about/icons/frame.png, drawn by
-  : its 8-pixel corners stay put, its edges repeat along the
-   sides, all at twice size with the pixels kept hard. As wide as the photo and bio above.
-   The contact icons sit inside it, under the note. */
+/* pixel frame, drawn at 2x */
 .about-inquiries {
   width: calc(var(--tabs-width, 440px) - 2 * 0.3 * clamp(1.4rem, 2.6vw, 2.1rem));
   max-width: 100%;
@@ -678,15 +635,13 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   text-align: center;
 }
 
-/* The old-style pixel icons in the inquiries frame, spread across a row as wide as the email line
-   in the footer (26 typewriter characters at the footer's size and spacing), and pressed in
-   (down onto their shadow) when hovered, like an old button. */
+/* contact icons */
 .contact-icons {
   list-style: none;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  font-size: 0.9rem;                    /* the footer's size, so the width below matches it */
+  font-size: 0.9rem;
   width: calc(26 * (0.6em - 0.06em));
   max-width: 100%;
   margin: 1rem auto 0.25rem;
@@ -694,15 +649,12 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 }
 .contact-icon { display: block; line-height: 0; }
 .contact-icon img {
-  width: 25.5px;                        /* three quarters of their pixel size */
+  width: 25.5px;
   height: 25.5px;
-  image-rendering: auto;                /* (not the frame's hard pixels, see below) */
+  image-rendering: auto;
   transition: transform 0.08s steps(1);
 }
-/* the envelope is wider than the others (46 pixels across instead of 34) */
 .contact-icon img.is-wide { width: 34.5px; }
-/* on high-resolution screens that's a clean one and a half screen pixels per icon pixel,
-   so keep the pixels hard; on older screens let them smooth a little instead of breaking up */
 @media (min-resolution: 2dppx) {
   .contact-icon img { image-rendering: pixelated; }
 }
@@ -711,15 +663,15 @@ a.contact-icon:focus-visible img { transform: translate(1px, 1px); }
 a.contact-icon:active img { transform: translate(2px, 2px); }
 a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px; }
 
-/* project pages (video, engineering, skate) */
+/* project pages */
 .project-page-title {
   text-align: center;
   font: 18px var(--font-typewriter);
   letter-spacing: -0.08em;
 }
-/* back links, at the bottom of a page: small, plain and centred */
+/* back links */
 .project-back {
-  margin-top: 2.5rem;                    /* well clear of whatever is above */
+  margin-top: 2.5rem;
   text-align: center;
   font: 12px var(--font-typewriter);
 }
@@ -729,9 +681,9 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   text-underline-offset: 2px;
 }
 .project-back a:hover { color: #0000ee; }
-.poem-nav .poem-prev, .poem-nav .poem-next { text-decoration: none; }   /* only the way back is underlined */
+.poem-nav .poem-prev, .poem-nav .poem-next { text-decoration: none; }
 
-/* Engineering: its projects, one per line, each opening its own write-up */
+/* engineering + poetry lists */
 .eng-list {
   list-style: none;
   display: flex;
@@ -741,44 +693,38 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   padding: 2rem 0 2.5rem;
   font: 15px "IM Fell English", Georgia, serif;
 }
-/* the titles look like links: blue and underlined, the underline thin and set just below */
 .eng-list a {
   color: #0000ee;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
-.poem-list { gap: 0.7rem; }   /* the poem titles sit a little closer together */
+.poem-list { gap: 0.7rem; }
 
-/* a poem, typed straight onto the page: as wide as a US Letter sheet's text (8.5 inches,
-   drawn at 80 pixels to the inch, less half-inch margins), and as long as it is */
+/* poems */
 .poem-sheet {
   width: min(680px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 0 5.88%;                     /* the half-inch margins of the 8.5 */
+  padding: 0 5.88%;
   font: 15px/1.45 "Times New Roman", Times, serif;
   text-align: center;
 }
-/* spaced like plain typed text: lines close together, one blank line between verses, and
-   one under the title */
 .poem-title { margin-bottom: 1.45em; font: bold 1em/1.45 "Times New Roman", Times, serif; }
 .poem-body p + p { margin-top: 1.45em; }
-/* under the poem: previous and next either side of the way back to the list */
 .poem-nav {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;   /* the way back stays centred, even with one side empty */
+  grid-template-columns: 1fr auto 1fr;
   gap: 2rem;
   margin-top: 3.5rem;
 }
-.poem-prev { justify-self: end; }        /* previous and next sit close in on either side of it */
+.poem-prev { justify-self: end; }
 .poem-next { justify-self: start; }
-.poem-nav .is-off { color: #aaa; cursor: var(--arrow); }   /* first or last poem: nothing that way */
+.poem-nav .is-off { color: #aaa; cursor: var(--arrow); }
 @media (max-width: 560px) {
   .poem-sheet { padding: 0; font-size: 14px; }
 }
 
-
-/* a project write-up: title, a small line under it, then the article in a readable column */
+/* write-ups */
 .article { max-width: 36rem; margin: 0 auto; padding: 0 16px 2.5rem; }
 .article-meta {
   margin-top: 0.4rem;
@@ -786,7 +732,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   font: italic 13px var(--font-typewriter);
   color: #555;
 }
-/* a video in a write-up, the width of the column, with a small caption under it */
 .article-figure { margin: 1.5rem 0; }
 .article-video { display: block; width: 100%; height: auto; background: #000; }
 .article-figure figcaption {
@@ -795,7 +740,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   font: italic 13px var(--font-typewriter);
   color: #555;
 }
-/* a file to download, as a plain typewriter button */
 .article-download { margin-top: 1.5rem; text-align: center; }
 .download-button {
   display: inline-block;
@@ -810,7 +754,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .download-button:hover, .download-button:focus-visible { color: #fff; background: #000; }
 .article-body { margin-top: 2rem; font: 15px/1.7 "IM Fell English", Georgia, serif; }
 .article-body p + p { margin-top: 1em; }
-/* one page holding several short write-ups, each under its own small title */
 .article-section-title {
   margin: 2.2rem 0 0.8rem;
   text-align: center;
@@ -820,22 +763,18 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .article-section-title:first-child { margin-top: 0; }
 .article-list { padding-left: 1.4em; }
 .article-list li + li { margin-top: 0.3em; }
-/* photos set into the text like a newspaper's, the words wrapping round them */
 .article-photo { width: 45%; margin: 0.35rem 0 0.6rem; }
 .article-photo img { display: block; width: 100%; height: auto; }
 .article-photo--right { float: right; margin-left: 1.25rem; }
 .article-photo--left { float: left; margin-right: 1.25rem; }
 .article-body::after { content: ""; display: block; clear: both; }
-/* a short run of audio clips, numbered, each with the browser's own player */
 .article-sounds { clear: both; }
 .sound-list { list-style: none; display: grid; gap: 0.5rem; }
 .sound-list li { display: flex; align-items: center; gap: 0.6rem; }
 .sound-num { font: 13px var(--font-typewriter); width: 1ch; }
 .sound-list audio { flex: 1; width: 100%; min-width: 0; height: 36px; }
 
-/* ---- Music: the band as Pixel Chix-style sprites (images/music/band-*.png, 24 x 33 pixels,
-  . Each sprite pixel is shown as a whole number of
-   screen pixels (--px) so the pixels stay perfectly square and sharp. ---- */
+/* ---- music: band sprites (--px keeps the pixels square) ---- */
 .band-stage { padding: 1.5rem 0 1rem; text-align: center; }
 .band {
   --px: 2;
@@ -859,7 +798,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   width: calc(24px * var(--px));
   height: calc(33px * var(--px));
   image-rendering: pixelated;
-  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);            /* black and white until hovered */
+  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);
   transition: filter 0.3s ease;
 }
 .band-member:hover img,
@@ -892,21 +831,18 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .band-stage:has(.band-member:hover) .band-name-link,
 .band-stage:has(.band-member:focus-visible) .band-name-link,
 .band-stage:has(.band-member.is-active) .band-name-link { color: #0000ee; }
-/* likewise "Mixtapes" while one of its CDs is hovered */
 .playlists:has(.playlist:hover) .playlists-title,
 .playlists:has(.playlist:focus-visible) .playlists-title,
 .playlists:has(.playlist.is-active) .playlists-title { color: #0000ee; }
 .band-media[hidden] { display: none; }
 
-/* seasonal playlist covers, linking out to Spotify */
+/* playlists */
 .playlists { padding: 2.5rem 0 1rem; text-align: center; }
 .playlists-title {
   margin-bottom: 1.1rem;
-  font: 14px var(--font-typewriter);   /* the same as "Filthy Blonde" and the icon titles */
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
-/* columns the width of a case, with the same gap across and down:
-   four across (two on narrow screens) */
 .playlist-grid {
   --case: 96px;
   list-style: none;
@@ -918,8 +854,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .playlist-grid { transition: translate 0.35s ease; }
 @media (max-width: 700px) {
   .playlist-grid { grid-template-columns: repeat(2, var(--case)); }
-  /* a left-hand case's lid swings out a whole case-width to the left: while one is open the
-     grid slides over, so the lid stays on screen */
+  /* left cases: slide the grid so the open lid stays on screen */
   .playlist-grid:has(> li:nth-child(odd) .playlist.is-active) { translate: calc(var(--case) / 2) 0; }
 }
 .playlist {
@@ -927,21 +862,18 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   color: #000;
   text-decoration: none;
 }
-/* Each playlist is a CD in a real photographed jewel case (images/cd/lid.png and tray.png,
-   cut from one photo of an open case). Closed, the lid shows the playlist cover through the
-   clear plastic. On hover the lid swings open on its hinge to reveal the CD in the tray, and
-   the inside of the lid shows the cover mirrored, as seen from behind. */
+/* cd jewel cases */
 .playlist { position: relative; }
 .playlist:hover,
 .playlist:focus-visible,
-.playlist.is-active { z-index: 5; }    /* the opened lid swings over its neighbour */
+.playlist.is-active { z-index: 5; }
 .jewel {
   position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 263 / 250;
   perspective: 900px;
-  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);   /* black and white until hovered */
+  filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9);
   transition: filter 0.3s ease;
 }
 .playlist:hover .jewel,
@@ -964,18 +896,15 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .jewel-face { backface-visibility: hidden; overflow: hidden; }
 .jewel-face::before { content: ""; }
-/* outside of the lid: the photographed lid, mirrored so the hinge is on the left */
 .jewel-face--front::before {
   background-image: url("../images/cd/lid.png");
   transform: scaleX(-1);
 }
-/* inside of the lid, seen once it's open: the photographed lid as it is, hinge on the right */
 .jewel-face--back {
   transform: rotateY(180deg);
   background-image: url("../images/cd/lid.png");
 }
 .jewel-face--back::before { display: none; }
-/* the playlist cover sitting in the lid, under the clear plastic */
 .jewel-cover {
   position: absolute;
   top: 6%;
@@ -986,7 +915,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .jewel-face--front .jewel-cover { left: 11%; }
 .jewel-face--back .jewel-cover { left: 5%; transform: scaleX(-1); }
-/* the clear lid catches the light over the cover */
 .jewel-face::after {
   content: "";
   position: absolute;
@@ -1012,13 +940,11 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   .jewel-lid { transition: none; }
 }
 
-/* The Filthy Blonde board: photos, the video and text boxes placed freely (filthy-blonde.html,
-   in .gallery-board). --x, --y, --w and the board's --board-h are in percent of
-   the board's width, and text --size too, so the arrangement scales as one piece. */
+/* filthy blonde board: positions in % of board width */
 .band-board[hidden] { display: none; }
 .gallery-board {
   width: min(1100px, 100%);
-  margin: 2rem auto 0;                             /* a little below the page title */
+  margin: 2rem auto 0;
   container-type: inline-size;
 }
 .gallery-board .band-board {
@@ -1053,7 +979,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .board-text a { color: inherit; text-decoration: underline; }
 .board-text a:hover,
 .board-text a:focus-visible { color: #0000ee; }
-/* the song player on the board (built from the <audio> by js/music.js) */
+/* song player (band.js) */
 .song {
   display: flex;
   align-items: center;
@@ -1087,18 +1013,14 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   font-variant-numeric: tabular-nums;
 }
 .song audio { max-width: 100%; }
-/* a long title gets its own line above the controls */
 .song--stacked { flex-wrap: wrap; row-gap: 0.5em; }
 .song--stacked .song-title { flex: 0 0 100%; order: -1; }
-.song-title-line { white-space: nowrap; }   /* kept to one line, except on phones */
+.song-title-line { white-space: nowrap; }
 .song-title-sub { font-weight: 400; }
 @media (max-width: 560px) {
   .song-title-line { white-space: normal; }
 }
-/* On phones the board is too narrow to read at its own scale, so it becomes a column in the
-   board's top-to-bottom order (js/band.js): text at a readable size, photos centred a little
-   narrower than it, the video and the players full width. (Up to tablet width: below about
-   900px the board's own text gets too small to read.) */
+/* below 900px the board is one column (order set in band.js) */
 @media (max-width: 900px) {
   .gallery-board .band-board {
     display: flex;
@@ -1110,10 +1032,10 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   }
   .board-item { position: static; width: 100%; order: var(--order, 0); }
   .board-photo { width: min(80%, 520px); }
-  .board-photo img { width: auto; max-width: 100%; max-height: 70vh; margin: 0 auto; }   /* a tall photo no taller than most of the screen */
+  .board-photo img { width: auto; max-width: 100%; max-height: 70vh; margin: 0 auto; }
   .board-text { max-width: 640px; font-size: calc(var(--size, 1.2) * 10.5px); line-height: 1.45; }
   .board-video, .board-audio { max-width: 640px; }
-  .board-pointer { display: none; }      /* "First show ->" points at a photo beside it on the board */
+  .board-pointer { display: none; }
   .song { font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1128,7 +1050,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   cursor: zoom-out;
 }
 .gallery-zoom[hidden] { display: none; }
-.board-zoom { z-index: 300; }   /* on a page rather than inside the gallery overlay */
+.board-zoom { z-index: 300; }
 .gallery-zoom img {
   width: 100%;
   height: 100%;
@@ -1136,10 +1058,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));
 }
 
-/* ---- Sketchbooks (art) ----
-   A shelf of old cloth-bound books; clicking one opens a flip-through sketchbook
-   (js/magazine.js). Each cover is a real photographed antique binding
-   (images/covers/*.jpg), set inline on the cover as its background image. */
+/* ---- sketchbooks (art) ---- */
 .mag-shelf {
   display: flex;
   flex-wrap: wrap;
@@ -1148,9 +1067,8 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   padding: 1.5rem 0.5rem 2rem;
 }
 .mag {
-  width: min(210px, calc(50% - 1rem));   /* at least two to a row, even on a phone */
+  width: min(210px, calc(50% - 1rem));
 }
-/* hovered, a book floats gently, like the other icons */
 .mag:has(.mag-cover:hover),
 .mag:has(.mag-cover:focus-visible) { animation: project-float 3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
@@ -1158,7 +1076,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .mag-pages[hidden] { display: none; }
 
-/* The binding photo, with a little extra light-and-shade so it reads as a solid board */
 .mag-binding {
   position: relative;
   container-type: inline-size;
@@ -1172,7 +1089,6 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
     inset 0 0 14px rgba(0, 0, 0, 0.35);
   border-radius: 2px 4px 4px 2px;
 }
-/* hinge groove beside the spine, and soft light across the board */
 .mag-binding::before {
   content: "";
   position: absolute;
@@ -1184,8 +1100,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
     radial-gradient(ellipse at 35% 25%, rgba(255, 245, 225, 0.12), rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.18));
 }
 
-/* Blind-embossed title: pressed into the cloth in the book's own colour.
-   A darker fill with a pale lower edge and a shadowed upper edge reads as a debossed stamp. */
+/* debossed cover title */
 .mag-label {
   position: absolute;
   z-index: 1;
@@ -1199,21 +1114,17 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   display: block;
   font-family: Georgia, "Times New Roman", serif;
   text-transform: uppercase;
-  /* one size for every book: small enough that "SCREENPRINTING" fits on one line */
   font-size: 6.1cqw;
   font-weight: bold;
   line-height: 1.15;
   letter-spacing: 0.06em;
 }
-/* Debossed: the pressed fibres are darker (multiplied into the cloth, so its weave still
-   shows through the letters), with a crisp shadow where the top edges step down... */
 .mag-label-title {
   position: relative;
   color: rgba(40, 28, 16, 0.2);
   mix-blend-mode: multiply;
   text-shadow: 0 -0.8px 0.6px rgba(0, 0, 0, 0.42);
 }
-/* ...and a faint catch of light along the bottom edges, peeking out below each letter */
 .mag-label::before {
   content: attr(data-text);
   position: absolute;
@@ -1229,18 +1140,15 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   padding: 0;
   border: 0;
   cursor: var(--hand);
-  /* at rest in high-contrast black and white, like the other icons; in colour when hovered */
-  filter: url(#bw-grain) grayscale(1) brightness(var(--bw-lift, 1.8)) contrast(1.5) brightness(0.9);   /* --bw-lift: extra for darker cloths */
+  filter: url(#bw-grain) grayscale(1) brightness(var(--bw-lift, 1.8)) contrast(1.5) brightness(0.9);   /* darker cloths get more lift */
   transition: transform 0.2s ease, filter 0.3s ease;
 }
-/* slight lift on hover */
 .mag-cover:hover,
 .mag-cover:focus-visible {
   transform: translateY(-5px);
   filter: none;
 }
 
-/* page block peeking out along the fore-edge, like a real hardback */
 .mag-cover::after {
   content: "";
   position: absolute;
@@ -1252,14 +1160,14 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   border-radius: 0 1px 1px 0;
 }
 
-/* Reader overlay */
+/* reader */
 body.mag-open { overflow: hidden; }
 .mag-reader {
   position: fixed;
   inset: 0;
   z-index: 300;
   display: grid;
-  grid-template-rows: auto auto auto;    /* the book, its page turner just under it, then the way back */
+  grid-template-rows: auto auto auto;
   align-content: center;
   padding: 12px 16px 16px;
   background: rgba(250, 250, 250, 0.97);
@@ -1275,7 +1183,6 @@ body.mag-open { overflow: hidden; }
   cursor: var(--hand);
 }
 .mag-reader button:disabled { opacity: 0.25; cursor: var(--arrow); }
-/* the way out: a back link like the ones on the other pages, centred at the bottom */
 .mag-reader .mag-close { justify-self: center; margin-top: 2rem; font: 12px var(--font-typewriter); letter-spacing: normal; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
 .mag-reader .mag-close:hover, .mag-reader .mag-close:focus-visible { color: #0000ee; }
 .mag-stage {
@@ -1286,7 +1193,7 @@ body.mag-open { overflow: hidden; }
   touch-action: pan-y;
 }
 .mag-book {
-  /* a two-page spread is 3:2 (each page 3:4), sized to fit the screen */
+  /* spread is 3:2 */
   --bw: min(1100px, 100%, (100vh - 120px) * 1.5);
   position: relative;
   width: var(--bw);
@@ -1308,19 +1215,18 @@ body.mag-open { overflow: hidden; }
   transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.3, 1);
 }
 .mag-leaf.is-turned { transform: rotateY(-180deg); }
-/* the cover's debossed title is drawn on a layer of its own, which some browsers show through
-   the back of a turning cover, mirrored: so it simply goes once the cover is turned over */
+/* hide the title once the cover's turned, or some browsers show it through mirrored */
 .mag-face .mag-label { transition: visibility 0s 0.4s; }
 .mag-leaf.is-turned .mag-label { visibility: hidden; }
 
-/* Sketchbook pages: cream drawing paper (images/sketch-paper.jpg) with a fine tooth, fibres and faint age marks, shaded into the gutter */
+/* pages */
 .mag-face {
   position: absolute;
   inset: 0;
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  isolation: isolate;          /* keeps the cover title's blended lettering inside its own face */
+  isolation: isolate;          /* keeps the title's blend mode inside the face */
   background: #efe9dc url("../images/sketch-paper.jpg") center / cover;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
@@ -1349,8 +1255,7 @@ body.mag-open { overflow: hidden; }
     linear-gradient(to right, rgba(60, 40, 20, 0.08), rgba(0, 0, 0, 0) 3%);
 }
 
-/* Pictures taped into the sketchbook. --pw/--ph are the picture's share of the page's
-   print area (worked out in js/magazine.js from its shape), --tilt a small hand-placed angle. */
+/* taped-in pictures; --pw/--ph set in magazine.js */
 .mag-content {
   position: absolute;
   inset: 8% 9% 11%;
@@ -1359,7 +1264,7 @@ body.mag-open { overflow: hidden; }
   align-items: center;
   justify-content: center;
 }
-.mag-face { container-type: size; }   /* captions are sized to the page */
+.mag-face { container-type: size; }
 .mag-pasted {
   flex-shrink: 0;
   position: relative;
@@ -1368,7 +1273,6 @@ body.mag-open { overflow: hidden; }
   rotate: var(--tilt, 0deg);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.12);
 }
-/* the picture shows through a window, so it can be cropped (sizes set in js/magazine.js) */
 .mag-crop {
   position: absolute;
   inset: 0;
@@ -1383,7 +1287,7 @@ body.mag-open { overflow: hidden; }
   object-fit: fill;
 }
 .mag-pasted { cursor: zoom-in; }
-/* a drawing shown large, as big as the screen allows, with its caption under it */
+/* enlarged drawing */
 .mag-zoom {
   position: absolute;
   inset: 0;
@@ -1405,7 +1309,6 @@ body.mag-open { overflow: hidden; }
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 .mag-zoom .mag-caption { margin: 0; font-size: 13px; }
-/* a caption written under the picture, in light typewriter */
 .mag-caption {
   max-width: 92%;
   margin-top: 4.5cqw;
@@ -1414,7 +1317,6 @@ body.mag-open { overflow: hidden; }
   letter-spacing: -0.02em;
   color: #2f2a24;
 }
-/* masking tape across two corners */
 .mag-pasted::before,
 .mag-pasted::after {
   content: "";
@@ -1431,13 +1333,10 @@ body.mag-open { overflow: hidden; }
 .mag-pasted::before { top: -3%; left: -6%; rotate: -35deg; }
 .mag-pasted::after { top: -3%; right: -6%; rotate: 35deg; }
 
-
-/* front and back covers in the reader */
+/* covers in the reader */
 .mag-cover-page,
 .mag-back-page { position: absolute; inset: 0; }
-/* back cover: the same binding, mirrored so the spine sits on the right */
 .mag-back-page { transform: scaleX(-1); }
-/* inside covers: the binding seen from the reverse, mirrored and a little darker */
 .mag-endpaper {
   position: absolute;
   inset: 0;
@@ -1462,11 +1361,8 @@ body.mag-open { overflow: hidden; }
   .mag-leaf, .mag-book, .mag-cover { transition: none; }
 }
 
-/* Homepage photo + caption (sizes/positions come from css/home.css) */
-/* --caption-gap sets both the tabs→photo and photo→caption spacing, so they always match.
-   (The header already adds 1rem of padding under the tabs.) */
+/* home */
 .home-main { padding-top: 0; padding-bottom: 0; }
-/* same spacing again between the caption and the footer */
 .home-main + .site-footer { padding-top: var(--caption-gap); }
 .home-photo {
   width: max(var(--photo-min-width), var(--photo-width));
@@ -1480,23 +1376,19 @@ body.mag-open { overflow: hidden; }
   height: auto;
 }
 .home-caption {
-  /* a little wider than the photo, still centred under it */
   width: calc(100% + var(--caption-extra-width));
   margin-left: calc(var(--caption-extra-width) / -2);
   margin-top: var(--caption-gap);
   font-family: var(--font-typewriter);
   font-size: var(--caption-size);
   line-height: 1.15;
-  /* Courier New only comes in regular and bold, so a thin outline gives a halfway weight */
+  /* faux medium weight */
   -webkit-text-stroke: 0.35px currentColor;
   text-align: var(--caption-align);
   transform: translateX(var(--caption-offset-x));
 }
 
-/* On the homepage, hovering Sonia's name types the caption out underneath it, like a
-   typewriter (js/main.js). It floats in the gap above the tabs, so nothing moves: one line,
-   centred, and where it's wider than the screen it scrolls along as it types (and can be
-   swiped back). */
+/* typed caption on the homepage (main.js) */
 .site-header { position: relative; }
 .typed-caption {
   position: absolute;
@@ -1506,13 +1398,13 @@ body.mag-open { overflow: hidden; }
   white-space: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
-  padding-right: 1ch;                   /* room for the cursor at the end */
+  padding-right: 1ch;
   translate: -50% 0;
   margin: 0;
   font-family: var(--font-typewriter);
   font-size: 0.7rem;
   line-height: 1.25;
-  /* Courier New only comes in regular and bold, so a thin outline gives a halfway weight */
+  /* faux medium weight */
   -webkit-text-stroke: 0.35px currentColor;
   color: #000;
   text-align: left;
@@ -1547,17 +1439,14 @@ body.mag-open { overflow: hidden; }
 }
 .site-footer a { color: #000; }
 
-/* Homepage link to the guest book: classic underlined hyperlink */
 .guestbook-link {
   margin-top: 0.4rem;
   text-align: center;
-  /* font and size come from the footer, same as the copyright line */
 }
 .site-footer .guestbook-link a { color: #0000ee; text-decoration: underline; }
 .site-footer .guestbook-link a:visited { color: #551a8b; }
 
-/* Guest book page: plain late-90s message board, as wide as the tabs line
-   (--tabs-width is measured in js/main.js). Title in the tab script, everything else typewriter. */
+/* ---- guestbook ---- */
 .guestbook {
   width: var(--tabs-width, 100%);
   max-width: calc(100% - 32px);
@@ -1566,8 +1455,7 @@ body.mag-open { overflow: hidden; }
   font: 14px/1.4 var(--font-typewriter);
   color: #000;
 }
-/* Watercolour paper with rough deckled edges (#deckle is defined in guestbook.html).
-   Used for the form sheet and for each entry slip. */
+/* deckled paper (#deckle is in guestbook.html) */
 .gb-sheet,
 .gb-slip {
   position: relative;
@@ -1598,7 +1486,6 @@ body.mag-open { overflow: hidden; }
   font: 14px var(--font-typewriter);
   padding: 2px 5px;
   background: #fff;
-  /* inset bevel, with the light edges greyed so they still show on a white page */
   border: 2px solid;
   border-color: #808080 #d4d4d4 #d4d4d4 #808080;
   border-radius: 0;
@@ -1640,12 +1527,11 @@ body.mag-open { overflow: hidden; }
 .gb-message { margin-top: 0.2rem; white-space: pre-wrap; overflow-wrap: anywhere; }
 .gb-empty { color: #555; text-align: center; }
 
-/* Entries: their own scrolling pane of watercolour slips */
 .gb-wall {
   margin-top: 2.5rem;
   max-height: 80vh;
   overflow-y: auto;
-  padding: 1rem 0.75rem; /* room for the tilted slips' torn edges and shadows */
+  padding: 1rem 0.75rem;
 }
 .gb-entries { display: grid; gap: 1.5rem; }
 .gb-slip {
@@ -1657,10 +1543,7 @@ body.mag-open { overflow: hidden; }
 }
 .gb-slip-text { flex: 1 1 auto; min-width: 0; }
 
-/* Ornate carved silver frames for the cave paintings, cut from a photo of a real frame
-   (images/frame-silver.jpg, a desaturated, high-contrast version). The photo's corners stay intact and its sides stretch to fit.
-   Slice numbers are where the frame meets the opening in that image. Each entry gets a
-   slightly different moulding width and tilt from js/guestbook.js (--fw, --frame-tilt). */
+/* silver frames; --fw/--frame-tilt set in guestbook.js */
 .gb-frame {
   --fw: 26px;
   position: relative;
@@ -1675,10 +1558,8 @@ body.mag-open { overflow: hidden; }
   display: block;
   width: 100%;
   height: auto;
-  /* thin dark rebate where the picture meets the moulding */
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55);
 }
-/* the moulding casts a soft shadow onto the picture */
 .gb-frame::after {
   content: "";
   position: absolute;
@@ -1692,10 +1573,8 @@ body.mag-open { overflow: hidden; }
   .gb-frame { flex-basis: auto; width: 100%; }
 }
 
-
-/* ---- Writing: the closed flip phone. Hovered, its little orange screen lights up with a
-   blinking new-message notice, laid over the photo's screen. ---- */
-.project-object--phone { width: 96px; }          /* 207px tall */
+/* ---- writing: flip phone ---- */
+.project-object--phone { width: 96px; }
 .phone-screen {
   position: absolute;
   left: 23.48%;
@@ -1711,12 +1590,12 @@ body.mag-open { overflow: hidden; }
   border-radius: 2px;
   background: radial-gradient(closest-side, #ff9d62, #f6824f);
   box-shadow: 0 0 5px rgba(255, 130, 70, 0.6);
-  color: #8a2a12;                                 /* the ink of the photo's "Operating" */
+  color: #8a2a12;
   opacity: 0;
   transition: opacity 0.2s;
 }
 .phone-envelope { width: 30%; fill: none; stroke: currentColor; stroke-width: 1.2; }
-.phone-new { font: 17cqw/1 "VT323", monospace; white-space: nowrap; }   /* sized to the screen */
+.phone-new { font: 17cqw/1 "VT323", monospace; white-space: nowrap; }
 .project-icon:hover .phone-screen,
 .project-icon:focus-visible .phone-screen,
 .phone-screen.is-lit,
@@ -1737,9 +1616,7 @@ body.mag-open { overflow: hidden; }
   .project-icon.is-active .phone-new { animation: none; }
 }
 
-/* ---- Messages page (js/messages.js): the closed phone, its notice blinking, with a caption.
-   Clicked, it flips open and its colour screen shows one quote at a time; the left and right
-   of the round key (or the arrow keys) go between them, and END closes it again. ---- */
+/* ---- messages page ---- */
 .messages-page { display: flex; flex-direction: column; align-items: center; }
 .messages-phone { position: relative; }
 .phone-closed {
@@ -1762,8 +1639,7 @@ body.mag-open { overflow: hidden; }
   text-align: center;
 }
 .phone-open {
-  /* js/messages.js sizes it to the height left between the caption and the back link, so
-     the back link still shows at the bottom of the screen; this is the fallback */
+  /* fallback; messages.js sizes it */
   width: clamp(110px, calc((100svh - 310px) / 3.43), min(220px, 60vw));
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
   animation: phone-flip 0.35s ease-out both;
@@ -1773,9 +1649,7 @@ body.mag-open { overflow: hidden; }
   from { transform: scaleY(0.55) translateY(20%); opacity: 0; }
   to { transform: none; opacity: 1; }
 }
-/* The phone photo, with its screen panel cut away, sits in front
-   of the page's own screen, so the screen shows through the hole as if it's in the phone. The
-   frame's shadow falls onto the screen's edges, like glass set just under the case. */
+/* the screen shows through a hole cut in the phone photo */
 .phone-frame {
   position: relative;
   z-index: 1;
@@ -1784,15 +1658,13 @@ body.mag-open { overflow: hidden; }
 }
 .phone-key { z-index: 2; }
 
-/* the screen: an early-2000s colour phone display, about 96 "pixels" across. --p is one of
-   those pixels, so the borders, icons and bubbles are drawn in chunky whole pixels */
+/* --p = one screen pixel */
 .quote-screen {
   position: absolute;
   left: 5.10%;
   top: 7.17%;
   width: 86.45%;
   height: 34.98%;
-  /* the panel's traced outline */
   clip-path: polygon(99.0% 49.4%, 98.9% 51.9%, 99.0% 54.4%, 99.0% 56.9%, 98.9% 59.5%, 98.4% 62.1%, 98.5% 64.9%, 98.9% 68.1%, 98.2% 71.0%, 98.5% 74.7%, 98.3% 78.5%, 99.1% 83.4%, 99.2% 88.6%, 98.4% 93.8%, 95.3% 97.5%, 89.9% 98.9%, 84.0% 99.3%, 77.8% 98.5%, 72.6% 99.0%, 67.5% 99.4%, 62.5% 99.6%, 57.6% 99.7%, 52.7% 99.8%, 47.8% 99.8%, 42.9% 99.7%, 38.0% 99.5%, 33.0% 99.2%, 28.0% 98.8%, 22.6% 98.7%, 16.5% 99.3%, 10.9% 98.6%, 5.2% 97.5%, 1.7% 94.2%, 1.1% 88.8%, 0.7% 83.9%, 0.5% 79.5%, 0.5% 75.5%, 0.5% 71.8%, 0.5% 68.5%, 0.4% 65.4%, 0.4% 62.5%, 0.4% 59.7%, 0.4% 57.1%, 0.5% 54.5%, 0.5% 52.0%, 0.7% 49.4%, 1.0% 47.0%, 1.0% 44.5%, 1.0% 41.9%, 1.0% 39.3%, 1.4% 36.6%, 1.5% 33.8%, 1.6% 30.8%, 1.9% 27.7%, 2.2% 24.3%, 2.5% 20.6%, 2.8% 16.4%, 3.4% 11.9%, 5.2% 7.9%, 9.3% 5.7%, 14.1% 4.3%, 18.9% 3.2%, 23.8% 2.3%, 28.7% 1.6%, 33.5% 1.1%, 38.3% 0.7%, 43.1% 0.4%, 47.9% 0.2%, 52.6% 0.2%, 57.4% 0.2%, 62.3% 0.4%, 67.1% 0.7%, 72.1% 1.0%, 77.1% 1.6%, 82.2% 2.3%, 87.3% 3.3%, 92.3% 4.6%, 95.9% 7.4%, 97.3% 11.8%, 97.6% 16.5%, 97.7% 20.8%, 97.7% 24.6%, 97.9% 28.0%, 98.3% 31.1%, 98.4% 34.0%, 98.3% 36.8%, 98.6% 39.4%, 98.7% 42.0%, 98.9% 44.5%, 98.9% 47.0%);
   display: flex;
   flex-direction: column;
@@ -1801,7 +1673,7 @@ body.mag-open { overflow: hidden; }
   background: #cfdcee;
   color: #0b1640;
   font-family: "VT323", monospace;
-  -webkit-font-smoothing: none;                   /* hard-edged letters, like a real LCD */
+  -webkit-font-smoothing: none;
   font-smooth: never;
 }
 .quote-screen > * { --p: calc(100cqw / 96); }
@@ -1810,7 +1682,6 @@ body.mag-open { overflow: hidden; }
 }
 .lcd-icon { height: 0.75em; width: auto; fill: currentColor; flex: none; }
 
-/* status bar in the arch at the top: signal, clock, battery */
 .lcd-status {
   display: flex;
   justify-content: space-between;
@@ -1824,7 +1695,6 @@ body.mag-open { overflow: hidden; }
 .lcd-status .lcd-icon { height: 0.7em; }
 .lcd-icon--battery { color: #8ff08f; }
 
-/* title bar: in stepped bands of blue, as a phone with few colours draws a gradient */
 .quote-bar {
   display: flex;
   justify-content: space-between;
@@ -1839,11 +1709,10 @@ body.mag-open { overflow: hidden; }
 }
 .quote-bar > span { display: flex; align-items: center; gap: calc(var(--p) * 2); }
 
-/* the messages, on a faintly dithered background */
 .quote-body {
   flex: 1;
   overflow-y: auto;
-  padding: calc(var(--p) * 3) calc(var(--p) * 3) 4.5cqh;       /* clear of the rounded bottom */
+  padding: calc(var(--p) * 3) calc(var(--p) * 3) 4.5cqh;
   background:
     repeating-conic-gradient(#d8e3f2 0 25%, #cbd8ec 0 50%) 0 0 / calc(var(--p) * 2) calc(var(--p) * 2);
   font-size: 11cqw;
@@ -1852,8 +1721,7 @@ body.mag-open { overflow: hidden; }
 }
 .quote-body::-webkit-scrollbar { display: none; }
 
-/* chat bubbles with pixel corners (the outline skips each corner pixel) and a stepped tail:
-   incoming on the left in white (a second sender in yellow), outgoing on the right in green */
+/* chat bubbles */
 .quote-line {
   --fill: #fff;
   --ink: #1b2a5c;
@@ -1862,7 +1730,7 @@ body.mag-open { overflow: hidden; }
   max-width: 84%;
   margin: var(--p) 0 var(--p) calc(var(--p) * 4);
   padding: calc(var(--p) * 1.5) calc(var(--p) * 3) calc(var(--p) * 2);
-  overflow-wrap: anywhere;                        /* long words wrap inside the bubble */
+  overflow-wrap: anywhere;
   background: var(--fill);
   box-shadow:
     0 calc(var(--p) * -1) var(--ink), 0 var(--p) var(--ink),
@@ -1896,7 +1764,6 @@ body.mag-open { overflow: hidden; }
 .quote-line.is-right::after { left: auto; right: calc(var(--p) * -4); transform: scaleX(-1); }
 .quote-context { margin-top: var(--p); font-size: 0.78em; color: #56628c; }
 
-/* the glass: a faint pixel grid, a soft glare across the top and a little shade at the edges */
 .lcd-glass {
   position: absolute;
   inset: 0;
@@ -1907,7 +1774,7 @@ body.mag-open { overflow: hidden; }
     repeating-linear-gradient(90deg, rgba(10, 20, 60, 0.05) 0 0.5px, transparent 0.5px var(--p)),
     radial-gradient(closest-side, rgba(0, 0, 0, 0) 75%, rgba(0, 10, 40, 0.18));
 }
-/* clickable spots over the photo's keys */
+/* hit areas over the keys */
 .phone-key {
   position: absolute;
   width: 10%;
@@ -1923,14 +1790,12 @@ body.mag-open { overflow: hidden; }
 .phone-key--left  { left: 29.95%; top: 61.16%; }
 .phone-key--right { left: 57.14%; top: 61.44%; }
 .phone-key--end   { left: 69.67%; top: 71.53%; width: 16%; height: 3.2%; }
-/* the caption only shows once the phone is open, above it */
 .messages-caption { display: none; }
 .messages-page.is-open .messages-caption { display: block; order: -1; margin: 0 0 0.75rem; }
-.messages-back { order: 1; margin-top: 2.5rem; }   /* last on the page, under the phone */
-/* open, everything closes up so the caption, phone and back link fit on one screen */
+.messages-back { order: 1; margin-top: 2.5rem; }
 .messages-page.is-open { padding-top: 1rem; padding-bottom: 0.75rem; }
 .messages-page.is-open .messages-back { margin-top: 1rem; }
-/* when the phone opens, its keys glow until one is pressed, so people know to use them */
+/* keys glow until the first press */
 .phone-open:not([hidden]):not(.is-used) .phone-key { animation: key-pulse 1.4s ease-in-out 0.5s infinite; }
 .phone-open .phone-key:hover, .phone-open .phone-key:focus-visible { animation: none; }
 @keyframes key-pulse {
@@ -1939,10 +1804,8 @@ body.mag-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) { .phone-open .phone-key { animation: none; } }
 
-/* ---- Writing: the typewriter. Its sheet of paper is a separate layer behind the machine
-  ; while it's hovered, js/typewriter.js types random letters
-   onto it, a line at a time, feeding each finished line up the page. ---- */
-.project-object--poetry { width: 170px; }        /* 147px tall */
+/* ---- writing: typewriter (typewriter.js) ---- */
+.project-object--poetry { width: 170px; }
 .tw-machine { position: relative; z-index: 1; }
 .tw-paper {
   position: absolute;
@@ -1967,9 +1830,8 @@ body.mag-open { overflow: hidden; }
   .project-object--poetry { width: 136px; }
 }
 
-/* ---- Writing: the cassette recorder, stood on end. Hovered, the
-   tape's two reels turn and the red record light glows, as if it's recording. ---- */
-.project-object--recorder { width: 100px; }      /* 191px tall */
+/* ---- writing: cassette recorder ---- */
+.project-object--recorder { width: 100px; }
 .project-object > img.rec-reel {
   position: absolute;
   width: 14.63%;

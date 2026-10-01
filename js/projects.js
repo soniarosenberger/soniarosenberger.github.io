@@ -1,18 +1,14 @@
-// Projects page: the oscilloscope's trace. It sits still on one waveform (sine, square,
-// triangle or saw). While the oscilloscope is hovered (or focused), it glitches for a
-// moment (jumpy, torn, flickering frames) into another waveform, holds that briefly,
-// and keeps going until the pointer leaves.
+// scope: glitches between waveforms while hovered
 (function () {
   var svg = document.querySelector('.scope-trace');
   if (!svg) return;
   var path = svg.querySelector('path');
-  var W = 100, H = 100;          // viewBox units; the SVG is stretched over the screen
-  var cycles = 4;                // whole waves across the screen
-  var mid = 46.9, amp = 22;      // centre line (where the photo's trace was) and height
+  var W = 100, H = 100;
+  var cycles = 4;
+  var mid = 46.9, amp = 22;
   svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
   svg.setAttribute('preserveAspectRatio', 'none');
 
-  // each wave maps a phase 0..1 to a height -1..1
   var waves = {
     sine: function (p) { return Math.sin(p * 2 * Math.PI); },
     square: function (p) { return p < 0.5 ? 1 : -1; },
@@ -21,10 +17,9 @@
   };
   var names = Object.keys(waves);
 
-  // shift moves the wave sideways (in cycles), tear offsets random horizontal slices
   function draw(name, shift, tear, gain) {
     var f = waves[name], d = '';
-    var step = name === 'square' || name === 'saw' ? 0.1 : 0.5;   // fine steps keep the jumps vertical
+    var step = name === 'square' || name === 'saw' ? 0.1 : 0.5;
     for (var x = 0; x <= W + 0.01; x += step) {
       var p = ((x / W) * cycles + shift) % 1;
       if (p < 0) p += 1;
@@ -45,8 +40,6 @@
     var frames = 5 + Math.floor(Math.random() * 5);
     svg.classList.add('is-glitching');
     (function frame() {
-      // finish on the new waveform once the glitch has run, or straight away if the
-      // pointer has left
       if (frames-- <= 0 || !active) {
         svg.classList.remove('is-glitching');
         path.style.opacity = '';
@@ -71,7 +64,7 @@
   function start() {
     if (active) return;
     active = true;
-    if (svg.classList.contains('is-glitching')) return;   // a glitch is still running; let it carry on
+    if (svg.classList.contains('is-glitching')) return;
     clearTimeout(timer);
     pickNext();
   }
@@ -82,12 +75,11 @@
   scope.addEventListener('mouseleave', stop);
   scope.addEventListener('focus', start);
   scope.addEventListener('blur', stop);
-  scope.addEventListener('icon:on', start);    // tapped, on a touch screen
+  scope.addEventListener('icon:on', start);
   scope.addEventListener('icon:off', stop);
 })();
 
-// The TV: hovering switches it on to snow, drawn at low resolution and stretched over the
-// glass so it looks soft like analogue static.
+// tv static
 (function () {
   var canvas = document.querySelector('.tv-static');
   if (!canvas) return;
@@ -100,7 +92,7 @@
   function draw() {
     var d = frame.data;
     for (var y = 0; y < h; y++) {
-      var lineShift = Math.random() < 0.03 ? 40 : 0;        // the odd bright streak
+      var lineShift = Math.random() < 0.03 ? 40 : 0;
       for (var x = 0; x < w; x++) {
         var v = Math.random() * 215 + lineShift;
         var i = (y * w + x) * 4;
@@ -122,12 +114,12 @@
     if (!canvas.classList.contains('is-on')) return;
     canvas.classList.remove('is-on');
     canvas.classList.add('is-off');
-    offTimer = setTimeout(function () { running = false; }, 320);   // after the switch-off
+    offTimer = setTimeout(function () { running = false; }, 320);
   }
   tv.addEventListener('mouseenter', on);
   tv.addEventListener('mouseleave', off);
   tv.addEventListener('focus', on);
   tv.addEventListener('blur', off);
-  tv.addEventListener('icon:on', on);          // tapped, on a touch screen
+  tv.addEventListener('icon:on', on);
   tv.addEventListener('icon:off', off);
 })();

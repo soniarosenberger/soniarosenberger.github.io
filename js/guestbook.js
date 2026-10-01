@@ -1,9 +1,8 @@
-// Guest book: notes + little cave-painting drawings, kept in a Supabase table.
+// guestbook (supabase). the anon key is public; RLS only allows select + insert
 (function () {
   var box = document.querySelector('.guestbook');
   if (!box) return;
 
-  // The "anon" key is public by design: the table only lets it read entries and add new ones.
   var SUPABASE_URL = 'https://ysfaowwvfideihxfthxb.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZmFvd3d2ZmlkZWloeGZ0aHhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MzQxOTcsImV4cCI6MjEwNjQxMDE5N30.m5Pn2RDeAp8I7a_NmU-Zf6egNspENkJxu2qkGrCdIPM';
   var HEADERS = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
@@ -18,7 +17,7 @@
       });
     },
     add: function (entry) {
-      if (entry.website) return Promise.resolve();   // spam trap filled in: quietly drop it
+      if (entry.website) return Promise.resolve();   // honeypot
       return fetch(SUPABASE_URL + '/rest/v1/guestbook', {
         method: 'POST',
         headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }, HEADERS),
@@ -33,7 +32,7 @@
   var list = box.querySelector('.gb-entries');
   var status = box.querySelector('.gb-status');
 
-  // ---- Cave painting canvas ----
+  // ---- cave painting ----
   var canvas = box.querySelector('.gb-canvas');
   var ctx = canvas.getContext('2d');
   var pigment = '#8e2f1c';
@@ -42,8 +41,6 @@
   var hasDrawing = false;
   var last = null;
 
-  // Draws random grey noise at a low resolution, then stretches it smoothly over the canvas.
-  // Layering a few of these at different scales gives natural-looking stone mottling.
   function noiseLayer(cellsX, cellsY, spread, alpha) {
     var small = document.createElement('canvas');
     small.width = cellsX;
@@ -67,7 +64,6 @@
 
   function paintRock() {
     var w = canvas.width, h = canvas.height;
-    // Base: cool mid-grey with a gentle uneven light across the wall
     var base = ctx.createLinearGradient(0, 0, w, h);
     base.addColorStop(0, '#9a9a97');
     base.addColorStop(0.5, '#8d8d8a');
@@ -75,25 +71,22 @@
     ctx.fillStyle = base;
     ctx.fillRect(0, 0, w, h);
 
-    // Broad patches, then finer mottling
     noiseLayer(18, 5, 90, 0.35);
     noiseLayer(60, 16, 90, 0.3);
     noiseLayer(225, 60, 80, 0.3);
     noiseLayer(450, 120, 70, 0.25);
 
-    // Fine grit, pixel by pixel
     var img = ctx.getImageData(0, 0, w, h);
     for (var i = 0; i < img.data.length; i += 4) {
       var n = (Math.random() - 0.5) * 34;
-      if (Math.random() < 0.015) n -= 45;  // occasional dark pits
-      if (Math.random() < 0.01) n += 35;   // occasional bright mineral flecks
+      if (Math.random() < 0.015) n -= 45;
+      if (Math.random() < 0.01) n += 35;
       img.data[i] += n;
       img.data[i + 1] += n;
       img.data[i + 2] += n;
     }
     ctx.putImageData(img, 0, 0);
 
-    // A few hairline cracks
     for (var c = 0; c < 3; c++) {
       var x = Math.random() * w, y = Math.random() * h;
       ctx.beginPath();
@@ -107,7 +100,7 @@
       ctx.lineWidth = 0.8 + Math.random() * 0.7;
       ctx.stroke();
       ctx.translate(0, 1);
-      ctx.strokeStyle = 'rgba(230, 230, 225, 0.18)'; // lit lower edge of the crack
+      ctx.strokeStyle = 'rgba(230, 230, 225, 0.18)';
       ctx.stroke();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
@@ -115,7 +108,6 @@
   }
 
   function dab(x, y) {
-    // Rough, powdery pigment: a cluster of semi-transparent dots
     ctx.fillStyle = pigment;
     for (var i = 0; i < brush * 3; i++) {
       var a = Math.random() * Math.PI * 2;
@@ -172,13 +164,13 @@
   box.querySelector('.gb-clear').addEventListener('click', paintRock);
   paintRock();
 
-  // ---- Entries ----
+  // ---- entries ----
   function formatDate(iso) {
     var d = new Date(iso);
     return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
   }
 
-  // Small stable hash so each entry always gets the same frame and tilt
+  // stable hash, so each entry keeps its frame and tilt
   function hash(str) {
     var h = 2166136261;
     for (var i = 0; i < str.length; i++) {
@@ -234,7 +226,6 @@
     });
   }
 
-
   function load() {
     api.list().then(render).catch(function () {
       list.textContent = '';
@@ -251,7 +242,7 @@
     var entry = {
       name: String(data.get('name') || '').trim(),
       message: String(data.get('message') || '').trim(),
-      website: String(data.get('website') || ''), // spam trap, humans leave it empty
+      website: String(data.get('website') || ''), // honeypot
       drawing: hasDrawing ? canvas.toDataURL('image/jpeg', 0.8) : ''
     };
     if (!entry.message && !entry.drawing) {
