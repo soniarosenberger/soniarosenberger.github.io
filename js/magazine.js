@@ -132,6 +132,7 @@
     frame.style.left = (-crop.x / crop.w * 100) + '%';
     frame.style.top = (-crop.y / crop.h * 100) + '%';
     var aspect = (bounds.w * crop.w) / (bounds.h * crop.h);
+    pasted.dataset.aspect = aspect;              // for showing it large (enlarge(), below)
     // leave a little paper around the picture for the tape, and room below it for a caption
     var fillW = 0.92, fillH = hasCaption ? 0.8 : 0.92;
     var areaAspect = AREA_ASPECT * fillW / fillH;
@@ -225,6 +226,7 @@
     nextBtn.focus();
   }
   function close() {
+    shrink();
     reader.hidden = true;
     document.body.classList.remove('mag-open');
     book.textContent = '';
@@ -238,10 +240,42 @@
   prevBtn.addEventListener('click', prev);
   reader.querySelector('.mag-close').addEventListener('click', close);
 
+  // A drawing clicked or tapped is shown large, cropped as it's pasted in, with its caption;
+  // a click anywhere (or Esc) puts it back.
+  var zoom = document.createElement('div');
+  zoom.className = 'mag-zoom';
+  zoom.hidden = true;
+  zoom.setAttribute('role', 'dialog');
+  zoom.setAttribute('aria-label', 'Drawing, enlarged');
+  reader.append(zoom);
+  function enlarge(pasted) {
+    var aspect = Number(pasted.dataset.aspect) || 1;
+    var pic = document.createElement('div');
+    pic.className = 'mag-zoom-picture';
+    pic.style.setProperty('--aspect', aspect);
+    pic.append(pasted.querySelector('.mag-crop').cloneNode(true));
+    zoom.textContent = '';
+    zoom.append(pic);
+    var caption = pasted.parentNode.querySelector('.mag-caption');
+    if (caption) zoom.append(caption.cloneNode(true));
+    var video = pic.querySelector('video');
+    if (video) video.play().catch(function () {});
+    zoom.hidden = false;
+  }
+  function shrink() {
+    if (zoom.hidden) return false;
+    zoom.hidden = true;
+    zoom.textContent = '';
+    return true;
+  }
+  zoom.addEventListener('click', shrink);
+
   // Click the right half to go forward, the left half to go back
   var swiped = false;
   book.addEventListener('click', function (e) {
     if (swiped) { swiped = false; return; } // the swipe already turned the page
+    var pasted = e.target.closest('.mag-pasted');
+    if (pasted) { enlarge(pasted); return; }
     var r = book.getBoundingClientRect();
     if (e.clientX > r.left + r.width / 2) next(); else prev();
   });
@@ -259,7 +293,7 @@
   document.addEventListener('keydown', function (e) {
     if (reader.hidden) return;
     if (e.target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape') { if (!shrink()) close(); }
     else if (e.key === 'ArrowRight') next();
     else if (e.key === 'ArrowLeft') prev();
   });

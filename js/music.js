@@ -9,3 +9,28 @@ document.querySelectorAll('.playlist').forEach(function (link) {
     })
     .catch(function () {});
 });
+
+// Touch screens have no hover, so the first tap on a CD opens its case (lid swinging open,
+// in colour) and a second tap goes to the playlist. Tapping anywhere else closes it.
+if (window.matchMedia('(hover: none)').matches) {
+  var openCase = null;
+  function closeCase() {
+    if (!openCase) return;
+    openCase.classList.remove('is-open');
+    openCase.dispatchEvent(new Event('icon:off'));
+    openCase = null;
+  }
+  document.querySelectorAll('.playlist').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      if (openCase === link) return;                 // second tap: off to Spotify
+      e.preventDefault();
+      closeCase();
+      openCase = link;
+      link.classList.add('is-open');
+      link.dispatchEvent(new Event('icon:on'));
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (openCase && !openCase.contains(e.target)) closeCase();
+  });
+}

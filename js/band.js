@@ -16,6 +16,13 @@
       enlarge(photo.querySelector('img'));
     }
   });
+  // On phones the board becomes one column; it follows the board top to bottom (then left to
+  // right), whatever order the items are written in.
+  board.querySelectorAll('.board-item').forEach(function (item) {
+    var x = parseFloat(item.style.getPropertyValue('--x')) || 0;
+    var y = parseFloat(item.style.getPropertyValue('--y')) || 0;
+    item.style.setProperty('--order', Math.round(y * 10) * 1000 + Math.round(x * 10));
+  });
   board.querySelectorAll('.board-photo').forEach(function (photo) {
     photo.tabIndex = 0;
     photo.setAttribute('role', 'button');
