@@ -22,6 +22,21 @@ body {
 
 a { color: var(--accent); }
 
+/* Old-style pixel cursors on computers (phones and tablets have none): the arrow everywhere,
+   and the pointing hand over anything that can be clicked. The numbers are each one's tip. */
+:root { --arrow: default; --hand: pointer; }
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    --arrow: url("../images/cursors/default.png") 0 0, default;
+    --hand: url("../images/cursors/hand.png") 5 0, pointer;
+  }
+}
+html { cursor: var(--arrow); }
+a[href], button, summary, select, label[for], [role="button"],
+input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"] { cursor: var(--hand); }
+input:not([type]), input[type="text"], input[type="email"], textarea { cursor: text; }
+button:disabled { cursor: var(--arrow); }
+
 /* Header: centred name with tabs underneath */
 .site-header {
   display: flex;
@@ -162,7 +177,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
   transition: transform 0.25s ease;
 }
-.collage-item video { cursor: default; }
+.collage-item video { cursor: var(--arrow); }
 .collage-item:hover,
 .collage-item:focus-within { z-index: 50; }
 .collage-item:hover img,
@@ -425,7 +440,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   transition: opacity 0.4s ease;
 }
 .vcr-screen.is-on::after { opacity: 1; }
-.vcr.is-playing .vcr-tv { cursor: pointer; }
+.vcr.is-playing .vcr-tv { cursor: var(--hand); }
 
 .vcr-tapes {
   list-style: none;
@@ -442,7 +457,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   border: 0;
   background: none;
   container-type: inline-size;
-  cursor: pointer;
+  cursor: var(--hand);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
@@ -487,7 +502,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   color: #000;
   font: inherit;
   letter-spacing: inherit;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .vcr-controls button:hover,
 .vcr-controls button:focus-visible { color: #0000ee; border-color: #0000ee; }
@@ -496,7 +511,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   flex: 0 1 480px;
   min-width: 60px;
   accent-color: #000;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 @media (max-width: 560px) {
   .vcr-controls { flex-wrap: wrap; }
@@ -772,7 +787,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   margin-right: 4px;
   display: none;
   touch-action: none;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .poem-scrollbar.is-on { display: block; }
 .poem-scrollbar::before {                /* the track: a hairline */
@@ -803,7 +818,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .poem-prev { justify-self: end; }        /* previous and next sit close in on either side of it */
 .poem-next { justify-self: start; }
-.poem-nav .is-off { color: #aaa; cursor: default; }   /* first or last poem: nothing that way */
+.poem-nav .is-off { color: #aaa; cursor: var(--arrow); }   /* first or last poem: nothing that way */
 @media (max-width: 560px) {
   .poem-sheet { padding: 1.25rem 1.5rem 1.25rem 1rem; font-size: 12px; }
   .poem-main { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }   /* clear of a browser's toolbar */
@@ -883,7 +898,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--hand);
   transition: transform 0.15s steps(2);
 }
 .band-member img {
@@ -917,7 +932,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   font: inherit;
   letter-spacing: inherit;
   color: inherit;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .band-name-link:hover,
 .band-name-link:focus-visible,
@@ -1102,7 +1117,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   color: #000;
   font: inherit;
   letter-spacing: inherit;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .song-play:hover,
 .song-play:focus-visible { color: #0000ee; border-color: #0000ee; }
@@ -1111,7 +1126,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   flex: 1;
   min-width: 3em;
   accent-color: #000;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .song-time {
   flex: none;
@@ -1260,7 +1275,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   aspect-ratio: 3 / 4;
   padding: 0;
   border: 0;
-  cursor: pointer;
+  cursor: var(--hand);
   /* at rest in high-contrast black and white, like the other icons; in colour when hovered */
   filter: url(#bw-grain) grayscale(1) brightness(var(--bw-lift, 1.8)) contrast(1.5) brightness(0.9);   /* --bw-lift: extra for darker cloths */
   transition: transform 0.2s ease, filter 0.3s ease;
@@ -1304,9 +1319,9 @@ body.mag-open { overflow: hidden; }
   background: none;
   border: 0;
   padding: 0.4rem 0.6rem;
-  cursor: pointer;
+  cursor: var(--hand);
 }
-.mag-reader button:disabled { opacity: 0.25; cursor: default; }
+.mag-reader button:disabled { opacity: 0.25; cursor: var(--arrow); }
 /* the way out: a back link like the ones on the other pages, centred at the bottom */
 .mag-reader .mag-close { justify-self: center; margin-top: 2rem; font: 12px var(--font-typewriter); letter-spacing: normal; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
 .mag-reader .mag-close:hover, .mag-reader .mag-close:focus-visible { color: #0000ee; }
@@ -1325,7 +1340,7 @@ body.mag-open { overflow: hidden; }
   aspect-ratio: 3 / 2;
   transform-style: preserve-3d;
   transition: translate 0.8s ease;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .mag-book.is-closed-front { translate: -25% 0; }
 .mag-book.is-closed-back { translate: 25% 0; }
@@ -1639,7 +1654,7 @@ body.mag-open { overflow: hidden; }
   color: #000;
   border: 2px outset #e0e0e0;
   border-radius: 0;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .gb-form button:active { border-style: inset; }
 .gb-form button[type="submit"] { justify-self: start; }
@@ -1775,7 +1790,7 @@ body.mag-open { overflow: hidden; }
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--hand);
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
   transition: transform 0.25s ease;
 }
@@ -1943,7 +1958,7 @@ body.mag-open { overflow: hidden; }
   border: 0;
   border-radius: 50%;
   background: transparent;
-  cursor: pointer;
+  cursor: var(--hand);
 }
 .phone-key:hover, .phone-key:focus-visible { background: rgba(120, 200, 90, 0.35); outline: none; }
 .phone-key { height: 3%; }
