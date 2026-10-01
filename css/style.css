@@ -1583,7 +1583,6 @@ body.mag-open { overflow: hidden; }
   padding: 2rem 1rem;
   color: #000;
   font-family: var(--font-typewriter);
-  font-weight: bold;
   font-size: 0.9rem;
   letter-spacing: -0.06em;
 }
@@ -1593,7 +1592,7 @@ body.mag-open { overflow: hidden; }
 .guestbook-link {
   margin-top: 0.4rem;
   text-align: center;
-  /* font, size and bold come from the footer, same as the copyright line */
+  /* font and size come from the footer, same as the copyright line */
 }
 .site-footer .guestbook-link a { color: #0000ee; text-decoration: underline; }
 .site-footer .guestbook-link a:visited { color: #551a8b; }
