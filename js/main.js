@@ -269,8 +269,8 @@ if (nav && 'ResizeObserver' in window) {
 
 
 // Touch screens can't hover, so there a tap on an icon plays what hovering does (its
-// animation, in colour), and a tap on its title opens the page. A tap anywhere else, or on
-// another icon, stops it. (Each kind: the icon, and what counts as its title.)
+// animation, in colour), and a second tap on it, or a tap on its title, opens the page. A tap
+// anywhere else, or on another icon, stops it. (Each kind: the icon, and what counts as its title.)
 (function () {
   if (!window.matchMedia('(hover: none)').matches) return;
   var KINDS = [
@@ -289,8 +289,8 @@ if (nav && 'ResizeObserver' in window) {
     document.querySelectorAll(kind[0]).forEach(function (icon) {
       icon.addEventListener('click', function (e) {
         if (kind[1] && e.target.closest(kind[1])) return;   // the title: open the page
+        if (active === icon) return;                         // tapped again: open it too
         e.preventDefault();
-        if (active === icon) return;
         stop();
         active = icon;
         icon.classList.add('is-active');
