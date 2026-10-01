@@ -749,79 +749,31 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .poem-list { gap: 0.7rem; }   /* the poem titles sit a little closer together */
 
-/* a poem, set on a page like a word processor's: as wide as a US Letter sheet (8.5 inches,
-   drawn at 80 pixels to the inch) with narrow half-inch margins, and only as long as the poem. */
+/* a poem, typed straight onto the page: as wide as a US Letter sheet's text (8.5 inches,
+   drawn at 80 pixels to the inch, less half-inch margins), and as long as it is */
 .poem-sheet {
   width: min(680px, calc(100% - 32px));
-  margin: -1.5rem auto 0;               /* snug under the tabs */
-  padding: 1.5rem 5.88%;                        /* narrow margins: half an inch of the 8.5 */
-  background: #fff;
-  font: 13px/1.45 "Times New Roman", Times, serif;
+  margin: 0 auto;
+  padding: 0 5.88%;                     /* the half-inch margins of the 8.5 */
+  font: 15px/1.45 "Times New Roman", Times, serif;
   text-align: center;
 }
-/* the header, the page and the links under it fill exactly one screen, so the links always sit
-   at the same spot near the bottom (the footer is just below, a scroll away); a poem longer
-   than its page scrolls inside it */
-.poem-screen { display: flex; flex-direction: column; height: 100vh; height: 100svh; }
-.poem-main {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 1.25rem;
-}
-/* the page fills the room left; a poem longer than that scrolls inside it (and at its end,
-   scrolling carries on down the page to the footer). Phones hide their scroll bars until
-   you scroll, so the page has its own, always showing while there's more poem to see
-   (js/main.js moves it, and it can be dragged). */
-.poem-frame { position: relative; flex: 1; min-height: 0; display: flex; margin-top: -1.5rem; }   /* snug under the tabs */
-.poem-main .poem-sheet { flex: 1; min-height: 0; margin: 0 auto; overflow-y: auto; scrollbar-width: none; }
-.poem-main .poem-sheet::-webkit-scrollbar { display: none; }
-.poem-scrollbar {
-  position: absolute;
-  top: 0.75rem;
-  bottom: 0.75rem;
-  right: max(16px, calc((100% - 680px) / 2)) ;
-  width: 12px;
-  margin-right: 4px;
-  display: none;
-  touch-action: none;
-  cursor: var(--hand);
-}
-.poem-scrollbar.is-on { display: block; }
-.poem-scrollbar::before {                /* the track: a hairline */
-  content: "";
-  position: absolute;
-  top: 0; bottom: 0; left: 50%;
-  width: 1px;
-  background: #ddd;
-}
-.poem-thumb {
-  position: absolute;
-  left: 3px;
-  width: 6px;
-  border-radius: 3px;
-  background: #9a9a9a;
-}
-.poem-scrollbar:hover .poem-thumb, .poem-scrollbar.is-dragging .poem-thumb { background: #555; }
 /* spaced like plain typed text: lines close together, one blank line between verses, and
    one under the title */
 .poem-title { margin-bottom: 1.45em; font: bold 1em/1.45 "Times New Roman", Times, serif; }
 .poem-body p + p { margin-top: 1.45em; }
-/* under the page: previous and next either side of the way back to the list */
+/* under the poem: previous and next either side of the way back to the list */
 .poem-nav {
   display: grid;
   grid-template-columns: 1fr auto 1fr;   /* the way back stays centred, even with one side empty */
   gap: 2rem;
-  margin-top: 0.75rem;                  /* snug under the page */
+  margin-top: 3.5rem;
 }
 .poem-prev { justify-self: end; }        /* previous and next sit close in on either side of it */
 .poem-next { justify-self: start; }
 .poem-nav .is-off { color: #aaa; cursor: var(--arrow); }   /* first or last poem: nothing that way */
 @media (max-width: 560px) {
-  .poem-sheet { padding: 1.25rem 1.5rem 1.25rem 1rem; font-size: 12px; }
-  .poem-main { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }   /* clear of a browser's toolbar */
+  .poem-sheet { padding: 0; font-size: 14px; }
 }
 
 

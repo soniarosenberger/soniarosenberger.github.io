@@ -268,48 +268,6 @@ if (nav && 'ResizeObserver' in window) {
 })();
 
 
-// Poem pages: the page's own scroll bar, beside a poem too long for its page. It shows
-// whenever there's more poem to see (phones otherwise hide theirs until you scroll), follows
-// the poem as it scrolls, and can be dragged or clicked.
-(function () {
-  var sheet = document.querySelector('.poem-sheet');
-  var bar = document.querySelector('.poem-scrollbar');
-  if (!sheet || !bar) return;
-  var thumb = bar.querySelector('.poem-thumb');
-  function update() {
-    var over = sheet.scrollHeight - sheet.clientHeight;
-    bar.classList.toggle('is-on', over > 1);
-    if (over <= 1) return;
-    var track = bar.clientHeight;
-    var h = Math.max(28, track * sheet.clientHeight / sheet.scrollHeight);
-    thumb.style.height = h + 'px';
-    thumb.style.top = ((track - h) * sheet.scrollTop / over) + 'px';
-  }
-  function scrollTo(clientY, grab) {
-    var r = bar.getBoundingClientRect(), h = thumb.offsetHeight;
-    var f = (clientY - r.top - grab) / (r.height - h);
-    sheet.scrollTop = Math.max(0, Math.min(1, f)) * (sheet.scrollHeight - sheet.clientHeight);
-  }
-  var grab = null;
-  bar.addEventListener('pointerdown', function (e) {
-    var t = thumb.getBoundingClientRect();
-    grab = (e.target === thumb) ? e.clientY - t.top : t.height / 2;
-    bar.setPointerCapture(e.pointerId);
-    bar.classList.add('is-dragging');
-    scrollTo(e.clientY, grab);
-    e.preventDefault();
-  });
-  bar.addEventListener('pointermove', function (e) { if (grab !== null) scrollTo(e.clientY, grab); });
-  ['pointerup', 'pointercancel'].forEach(function (t) {
-    bar.addEventListener(t, function () { grab = null; bar.classList.remove('is-dragging'); });
-  });
-  sheet.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  if ('ResizeObserver' in window) new ResizeObserver(update).observe(sheet);
-  update();
-})();
-
-
 // Touch screens can't hover, so there a tap on an icon plays what hovering does (its
 // animation, in colour), and a tap on its title opens the page. A tap anywhere else, or on
 // another icon, stops it. (Each kind: the icon, and what counts as its title.)
