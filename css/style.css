@@ -145,7 +145,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   position: relative;
   z-index: 60; /* stays readable above the pictures */
   text-align: center;
-  font: bold 15px var(--font-typewriter);
+  font: 15px var(--font-typewriter);
   letter-spacing: -0.03em;
   text-transform: lowercase;
   margin-bottom: 0.5rem;
@@ -211,7 +211,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 .page-placeholder {
   text-align: center;
   padding: 3rem 0;
-  font: bold 14px var(--font-typewriter);
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
   color: #666;
 }
@@ -264,7 +264,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 .project-object--video { width: 200px; }        /* 116px tall */
 .project-title {
   margin-top: 0.6rem;
-  font: bold 14px var(--font-typewriter);
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
 .project-icon:hover .project-title,
@@ -490,7 +490,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  font: bold 14px var(--font-typewriter);
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
 .vcr-controls[hidden] { display: none; }
@@ -530,7 +530,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 .vcr-blurb p + p { margin-top: 0.8em; }
 .vcr-blurb-title {
   margin-bottom: 0.5em;
-  font: bold 18px var(--font-typewriter);
+  font: 18px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
 .vcr-credits { font-style: italic; }
@@ -672,7 +672,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
   image-rendering: pixelated;
   background: #fff;
   background-clip: padding-box;
-  font: bold 0.8rem/1.35 var(--font-typewriter);
+  font: 0.8rem/1.35 var(--font-typewriter);
   letter-spacing: -0.03em;
   text-align: center;
 }
@@ -713,7 +713,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 /* project pages (video, engineering, skate) */
 .project-page-title {
   text-align: center;
-  font: bold 18px var(--font-typewriter);
+  font: 18px var(--font-typewriter);
   letter-spacing: -0.08em;
 }
 /* back links, at the bottom of a page: small, plain and centred */
@@ -802,7 +802,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   border: 1.5px solid #000;
   background: #fff;
   color: #000;
-  font: bold 13px var(--font-typewriter);
+  font: 13px var(--font-typewriter);
   letter-spacing: -0.03em;
   text-decoration: none;
 }
@@ -813,7 +813,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .article-section-title {
   margin: 2.2rem 0 0.8rem;
   text-align: center;
-  font: bold 15px var(--font-typewriter);
+  font: 15px var(--font-typewriter);
   letter-spacing: -0.05em;
 }
 .article-section-title:first-child { margin-top: 0; }
@@ -829,7 +829,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .article-sounds { clear: both; }
 .sound-list { list-style: none; display: grid; gap: 0.5rem; }
 .sound-list li { display: flex; align-items: center; gap: 0.6rem; }
-.sound-num { font: bold 13px var(--font-typewriter); width: 1ch; }
+.sound-num { font: 13px var(--font-typewriter); width: 1ch; }
 .sound-list audio { flex: 1; width: 100%; min-width: 0; height: 36px; }
 
 /* ---- Music: the band as Pixel Chix-style sprites (images/music/band-*.png, 24 x 33 pixels,
@@ -873,7 +873,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 }
 .band-name {
   margin-bottom: 1.1rem;
-  font: bold 14px var(--font-typewriter);
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
 .band-name-link {
@@ -901,7 +901,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .playlists { padding: 2.5rem 0 1rem; text-align: center; }
 .playlists-title {
   margin-bottom: 1.1rem;
-  font: bold 14px var(--font-typewriter);   /* the same as "Filthy Blonde" and the icon titles */
+  font: 14px var(--font-typewriter);   /* the same as "Filthy Blonde" and the icon titles */
   letter-spacing: -0.03em;
 }
 /* columns the width of a case, with the same gap across and down:
@@ -1001,7 +1001,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .playlist-title {
   display: block;
   margin-top: 0.5rem;
-  font: bold 14px var(--font-typewriter);
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
 .playlist:hover .playlist-title,
@@ -1057,7 +1057,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   display: flex;
   align-items: center;
   gap: 0.8em;
-  font: 700 max(11px, 1.2cqw) / 1.2 var(--font-typewriter);
+  font: max(11px, 1.2cqw) / 1.2 var(--font-typewriter);
   letter-spacing: -0.02em;
 }
 .song-play {
@@ -1265,7 +1265,7 @@ body.mag-open { overflow: hidden; }
 }
 .mag-reader[hidden] { display: none; }
 .mag-reader button {
-  font: bold 14px var(--font-typewriter);
+  font: 14px var(--font-typewriter);
   letter-spacing: -0.03em;
   color: #000;
   background: none;
@@ -1453,7 +1453,7 @@ body.mag-open { overflow: hidden; }
   align-items: center;
   gap: 1.5rem;
   padding-top: 10px;
-  font: bold 13px var(--font-typewriter);
+  font: 13px var(--font-typewriter);
   letter-spacing: -0.03em;
 }
 .mag-status { min-width: 11em; text-align: center; }
@@ -1585,7 +1585,7 @@ body.mag-open { overflow: hidden; }
 .gb-sheet { padding: 1.75rem 1.75rem 2rem; }
 .gb-title {
   text-align: center;
-  font: bold 30px/1.2 var(--font-typewriter);
+  font: 30px/1.2 var(--font-typewriter);
   letter-spacing: -0.03em;
   margin-bottom: 0.75rem;
 }
