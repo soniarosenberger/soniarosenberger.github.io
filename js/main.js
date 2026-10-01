@@ -151,21 +151,8 @@ if (nav && 'ResizeObserver' in window) {
       bottom: r.top + r.height * parseFloat(style.getPropertyValue('--ink-b'))
     };
   }
-  // Shrink the caption to the width of its longest line, so the block of left-aligned text
-  // sits centred under the name rather than leaving a gap down its right-hand side.
-  function fitWidth() {
-    caption.style.width = '';
-    var left = Infinity, right = -Infinity;
-    letters.forEach(function (s) {
-      var r = s.getBoundingClientRect();
-      if (s.textContent === ' ') return;                // spaces at line ends don't count
-      left = Math.min(left, r.left); right = Math.max(right, r.right);
-    });
-    if (right > left) caption.style.width = Math.ceil(right - left + 1) + 'px';
-  }
   // halfway between the bottom of the name's letters and the top of the tabs' letters
   function place() {
-    fitWidth();
     var headBox = header.getBoundingClientRect();
     var from = ink(name).bottom;
     var to = Math.min.apply(null, Array.prototype.map.call(header.querySelectorAll('.site-nav a'), function (a) {
@@ -179,14 +166,19 @@ if (nav && 'ResizeObserver' in window) {
   function placeCaret() {
     var box = caption.getBoundingClientRect();
     var at = letters[Math.max(0, next - 1)].getBoundingClientRect();
-    caret.style.left = ((next ? at.right : at.left) - box.left) + 'px';
+    caret.style.left = ((next ? at.right : at.left) - box.left + caption.scrollLeft) + 'px';
     caret.style.top = (at.top - box.top) + 'px';
+  }
+  // on a screen too narrow for the whole line, keep the newest letters in view
+  function follow() {
+    caption.scrollLeft = caption.scrollWidth;
   }
   function typeNext() {
     if (!on || next >= letters.length) return;
     var ch = TEXT[next];
     letters[next].classList.add('is-typed');
     next++;
+    follow();
     placeCaret();
     var wait = 35 + Math.random() * 50;              // an uneven hand on the keys
     if (ch === ' ') wait += 30 + Math.random() * 50;
@@ -198,6 +190,7 @@ if (nav && 'ResizeObserver' in window) {
     clearTimeout(timer);
     next = 0;
     letters.forEach(function (s) { s.classList.remove('is-typed'); });
+    caption.scrollLeft = 0;
   }
   function show() {
     if (on) return;
@@ -229,7 +222,9 @@ if (nav && 'ResizeObserver' in window) {
       e.preventDefault();
       if (on) hide(); else show();
     });
-    document.addEventListener('click', function (e) { if (on && !name.contains(e.target)) hide(); });
+    document.addEventListener('click', function (e) {
+      if (on && !name.contains(e.target) && !caption.contains(e.target)) hide();
+    });
   } else {
     name.addEventListener('mouseenter', show);
     name.addEventListener('mouseleave', hide);

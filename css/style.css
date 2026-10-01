@@ -88,7 +88,7 @@ button:disabled { cursor: var(--arrow); }
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.5rem clamp(0.75rem, 3.5vw, 2.25rem);
-  margin-top: clamp(2.5rem, 6vw, 4rem);
+  margin-top: clamp(1.75rem, 4.2vw, 2.8rem);
 }
 .site-nav a {
   --ink: #000;
@@ -1493,13 +1493,19 @@ body.mag-open { overflow: hidden; }
 }
 
 /* On the homepage, hovering Sonia's name types the caption out underneath it, like a
-   typewriter (js/main.js). It floats in the gap above the tabs, so nothing moves. */
+   typewriter (js/main.js). It floats in the gap above the tabs, so nothing moves: one line,
+   centred, and where it's wider than the screen it scrolls along as it types (and can be
+   swiped back). */
 .site-header { position: relative; }
 .typed-caption {
   position: absolute;
   left: 50%;
-  width: var(--tabs-width, 90%);
+  width: max-content;
   max-width: calc(100% - 2rem);
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-right: 1ch;                   /* room for the cursor at the end */
   translate: -50% 0;
   margin: 0;
   font-family: var(--font-typewriter);
@@ -1513,7 +1519,8 @@ body.mag-open { overflow: hidden; }
   opacity: 0;
   transition: opacity 0.4s ease;
 }
-.typed-caption.is-on { opacity: 1; transition-duration: 0.1s; }
+.typed-caption::-webkit-scrollbar { display: none; }
+.typed-caption.is-on { opacity: 1; transition-duration: 0.1s; pointer-events: auto; }
 .typed-caption span { visibility: hidden; }
 .typed-caption span.is-typed { visibility: visible; }
 .typed-caption .typed-caret {
@@ -1523,8 +1530,7 @@ body.mag-open { overflow: hidden; }
 }
 @keyframes caret-blink { 50% { opacity: 0; } }
 @media (max-width: 440px) {
-  /* as wide as the name (8.2vw type, about 9.78em across), so it sits centred under it */
-  .typed-caption { font-size: 0.58rem; width: 80.2vw; }
+  .typed-caption { font-size: 0.58rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .typed-caption .typed-caret { display: none; }
