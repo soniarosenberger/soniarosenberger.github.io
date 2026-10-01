@@ -12,6 +12,7 @@ document.body.insertAdjacentHTML('beforeend',
 
 // per-icon filter so the b&w can fade on hover (url() filters can't transition)
 (function () {
+  if (window.matchMedia('(hover: none)').matches) return;   // touch: plain css b&w (see style.css)
   var NS = 'http://www.w3.org/2000/svg';
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var holder = document.createElementNS(NS, 'svg');

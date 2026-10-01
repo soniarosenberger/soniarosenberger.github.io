@@ -1872,3 +1872,14 @@ body.mag-open { overflow: hidden; }
   .project-icon.is-active .rec-reel,
   .project-icon.is-active .rec-light { animation: none; }
 }
+
+/* touch: no svg grain, ios safari drops filtered icons that animate or turn in 3d */
+@media (hover: none) {
+  .project-object,
+  .project-object--skate .skate-face,
+  .band-member img { filter: grayscale(1) contrast(1.7) brightness(0.9); }
+  .mag-cover { filter: grayscale(1) brightness(var(--bw-lift, 1.8)) contrast(1.5) brightness(0.9); }
+  .jewel { filter: none; }
+  .jewel-tray, .jewel-face { filter: grayscale(1) contrast(1.7) brightness(0.9); transition: filter 0.3s ease; }
+  .playlist.is-active .jewel-tray, .playlist.is-active .jewel-face { filter: none; }
+}
