@@ -29,7 +29,9 @@ document.body.insertAdjacentHTML('beforeend',
 
   // [icon, what hovering it, and its own look: lift (brighten first), contrast, brightness]
   var kinds = [
-    ['.project-object', '.project-icon'],
+    ['.project-object:not(.project-object--skate)', '.project-icon'],
+    // the skateboard spins in 3D, so (like the CD case below) each face of the deck wears it
+    ['.project-object--skate', '.project-icon', false, '.skate-face'],
     ['.mag-cover', '.mag-cover', true],
     ['.band-member img', '.band-member'],
     // the CD case swings its lid open in 3D, which a filter on the whole case upsets, so its

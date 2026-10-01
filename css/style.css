@@ -319,7 +319,13 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 
 /* the skateboard spins round once on its long (vertical) axis when hovered,
    showing the other side of the deck halfway round */
-.project-object--skate { perspective: 500px; }
+/* (its black and white is on each face, not the whole board, as a filter there would flatten
+   the spin, and some browsers then drop the filter altogether) */
+.project-object.project-object--skate { perspective: 500px; filter: none; }
+.project-object--skate .skate-face { filter: url(#bw-grain) grayscale(1) contrast(1.7) brightness(0.9); transition: filter 0.3s ease; }
+.project-icon:hover .skate-face,
+.project-icon:focus-visible .skate-face,
+.project-icon.is-active .skate-face { filter: none; }
 .skate-deck {
   position: relative;
   display: block;
@@ -735,7 +741,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 @media (max-width: 560px) {
   .about-intro { flex-direction: column; align-items: stretch; width: 100%; }
   .about-photo, .about-bio { flex-basis: auto; width: 100%; }
-  .about-photo { width: 25%; align-self: center; }   /* the photo small, a quarter of the width */
+  .about-photo { width: 50%; align-self: center; }   /* the photo smaller: a quarter of the area */
   .about-page .about-inquiries { width: 100%; }
 }
 
