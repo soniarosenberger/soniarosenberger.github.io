@@ -728,8 +728,13 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
   padding: 2rem 0 2.5rem;
   font: 15px "IM Fell English", Georgia, serif;
 }
-.eng-list a { color: #000; text-decoration: none; }
-.eng-list a:hover, .eng-list a:focus-visible { color: #0000ee; text-decoration: underline; }
+/* the titles look like links: blue and underlined, the underline thin and set just below */
+.eng-list a {
+  color: #0000ee;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
 .poem-list { gap: 0.7rem; }   /* the poem titles sit a little closer together */
 
 /* a poem, set on a page like a word processor's: as wide as a US Letter sheet (8.5 inches,
