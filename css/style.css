@@ -104,7 +104,8 @@ button:disabled { cursor: var(--arrow); }
   .site-header .site-nav a[href] { height: calc(var(--fs) * 1.45); }
   .site-nav a::before, .site-nav a::after { translate: 0 calc(var(--fs) * -0.175); }
   .site-nav::after { content: ""; flex-basis: 100%; order: 2; }
-  .site-nav a:nth-child(n + 4) { order: 3; }
+  /* the second line, tucked up under the first: half the gap between their letters */
+  .site-nav a:nth-child(n + 4) { order: 3; margin-top: calc(var(--fs) * -0.4); }
 }
 /* Classic early-web hyperlink blue on hover */
 .site-nav a:hover,
