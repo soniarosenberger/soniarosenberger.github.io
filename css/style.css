@@ -737,6 +737,7 @@ a.contact-icon:focus-visible { outline: 1px dashed #0000ee; outline-offset: 3px;
 .note-media img, .note-media video { display: block; width: 100%; height: auto; background: #eee; }
 .note-media img { cursor: zoom-in; }
 .note-media video { grid-column: 1 / -1; background: #000; }
+.note-media video, .note-media:not(.is-many) img { width: auto; max-width: 100%; max-height: 80vh; margin: 0 auto; }
 .note-media.is-many img:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
 /* write-ups */
