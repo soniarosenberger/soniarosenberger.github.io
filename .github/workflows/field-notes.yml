@@ -1,0 +1,45 @@
+# publish field notes from the "Published" folder in google drive (see .github/scripts/field_notes.py)
+name: field notes
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+concurrency: field-notes
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+            field-notes
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .github/scripts/requirements.txt
+      - run: pip install -q -r .github/scripts/requirements.txt
+      - name: sync from drive
+        env:
+          GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
+        run: python .github/scripts/field_notes.py
+      - name: commit and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A field-notes field-notes.html
+          git diff --cached --quiet && exit 0
+          git config user.name "field notes"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Field notes"
+          git pull -q --rebase
+          git push -q
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" > /dev/null || true

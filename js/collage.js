@@ -1,5 +1,5 @@
 (function () {
-  var items = document.querySelectorAll('.collage-item img');
+  var items = document.querySelectorAll('.collage-item img, .note-media img');
   if (!items.length) return;
 
   var box = document.createElement('div');
