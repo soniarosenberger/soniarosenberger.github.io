@@ -1645,6 +1645,30 @@ body.mag-open { overflow: hidden; }
   animation: phone-flip 0.35s ease-out both;
 }
 .phone-open[hidden], .phone-closed[hidden] { display: none; }
+/* prev/next beside the screen (24.66% = screen centre) */
+.phone-arrow {
+  position: absolute;
+  top: 24.66%;
+  width: 30px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #000;
+  translate: 0 -50%;
+}
+.phone-arrow::before {
+  content: "";
+  position: absolute;
+  inset: 13px 10px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.phone-arrow--prev { right: calc(100% + 6px); }
+.phone-arrow--prev::before { clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.phone-arrow--next { left: calc(100% + 6px); }
+.phone-arrow:hover, .phone-arrow:focus-visible { color: #0000ee; }
+.messages-page:not(.is-open) .phone-arrow { display: none; }
 @keyframes phone-flip {
   from { transform: scaleY(0.55) translateY(20%); opacity: 0; }
   to { transform: none; opacity: 1; }

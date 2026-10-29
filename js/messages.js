@@ -203,6 +203,8 @@ var QUOTES = [
   open.addEventListener('click', function (e) {
     if (e.target.closest('.phone-key')) open.classList.add('is-used');
   });
+  document.querySelector('.phone-arrow--prev').addEventListener('click', function () { show(at - 1); });
+  document.querySelector('.phone-arrow--next').addEventListener('click', function () { show(at + 1); });
   open.querySelector('.phone-key--left').addEventListener('click', function () { show(at - 1); });
   open.querySelector('.phone-key--right').addEventListener('click', function () { show(at + 1); });
   open.querySelector('.phone-key--end').addEventListener('click', function () { flip(false); });
