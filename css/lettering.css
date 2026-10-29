@@ -137,3 +137,20 @@
   -webkit-mask-image: url("../images/type/vhs-van-isle.svg");
   mask-image: url("../images/type/vhs-van-isle.svg");
 }
+
+.vhs[data-video^="videos/yhwh-nailgun"] .vhs-label-text {
+  --fs: 6.2cqw;
+  width: calc(var(--fs) * 6.5420);
+  height: calc(var(--fs) * 2.1000);
+  padding: calc(var(--fs) * 0.0000) calc(var(--fs) * 0.0000);
+  --ink-t: 0.0943;
+  --ink-b: 0.9881;
+}
+.vhs[data-video^="videos/yhwh-nailgun"] .vhs-label-text::before {
+  left: calc(var(--fs) * 0.0000);
+  top: calc(var(--fs) * 0.0000);
+  width: calc(var(--fs) * 6.7410);
+  height: calc(var(--fs) * 2.1000);
+  -webkit-mask-image: url("../images/type/vhs-yhwh-nailgun.svg");
+  mask-image: url("../images/type/vhs-yhwh-nailgun.svg");
+}

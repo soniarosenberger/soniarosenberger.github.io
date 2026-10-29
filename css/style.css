@@ -527,7 +527,7 @@ main h1 { font-size: 2rem; margin-bottom: 1rem; }
 
 @media (max-width: 700px) {
   .vcr-tv { width: 100%; }
-  .vcr-tapes { flex-direction: row; justify-content: center; width: 100%; }
+  .vcr-tapes { flex-direction: row; flex-wrap: wrap; justify-content: center; width: 100%; }
   .vcr-tapes > li { width: 44%; }
   .vcr.is-playing .vcr-tv { width: min(100vw - 32px, (100vh - 32px) * 2.053); }
   .vcr.is-playing .vcr-tapes > li { width: 40%; }
