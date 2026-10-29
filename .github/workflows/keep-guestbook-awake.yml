@@ -1,0 +1,21 @@
+# supabase pauses free projects after a week without requests, so read the guestbook every few days
+name: keep guestbook awake
+
+on:
+  schedule:
+    - cron: "17 9 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: read one entry
+        env:
+          # the same public anon key the site uses (js/guestbook.js)
+          URL: https://ysfaowwvfideihxfthxb.supabase.co
+          KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZmFvd3d2ZmlkZWloeGZ0aHhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MzQxOTcsImV4cCI6MjEwNjQxMDE5N30.m5Pn2RDeAp8I7a_NmU-Zf6egNspENkJxu2qkGrCdIPM
+        run: |
+          curl --fail --silent --show-error --max-time 30 \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+            "$URL/rest/v1/guestbook?select=id&limit=1"
